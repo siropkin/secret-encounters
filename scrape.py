@@ -18,6 +18,7 @@ RAW = Path(__file__).resolve().parent / "data" / "raw"  # page checkpoints (giti
 UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
 TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\s*\]", re.I)   # [M4F] [F4M] [M4A]
+TAG_BARE = re.compile(r"\b([mfta])\s*4\s*([mfta])\b", re.I)    # 37 m4f #Missouri (title only)
 PAIR = re.compile(r"\b(\d{2})\s*[-/–—]?\s*([MF])\b|\b([MF])\s*[-/–—]?\s*(\d{2})\b")
 
 MOTIFS = {
@@ -88,8 +89,9 @@ def age_bucket(a):
     return "18-24" if a < 25 else "25-34" if a < 35 else "35-44" if a < 45 else "45-54" if a < 55 else "55+"
 
 def parse_post(p):
-    text = f"{p.get('title') or ''}\n{p.get('selftext') or ''}"
-    tag = TAG.search(text)
+    title = p.get('title') or ''
+    text = f"{title}\n{p.get('selftext') or ''}"
+    tag = TAG.search(text) or TAG_BARE.search(title)
     gender = tag.group(1).upper() if tag else None
     tgender = tag.group(2).upper() if tag else None
     if gender not in ("M", "F"):  gender = None
@@ -190,7 +192,7 @@ def aggregate(posts):
         "ages": {g: dict(c) for g, c in ages.items()},
         "motives": {g: dict(c) for g, c in motives.items()},
         "cities": [{"city": n, "lat": CITIES[n][0], "lon": CITIES[n][1], "n": c}
-                   for n, c in cities_c.most_common(12)],
+                   for n, c in cities_c.most_common(15)],
     }
     return data
 
@@ -214,6 +216,12 @@ def demo():
     assert p3["gender"] == "M" and p3["age"] == 38, p3
     p4 = parse_post({"title": "F 45, thinking about taking the leap", "selftext": ""})
     assert p4["gender"] == "F" and p4["age"] == 45, p4
+    p5 = parse_post({"title": "37 m4f #Missouri looking for a secret fwb", "selftext": ""})
+    assert p5["gender"] == "M" and p5["seeking"] == "M4F" and p5["age"] == 37, p5
+    city_posts = [{"title": aliases[0], "selftext": "", "created_utc": index + 1}
+                  for index, (_, _, aliases) in enumerate(list(CITIES.values())[:16])]
+    city_data = aggregate(city_posts)
+    assert len(city_data["cities"]) == 15, city_data["cities"]
     print("demo ok")
 
 if __name__ == "__main__":
