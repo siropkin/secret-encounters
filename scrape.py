@@ -127,7 +127,7 @@ def fetch(after):
         except Exception as e:
             print(f"  {type(e).__name__}: {e}; retry {attempt + 1}/8", flush=True)
         time.sleep(15 * (attempt + 1))  # archive rate-limits bursts: "Timeout. Maybe slow down a bit"
-    sys.exit("Arctic Shift never served a page — rerun later.")
+    return []  # exhausted retries — caller skips the cursor forward
 
 def main(days):
     posts = []
@@ -140,8 +140,16 @@ def main(days):
         print(f"resuming: {len(posts)} posts from {len(saved)} saved pages", flush=True)
     else:
         cursor = now - days * 86400
+    skips = 0
     for i in range(len(saved), 1500):  # safety cap
         batch = fetch(cursor)
+        if not batch:  # cursor the archive keeps choking on — step past it (negligible loss)
+            skips += 1
+            if skips > 10: sys.exit("archive kept refusing — rerun to resume from checkpoints")
+            cursor += 5
+            print(f"  skipping cursor (+{skips * 5}s)", flush=True)
+            continue
+        skips = 0
         posts.extend(batch)
         (RAW / f"{i + 1}.json").write_text(json.dumps(batch))
         cursor = batch[-1].get("created_utc", now)
