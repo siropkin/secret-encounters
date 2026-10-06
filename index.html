@@ -279,7 +279,7 @@ function drawMap(){
   }
   // label nudges so neighbours don't collide — [dx, dy] in multiples of (r + 4px)
   const OFF = {'New York': [1.2, 1], 'Boston': [1.2, -1], 'Toronto': [-1.2, -1], 'Chicago': [-2.4, .3],
-    'London': [0, -1.3], 'Paris': [1.2, 1], 'Amsterdam': [1.1, -1.1], 'Berlin': [1.2, -.9],
+    'London': [-1.2, -1], 'Paris': [1.2, 1], 'Amsterdam': [1.2, -1.1], 'Berlin': [1.2, -.9],
     'Manchester': [-1.1, -1.1], 'Dublin': [-1.2, 0], 'Los Angeles': [-1.2, 1], 'San Francisco': [-1.2, -1],
     'Seattle': [-1.2, .8], 'Vancouver': [-1.1, -1.2], 'Sydney': [0, 1.4], 'Melbourne': [0, -1.4],
     'Houston': [1.1, 1], 'Dallas': [-1.1, -1], 'Miami': [1.2, .8], 'Montreal': [1.2, -1.2]};
@@ -288,11 +288,10 @@ function drawMap(){
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'hot');
     const ti = document.createElementNS(NS, 'title'); ti.textContent = `${c.city}: ${c.n.toLocaleString()} mentions`; g.appendChild(ti);
     g.appendChild(rc.circle(cx, cy, r * 2, {stroke: RED, strokeWidth: 1.6, roughness: 2.2, fill: 'rgba(156,47,36,.16)', fillStyle: 'solid'}));
-    if (i < 8){
-      const [dx, dy] = OFF[c.city] || [0, -1.25];
-      const anchor = dx > 0 ? 'start' : dx < 0 ? 'end' : 'middle';
-      g.appendChild(txt(cx + dx * (r + 5), cy + dy * (r + 5) + 5, `${c.city} · ${c.n.toLocaleString()}`, 'ml', anchor));
-    }
+    const [dx, dy] = OFF[c.city] || [0, -1.25];
+    const anchor = dx > 0 ? 'start' : dx < 0 ? 'end' : 'middle';
+    const gap = r * .55 + 7;
+    g.appendChild(txt(cx + dx * gap, cy + dy * gap + 5, `${c.city} · ${c.n.toLocaleString()}`, 'ml', anchor));
     svg.appendChild(g);
   });
   host.appendChild(svg);
