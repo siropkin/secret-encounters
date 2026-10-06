@@ -156,8 +156,8 @@ footer .rule{width:min(70%,380px)}
     <p class="kicker">The Underground Gazette of Married Restlessness — <b>Vol. LXII · No. 7</b> · Price: One Indiscretion</p>
     <h1>Secret<br>Encounters</h1>
     <p class="deck">Who looks for whom — and why. Our bureau examined <span id="nposts">several thousand</span> anonymous
-      confessions posted to a notorious internet forum for the unfaithful, and distilled the demographics,
-      the motives, and the geography of wandering hearts. All names withheld. Naturally.</p>
+      confessions posted to a notorious internet forum for the unfaithful between <span id="period">the past year</span>,
+      and distilled the demographics, the motives, and the geography of wandering hearts. All names withheld. Naturally.</p>
     <div class="rule"></div>
     <div class="ledger">
       <div><span class="n" id="pc-m">—</span><br><span class="l">are men</span></div>
@@ -333,6 +333,7 @@ function drawMap(){
 function render(){
   const M = DATA.gender.M || 0, F = DATA.gender.F || 0, T = (M + F) || 1;
   $('#nposts').textContent = DATA.posts.toLocaleString();
+  if (DATA.period) $('#period').textContent = `${DATA.period.from} – ${DATA.period.to}`;
   $('#pc-m').textContent = Math.round(100 * M / T) + '%';
   $('#pc-f').textContent = Math.round(100 * F / T) + '%';
   const cTot = DATA.cities.reduce((s, c) => s + c.n, 0);

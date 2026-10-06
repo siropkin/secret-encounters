@@ -2,7 +2,7 @@
 """Scrape r/Affairs submissions via the PullPush API and bake an aggregated
 data/data.json for the Secret Encounters infographic.
 
-Usage:  python3 scrape.py [pages]     # 100 posts/page, default 25
+Usage:  python3 scrape.py [days]      # history window, default 365
         python3 scrape.py demo        # parser self-check
 Stdlib only. Output is aggregates only — no usernames or post IDs are stored.
 """
@@ -116,16 +116,21 @@ def fetch(before):
             time.sleep(20)
     sys.exit("PullPush never let us in — rerun later or from another network.")
 
-def main(pages):
+def main(days):
     posts, before = [], None
-    for i in range(pages):
+    after = int(time.time()) - days * 86400
+    for i in range(1500):  # safety cap
         batch = fetch(before)
         if not batch:
             print("archive exhausted"); break
-        posts.extend(batch)
-        before = min(p.get("created_utc", 0) for p in batch) - 1
-        print(f"page {i + 1}/{pages}: {len(posts)} posts so far", flush=True)
+        oldest = min(p.get("created_utc", 0) for p in batch)
+        posts.extend(p for p in batch if p.get("created_utc", 0) >= after)
+        before = oldest - 1
+        print(f"page {i + 1}: {len(posts)} posts (back to {time.strftime('%Y-%m-%d', time.gmtime(oldest))})", flush=True)
+        if oldest < after: break
         time.sleep(1.5)
+    if not posts:
+        sys.exit("no posts collected — PullPush never served a page")
 
     gender_c, seeking_c, cities_c = Counter(), Counter(), Counter()
     ages    = {"M": Counter(), "F": Counter()}
@@ -144,6 +149,8 @@ def main(pages):
 
     data = {
         "generated": time.strftime("%Y-%m-%d"),
+        "period": {"from": time.strftime("%b %Y", time.gmtime(min(p["created_utc"] for p in posts))),
+                   "to":   time.strftime("%b %Y", time.gmtime(max(p["created_utc"] for p in posts)))},
         "posts": len(posts), "gendered": sum(gender_c.values()), "seeking_tagged": tagged,
         "gender": dict(gender_c),
         "seeking": dict(seeking_c.most_common()),
@@ -172,4 +179,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "demo":
         demo()
     else:
-        main(int(sys.argv[1]) if len(sys.argv) > 1 else 25)
+        main(int(sys.argv[1]) if len(sys.argv) > 1 else 365)  # days of history
