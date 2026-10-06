@@ -22,7 +22,7 @@ UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
 TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\w*\s*\]", re.I)  # [M4F] [F4M] [M4A] [M4MF]
 TAG_BARE = re.compile(r"\b([mfta])\s*4\s*([mfta])\b", re.I)    # 37 m4f #Missouri (title only)
-PAIR = re.compile(r"\b(\d{2})\s*[-/–—]?\s*([MF])\b|\b([MF])\s*[-/–—]?\s*(\d{2})\b")
+PAIR = re.compile(r"\b(\d{2})\s*[-/–—]?\s*([MF])\b|\b([MF])\s*[-/–—]?\s*(\d{2})\b", re.I)
 
 MOTIFS = {
     "dead_bedroom":   ["dead bedroom", "dead-bedroom", "sexless", "no sex", "no intimacy",

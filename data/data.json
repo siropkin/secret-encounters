@@ -5,11 +5,11 @@
   "to": "Oct 2026"
  },
  "posts": 125668,
- "gendered": 113506,
+ "gendered": 114442,
  "seeking_tagged": 110900,
  "gender": {
-  "M": 105362,
-  "F": 8144
+  "M": 106230,
+  "F": 8212
  },
  "seeking": {
   "M4F": 102948,
@@ -19,43 +19,43 @@
  },
  "ages": {
   "M": {
-   "45-54": 23480,
-   "25-34": 23979,
-   "35-44": 49773,
-   "55+": 4877,
-   "18-24": 1719
+   "35-44": 50260,
+   "45-54": 23662,
+   "25-34": 24333,
+   "55+": 4907,
+   "18-24": 1751
   },
   "F": {
-   "25-34": 3172,
-   "45-54": 713,
-   "35-44": 3109,
-   "18-24": 847,
-   "55+": 110
+   "18-24": 874,
+   "35-44": 3142,
+   "25-34": 3195,
+   "55+": 114,
+   "45-54": 723
   }
  },
  "motives": {
   "M": {
-   "thrill_variety": 34043,
-   "desired": 22791,
-   "dead_bedroom": 10423,
-   "emotional_gap": 12691,
-   "escape": 13635,
-   "loneliness": 6156
+   "thrill_variety": 34250,
+   "emotional_gap": 12753,
+   "escape": 13678,
+   "desired": 22925,
+   "dead_bedroom": 10488,
+   "loneliness": 6190
   },
   "F": {
-   "dead_bedroom": 480,
-   "emotional_gap": 1205,
-   "thrill_variety": 1875,
-   "desired": 1763,
-   "loneliness": 512,
-   "escape": 567
+   "dead_bedroom": 481,
+   "thrill_variety": 1883,
+   "escape": 568,
+   "loneliness": 511,
+   "emotional_gap": 1206,
+   "desired": 1765
   },
   "all": {
    "thrill_variety": 37101,
-   "desired": 25222,
-   "dead_bedroom": 11198,
    "emotional_gap": 14327,
    "escape": 14549,
+   "desired": 25222,
+   "dead_bedroom": 11198,
    "loneliness": 6915
   }
  },
