@@ -25,15 +25,13 @@ body{
   font-family:'Special Elite', 'Courier New', monospace;
   line-height:1.45; overflow-x:hidden;
 }
-/* fixed grain + folds + vignette over everything (non-interactive) */
+/* fixed grain + vignette over everything (non-interactive) */
 body::after{
   content:""; position:fixed; inset:0; pointer-events:none; z-index:60;
   background-image:
     var(--noise),
-    linear-gradient(90deg, transparent 49.6%, rgba(60,40,20,.05) 49.85%, rgba(255,252,240,.09) 50.05%, transparent 50.4%),
-    linear-gradient(0deg, transparent 34.8%, rgba(60,40,20,.04) 34.95%, rgba(255,252,240,.07) 35.1%, transparent 35.4%),
-    radial-gradient(ellipse at center, transparent 52%, rgba(58,38,14,.20) 100%);
-  mix-blend-mode:multiply;
+    radial-gradient(ellipse at center, transparent 58%, rgba(58,38,14,.14) 100%);
+  mix-blend-mode:multiply; opacity:.55;
 }
 .wrap{max-width:1200px; margin:0 auto; padding:0 16px 4rem}
 
@@ -54,12 +52,6 @@ h1{
 }
 .rule{height:0; border-top:3px double var(--ink); margin:1.1rem auto .2rem; width:min(92%,560px); position:relative}
 .rule::after{content:"❦"; position:absolute; left:50%; top:50%; transform:translate(-50%,-52%); background:var(--paper); padding:0 .7em; color:var(--red); font-size:1.1rem}
-.stamp{
-  position:absolute; top:1.1rem; right:max(2vw,.5rem); transform:rotate(11deg);
-  font-family:'Caveat', cursive; font-weight:700; color:var(--red); font-size:clamp(1.1rem,4vw,1.7rem);
-  border:2px solid var(--red); border-radius:50%; padding:.9em .55em; opacity:.75; line-height:1;
-  display:none;
-}
 .ledger{display:flex; justify-content:center; gap:1.6rem; flex-wrap:wrap; margin:1rem 0 0}
 .ledger div{text-align:center}
 .ledger .n{font-family:'Caveat', cursive; font-weight:700; font-size:2rem; display:inline-block; transform:rotate(-2deg)}
@@ -77,7 +69,7 @@ h1{
 }
 .hero::after{ /* grain glued onto the photograph itself */
   content:""; position:absolute; inset:0; pointer-events:none;
-  background-image:var(--noise); mix-blend-mode:multiply; opacity:.55;
+  background-image:var(--noise); mix-blend-mode:multiply; opacity:.35;
   -webkit-mask-image:radial-gradient(ellipse 74% 70% at 50% 46%, #000 45%, transparent 74%);
           mask-image:radial-gradient(ellipse 74% 70% at 50% 46%, #000 45%, transparent 74%);
 }
@@ -140,7 +132,6 @@ footer .rule{width:min(70%,380px)}
   .hero{position:sticky; top:1rem}
   .panel.men{margin-top:2.4rem}
   .panel.women{margin-top:4.5rem}
-  .stamp{display:block; right:max(3vw,1rem)}
 }
 @media (prefers-reduced-motion:reduce){
   .bar,.hot{transition:none}
@@ -152,12 +143,11 @@ footer .rule{width:min(70%,380px)}
 <div class="wrap">
 
   <header class="masthead">
-    <div class="stamp">EXPOSED!</div>
-    <p class="kicker">The Underground Gazette of Married Restlessness — <b>Vol. LXII · No. 7</b> · Price: One Indiscretion</p>
+    <p class="kicker">An interactive infographic of <b>Reddit · r/Affairs</b> — <span id="kperiod">the past year</span></p>
     <h1>Secret<br>Encounters</h1>
-    <p class="deck">Who looks for whom — and why. Our bureau examined <span id="nposts">several thousand</span> anonymous
-      confessions posted to a notorious internet forum for the unfaithful between <span id="period">the past year</span>,
-      and distilled the demographics, the motives, and the geography of wandering hearts. All names withheld. Naturally.</p>
+    <p class="deck">Who looks for whom — and why. We examined <span id="nposts">several thousand</span> anonymous
+      posts from Reddit's r/Affairs community, collected for <span id="period">the past year</span>,
+      and distilled the demographics, the motives, and the geography of wandering hearts. All names withheld.</p>
     <div class="rule"></div>
     <div class="ledger">
       <div><span class="n" id="pc-m">—</span><br><span class="l">are men</span></div>
@@ -212,8 +202,9 @@ footer .rule{width:min(70%,380px)}
 
   <footer>
     <div class="rule"></div>
-    <p>Set in Playfair Display, Special Elite &amp; Caveat. Figures distilled from anonymous public posts;
-      percentages are of posts where the detail could be discerned. Drawn in haste, printed in regret.</p>
+    <p>Source: public posts from <b>reddit.com/r/Affairs</b>, <span id="fperiod">the past year</span>.
+      Percentages are of posts where the detail could be discerned.
+      Set in Playfair Display, Special Elite &amp; Caveat.</p>
   </footer>
 </div>
 
@@ -333,7 +324,10 @@ function drawMap(){
 function render(){
   const M = DATA.gender.M || 0, F = DATA.gender.F || 0, T = (M + F) || 1;
   $('#nposts').textContent = DATA.posts.toLocaleString();
-  if (DATA.period) $('#period').textContent = `${DATA.period.from} – ${DATA.period.to}`;
+  if (DATA.period){
+    const p = `${DATA.period.from} – ${DATA.period.to}`;
+    $('#period').textContent = p; $('#kperiod').textContent = p; $('#fperiod').textContent = p;
+  }
   $('#pc-m').textContent = Math.round(100 * M / T) + '%';
   $('#pc-f').textContent = Math.round(100 * F / T) + '%';
   const cTot = DATA.cities.reduce((s, c) => s + c.n, 0);
