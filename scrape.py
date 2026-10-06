@@ -46,7 +46,7 @@ CITIES = {  # name: (lat, lon, [aliases])
     "London":        (51.51,   -0.13, ["london"]),
     "Houston":       (29.76,  -95.37, ["houston"]),
     "Seattle":       (47.61, -122.33, ["seattle"]),
-    "San Francisco": (37.77, -122.42, ["san francisco", "sf bay", "bay area"]),
+    "San Francisco": (37.77, -122.42, ["san francisco", "sf bay", "bay area", "sf", "bayarea"]),
     "Boston":        (42.36,  -71.06, ["boston"]),
     "Atlanta":       (33.75,  -84.39, ["atlanta"]),
     "Denver":        (39.74, -104.99, ["denver"]),
