@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Scrape r/Affairs submissions via the PullPush API and bake an aggregated
-data/data.json for the Secret Encounters infographic.
+"""Scrape r/Affairs submissions from the Arctic Shift archive and bake an
+aggregated data/data.json for the Secret Encounters infographic.
+(PullPush is edge-blocked/backend-down; Arctic Shift is the Pushshift-successor
+that side-project-census already uses successfully.)
 
 Usage:  python3 scrape.py [days]      # history window, default 365
         python3 scrape.py demo        # parser self-check
@@ -10,7 +12,7 @@ import json, re, sys, time, urllib.parse, urllib.request, urllib.error
 from collections import Counter
 from pathlib import Path
 
-API = "https://api.pullpush.io/reddit/search/submission/"
+API = "https://arctic-shift.photon-reddit.com/api/posts/search"
 OUT = Path(__file__).resolve().parent / "data" / "data.json"
 UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
@@ -67,6 +69,16 @@ CITIES = {  # name: (lat, lon, [aliases])
     "Calgary":       (51.05, -114.07, ["calgary"]),
     "Columbus":      (39.96,  -83.00, ["columbus"]),
     "Charlotte":     (35.23,  -80.84, ["charlotte"]),
+    "Kansas City":   (39.10,  -94.58, ["kansas city", "kc mo", "kcmo"]),
+    "San Jose":      (37.34, -121.89, ["san jose"]),
+    "Tampa":         (27.95,  -82.46, ["tampa"]),
+    "Orlando":       (28.54,  -81.38, ["orlando"]),
+    "Detroit":       (42.33,  -83.05, ["detroit"]),
+    "Baltimore":     (39.29,  -76.61, ["baltimore"]),
+    "Pittsburgh":    (40.44,  -80.00, ["pittsburgh"]),
+    "St. Louis":     (38.63,  -90.20, ["st. louis", "st louis", "stl"]),
+    "Sacramento":    (38.58, -121.49, ["sacramento"]),
+    "Indianapolis":  (39.77,  -86.16, ["indianapolis", "indy"]),
 }
 CITY_RES = [(name, re.compile(r"\b(?:" + "|".join(map(re.escape, aliases)) + r")\b"))
             for name, (_, _, aliases) in CITIES.items()]
@@ -99,38 +111,36 @@ def parse_post(p):
         "cities":  [name for name, rx in CITY_RES if rx.search(low)],
     }
 
-def fetch(before):
-    q = {"subreddit": "affairs", "size": 100, "sort": "desc", "sort_type": "created_utc"}
-    if before: q["before"] = before
+def fetch(after):
+    q = {"subreddit": "affairs", "after": after, "sort": "asc", "limit": "auto",
+         "fields": "id,title,selftext,created_utc"}
     req = urllib.request.Request(API + "?" + urllib.parse.urlencode(q), headers=UA)
-    for attempt in range(40):
+    for attempt in range(8):
         try:
-            with urllib.request.urlopen(req, timeout=30) as r:
-                return json.load(r).get("data", [])
+            with urllib.request.urlopen(req, timeout=120) as r:
+                data = json.load(r).get("data") or []
+                if data: return data
+                print(f"  empty page; retry {attempt + 1}/8", flush=True)
         except urllib.error.HTTPError as e:
-            wait = 65 if e.code == 429 else min(10 * (attempt + 1), 120)
-            print(f"  HTTP {e.code}; waiting {wait}s (attempt {attempt + 1}/40)", flush=True)
-            time.sleep(wait)
+            print(f"  HTTP {e.code}; slowing down (retry {attempt + 1}/8)", flush=True)
         except Exception as e:
-            print(f"  {type(e).__name__}: {e}; retry in 20s", flush=True)
-            time.sleep(20)
-    sys.exit("PullPush never let us in — rerun later or from another network.")
+            print(f"  {type(e).__name__}: {e}; retry {attempt + 1}/8", flush=True)
+        time.sleep(15 * (attempt + 1))  # archive rate-limits bursts: "Timeout. Maybe slow down a bit"
+    sys.exit("Arctic Shift never served a page — rerun later.")
 
 def main(days):
-    posts, before = [], None
-    after = int(time.time()) - days * 86400
+    posts = []
+    now = int(time.time())
+    cursor = now - days * 86400
     for i in range(1500):  # safety cap
-        batch = fetch(before)
-        if not batch:
-            print("archive exhausted"); break
-        oldest = min(p.get("created_utc", 0) for p in batch)
-        posts.extend(p for p in batch if p.get("created_utc", 0) >= after)
-        before = oldest - 1
-        print(f"page {i + 1}: {len(posts)} posts (back to {time.strftime('%Y-%m-%d', time.gmtime(oldest))})", flush=True)
-        if oldest < after: break
-        time.sleep(1.5)
+        batch = fetch(cursor)
+        posts.extend(batch)
+        cursor = batch[-1].get("created_utc", now)
+        print(f"page {i + 1}: {len(posts)} posts (up to {time.strftime('%Y-%m-%d', time.gmtime(cursor))})", flush=True)
+        if cursor >= now - 1800 or len(batch) < 50: break  # caught up to ~now
+        time.sleep(1.2)  # polite cadence
     if not posts:
-        sys.exit("no posts collected — PullPush never served a page")
+        sys.exit("no posts collected")
 
     gender_c, seeking_c, cities_c = Counter(), Counter(), Counter()
     ages    = {"M": Counter(), "F": Counter()}
