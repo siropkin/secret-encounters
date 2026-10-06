@@ -2,61 +2,61 @@
  "generated": "2026-10-06",
  "period": {
   "from": "Oct 2025",
-  "to": "Sep 2026"
+  "to": "Oct 2026"
  },
- "posts": 115725,
- "gendered": 104198,
- "seeking_tagged": 101730,
+ "posts": 125668,
+ "gendered": 113506,
+ "seeking_tagged": 110900,
  "gender": {
-  "M": 96671,
-  "F": 7527
+  "M": 105362,
+  "F": 8144
  },
  "seeking": {
-  "M4F": 94418,
-  "F4M": 6742,
-  "F4F": 290,
-  "M4M": 280
+  "M4F": 102948,
+  "F4M": 7309,
+  "F4F": 325,
+  "M4M": 318
  },
  "ages": {
   "M": {
-   "45-54": 21559,
-   "25-34": 22177,
-   "35-44": 45480,
-   "55+": 4462,
-   "18-24": 1586
+   "45-54": 23480,
+   "25-34": 23979,
+   "35-44": 49773,
+   "55+": 4877,
+   "18-24": 1719
   },
   "F": {
-   "25-34": 2956,
-   "45-54": 655,
-   "35-44": 2854,
-   "18-24": 782,
-   "55+": 103
+   "25-34": 3172,
+   "45-54": 713,
+   "35-44": 3109,
+   "18-24": 847,
+   "55+": 110
   }
  },
  "motives": {
   "M": {
-   "thrill_variety": 31349,
-   "desired": 20683,
-   "dead_bedroom": 9596,
-   "emotional_gap": 11721,
-   "escape": 12443,
-   "loneliness": 5656
+   "thrill_variety": 34043,
+   "desired": 22791,
+   "dead_bedroom": 10423,
+   "emotional_gap": 12691,
+   "escape": 13635,
+   "loneliness": 6156
   },
   "F": {
-   "dead_bedroom": 448,
-   "emotional_gap": 1118,
-   "thrill_variety": 1762,
-   "desired": 1618,
-   "loneliness": 466,
-   "escape": 522
+   "dead_bedroom": 480,
+   "emotional_gap": 1205,
+   "thrill_variety": 1875,
+   "desired": 1763,
+   "loneliness": 512,
+   "escape": 567
   },
   "all": {
-   "thrill_variety": 34289,
-   "desired": 22963,
-   "dead_bedroom": 10335,
-   "emotional_gap": 13268,
-   "escape": 13308,
-   "loneliness": 6365
+   "thrill_variety": 37101,
+   "desired": 25222,
+   "dead_bedroom": 11198,
+   "emotional_gap": 14327,
+   "escape": 14549,
+   "loneliness": 6915
   }
  },
  "cities": [
@@ -64,91 +64,91 @@
    "city": "New York",
    "lat": 40.71,
    "lon": -74.0,
-   "n": 5888
+   "n": 6436
   },
   {
    "city": "Chicago",
    "lat": 41.88,
    "lon": -87.63,
-   "n": 3759
+   "n": 4074
   },
   {
    "city": "Boston",
    "lat": 42.36,
    "lon": -71.06,
-   "n": 3423
+   "n": 3750
   },
   {
    "city": "Seattle",
    "lat": 47.61,
    "lon": -122.33,
-   "n": 2784
+   "n": 3009
   },
   {
    "city": "Washington",
    "lat": 38.91,
    "lon": -77.04,
-   "n": 2312
+   "n": 2531
   },
   {
    "city": "Philadelphia",
    "lat": 39.95,
    "lon": -75.17,
-   "n": 2077
+   "n": 2265
   },
   {
    "city": "London",
    "lat": 51.51,
    "lon": -0.13,
-   "n": 1928
+   "n": 2116
   },
   {
    "city": "Toronto",
    "lat": 43.65,
    "lon": -79.38,
-   "n": 1893
+   "n": 2039
   },
   {
    "city": "Los Angeles",
    "lat": 34.05,
    "lon": -118.24,
-   "n": 1781
+   "n": 1973
   },
   {
    "city": "Denver",
    "lat": 39.74,
    "lon": -104.99,
-   "n": 1397
+   "n": 1527
   },
   {
    "city": "Houston",
    "lat": 29.76,
    "lon": -95.37,
-   "n": 1272
+   "n": 1415
   },
   {
    "city": "San Francisco",
    "lat": 37.77,
    "lon": -122.42,
-   "n": 1135
+   "n": 1238
   },
   {
    "city": "Atlanta",
    "lat": 33.75,
    "lon": -84.39,
-   "n": 1087
+   "n": 1201
   },
   {
    "city": "Pittsburgh",
    "lat": 40.44,
    "lon": -80.0,
-   "n": 945
+   "n": 1037
   },
   {
    "city": "Nashville",
    "lat": 36.16,
    "lon": -86.78,
-   "n": 941
+   "n": 1022
   }
  ]
 }
