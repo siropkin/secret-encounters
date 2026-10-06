@@ -64,7 +64,13 @@
    "city": "New York",
    "lat": 40.71,
    "lon": -74.0,
-   "n": 6436
+   "n": 9282
+  },
+  {
+   "city": "Washington",
+   "lat": 38.91,
+   "lon": -77.04,
+   "n": 4325
   },
   {
    "city": "Chicago",
@@ -85,10 +91,16 @@
    "n": 3009
   },
   {
-   "city": "Washington",
-   "lat": 38.91,
-   "lon": -77.04,
-   "n": 2531
+   "city": "Los Angeles",
+   "lat": 34.05,
+   "lon": -118.24,
+   "n": 2893
+  },
+  {
+   "city": "San Francisco",
+   "lat": 37.77,
+   "lon": -122.42,
+   "n": 2450
   },
   {
    "city": "Philadelphia",
@@ -97,28 +109,16 @@
    "n": 2265
   },
   {
-   "city": "San Francisco",
-   "lat": 37.77,
-   "lon": -122.42,
-   "n": 2257
+   "city": "Toronto",
+   "lat": 43.65,
+   "lon": -79.38,
+   "n": 2184
   },
   {
    "city": "London",
    "lat": 51.51,
    "lon": -0.13,
    "n": 2116
-  },
-  {
-   "city": "Toronto",
-   "lat": 43.65,
-   "lon": -79.38,
-   "n": 2039
-  },
-  {
-   "city": "Los Angeles",
-   "lat": 34.05,
-   "lon": -118.24,
-   "n": 1973
   },
   {
    "city": "Denver",
@@ -130,25 +130,25 @@
    "city": "Houston",
    "lat": 29.76,
    "lon": -95.37,
-   "n": 1415
+   "n": 1440
+  },
+  {
+   "city": "Dallas",
+   "lat": 32.78,
+   "lon": -96.8,
+   "n": 1438
   },
   {
    "city": "Atlanta",
    "lat": 33.75,
    "lon": -84.39,
-   "n": 1201
+   "n": 1325
   },
   {
    "city": "Pittsburgh",
    "lat": 40.44,
    "lon": -80.0,
    "n": 1037
-  },
-  {
-   "city": "Nashville",
-   "lat": 36.16,
-   "lon": -86.78,
-   "n": 1022
   }
  ]
 }
