@@ -6,15 +6,18 @@ that side-project-census already uses successfully.)
 
 Usage:  python3 scrape.py [days]      # history window, default 365
         python3 scrape.py demo        # parser self-check
+    python3 scrape.py rebuild     # aggregate existing checkpoints only
 Stdlib only. Output is aggregates only — no usernames or post IDs are stored.
 """
-import json, re, sys, time, urllib.parse, urllib.request, urllib.error
+import json, os, re, sys, time, urllib.parse, urllib.request, urllib.error
 from collections import Counter
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent
 API = "https://arctic-shift.photon-reddit.com/api/posts/search"
-OUT = Path(__file__).resolve().parent / "data" / "data.json"
-RAW = Path(__file__).resolve().parent / "data" / "raw"  # page checkpoints (gitignored)
+OUT = ROOT / "data" / "data.json"
+LEGACY_RAW = ROOT / "data" / "raw"
+RAW = Path(os.environ.get("SECRET_ENCOUNTERS_RAW_DIR", str(ROOT / ".checkpoints" / "raw"))).expanduser()
 UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
 TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\w*\s*\]", re.I)  # [M4F] [F4M] [M4A] [M4MF]
@@ -85,6 +88,48 @@ CITIES = {  # name: (lat, lon, [aliases])
 CITY_RES = [(name, re.compile(r"\b(?:" + "|".join(map(re.escape, aliases)) + r")\b"))
             for name, (_, _, aliases) in CITIES.items()]
 
+def checkpoint_sort_key(path):
+    try:
+        return (0, int(path.stem))
+    except ValueError:
+        return (1, path.stem)
+
+def checkpoint_files():
+    files = sorted(RAW.glob("*.json"), key=checkpoint_sort_key)
+    if files:
+        return files
+    legacy = sorted(LEGACY_RAW.glob("*.json"), key=checkpoint_sort_key)
+    if legacy:
+        print(f"using legacy checkpoints from {LEGACY_RAW}; set SECRET_ENCOUNTERS_RAW_DIR to keep checkpoints outside web data/", flush=True)
+    return legacy
+
+def load_json_posts(path):
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"  skipping {path.name}: {type(e).__name__}: {e}", flush=True)
+        return []
+    if isinstance(payload, list):
+        return payload
+    print(f"  skipping {path.name}: expected a JSON array", flush=True)
+    return []
+
+def dedupe_posts(posts):
+    seen = set()
+    unique = []
+    dropped = 0
+    for post in posts:
+        pid = post.get("id") if isinstance(post, dict) else None
+        key = ("id", pid) if pid else ("fallback", post.get("created_utc") if isinstance(post, dict) else None,
+                                        post.get("title") if isinstance(post, dict) else None,
+                                        post.get("selftext") if isinstance(post, dict) else None)
+        if key in seen:
+            dropped += 1
+            continue
+        seen.add(key)
+        unique.append(post)
+    return unique, dropped
+
 def age_bucket(a):
     return "18-24" if a < 25 else "25-34" if a < 35 else "35-44" if a < 45 else "45-54" if a < 55 else "55+"
 
@@ -135,10 +180,12 @@ def main(days):
     posts = []
     now = int(time.time())
     RAW.mkdir(parents=True, exist_ok=True)
-    saved = sorted(RAW.glob("*.json"), key=lambda p: int(p.stem))
+    saved = checkpoint_files()
     if saved:  # resume from checkpoints
-        for p in saved: posts.extend(json.loads(p.read_text()))
-        cursor = posts[-1]["created_utc"]
+        for p in saved:
+            posts.extend(load_json_posts(p))
+        cursors = [p.get("created_utc") for p in posts if isinstance(p, dict) and isinstance(p.get("created_utc"), (int, float))]
+        cursor = int(max(cursors)) if cursors else now - days * 86400
         print(f"resuming: {len(posts)} posts from {len(saved)} saved pages", flush=True)
     else:
         cursor = now - days * 86400
@@ -153,16 +200,19 @@ def main(days):
             continue
         skips = 0
         posts.extend(batch)
-        (RAW / f"{i + 1}.json").write_text(json.dumps(batch))
+        (RAW / f"{i + 1}.json").write_text(json.dumps(batch), encoding="utf-8")
         cursor = batch[-1].get("created_utc", now)
         print(f"page {i + 1}: {len(posts)} posts (up to {time.strftime('%Y-%m-%d', time.gmtime(cursor))})", flush=True)
         if cursor >= now - 1800 or len(batch) < 50: break  # caught up to ~now
         time.sleep(1.2)  # polite cadence
     if not posts:
         sys.exit("no posts collected")
+    posts, dropped = dedupe_posts(posts)
+    if dropped:
+        print(f"deduped {dropped} repeated posts by id/fingerprint", flush=True)
     data = aggregate(posts)
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(json.dumps(data, indent=1))
+    OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")
     print(f"wrote {OUT} — {len(posts)} posts, {data['gendered']} gendered, {data['seeking_tagged']} seeking-tags")
 
 def aggregate(posts):
@@ -182,10 +232,15 @@ def aggregate(posts):
         if r["seeking"]: seeking_c[r["seeking"]] += 1; tagged += 1
         for c in r["cities"]: cities_c[c] += 1
 
+    timestamps = [int(p.get("created_utc")) for p in posts if isinstance(p, dict) and isinstance(p.get("created_utc"), (int, float))]
+    if not timestamps:
+        now = int(time.time())
+        timestamps = [now]
+
     data = {
         "generated": time.strftime("%Y-%m-%d"),
-        "period": {"from": time.strftime("%b %Y", time.gmtime(min(p["created_utc"] for p in posts))),
-                   "to":   time.strftime("%b %Y", time.gmtime(max(p["created_utc"] for p in posts)))},
+        "period": {"from": time.strftime("%b %Y", time.gmtime(min(timestamps))),
+                   "to":   time.strftime("%b %Y", time.gmtime(max(timestamps)))},
         "posts": len(posts), "gendered": sum(gender_c.values()), "seeking_tagged": tagged,
         "gender": dict(gender_c),
         "seeking": dict(seeking_c.most_common()),
@@ -197,11 +252,14 @@ def aggregate(posts):
     return data
 
 def rebuild():
-    files = sorted(RAW.glob("*.json"), key=lambda p: int(p.stem))
-    posts = [p for f in files for p in json.loads(f.read_text())]
-    if not posts: sys.exit("no checkpoints in data/raw")
+    files = checkpoint_files()
+    posts = [p for f in files for p in load_json_posts(f)]
+    if not posts: sys.exit(f"no checkpoints in {RAW} or {LEGACY_RAW}")
+    posts, dropped = dedupe_posts(posts)
+    if dropped:
+        print(f"deduped {dropped} repeated posts by id/fingerprint", flush=True)
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(json.dumps(aggregate(posts), indent=1))
+    OUT.write_text(json.dumps(aggregate(posts), indent=1), encoding="utf-8")
     print(f"rebuilt {OUT} from {len(files)} pages ({len(posts)} posts)")
 
 def demo():

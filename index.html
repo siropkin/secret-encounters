@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Secret Encounters | r/Affairs in numbers</title>
 <meta name="description" content="Who is looking, and why? Ages, reasons, and cities in public posts from Reddit's r/Affairs community.">
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -94,7 +95,6 @@ h1{
 .panel small{font-size:.95rem; color:var(--faded)}
 .panel h3{font-size:1.1rem; margin:24px 0 var(--gap-tight)}
 .topic-note{font-size:.9rem; color:var(--faded); margin:0 0 var(--gap-group)}
-.reason-note{max-width:880px; margin:24px auto 0; font-size:.9rem; color:var(--faded)}
 .seek small{display:block; margin-top:0; font-size:.9rem; color:var(--faded)}
 .seek{display:flex; flex-direction:column; gap:var(--gap-tight); font-size:1rem; margin:0; min-height:48px}
 .stat-statement{display:block; font-size:1rem; line-height:1.5; color:var(--faded)}
@@ -195,7 +195,7 @@ footer .rule{width:min(70%,380px)}
   .story-intro .kicker{grid-area:1/1}
   .story-intro h1{grid-area:2/1; transform:scale(var(--title-scale,1)); transform-origin:center top}
   .masthead .deck{grid-area:3/1; width:var(--photo-width); max-width:none}
-  .story-intro .topic-summary{grid-area:3/1}
+  .story-intro .topic-summary{grid-area:3/1; padding-inline:24px}
   .summary-story{position:absolute; top:0; left:50%; transform:translateX(-50%);
     width:var(--photo-width); height:100svh; margin-top:0;
     display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:64px}
@@ -226,8 +226,7 @@ footer .rule{width:min(70%,380px)}
     margin-bottom:0; font-variant-numeric:tabular-nums}
   .chart-section .seek small{margin-top:0; font-size:1rem; line-height:1.5}
   .chart-section .seek .stat-note{margin-top:calc(var(--gap-note) - var(--gap-tight))}
-  .topic-note,.chart-detail,.reason-note,.gender-title .count{font-size:1rem; line-height:1.5}
-  .reason-note{margin-top:16px}
+  .topic-note,.chart-detail,.gender-title .count{font-size:1rem; line-height:1.5}
   .plate{margin-top:24px; padding-top:24px}
   .men{grid-column:1}
   .women{grid-column:3}
@@ -350,8 +349,6 @@ footer .rule{width:min(70%,380px)}
     </section>
   </section>
   </div>
-  <p class="reason-note">Reasons are keyword matches, not confirmed motives. Age percentages may not total 100% because of rounding.</p>
-
   <section class="plate" aria-label="Map of hotspot cities">
     <h2>Cities mentioned</h2>
     <p class="sub" id="city-note">The 15 most-mentioned cities. A mention does not mean someone lives there.</p>
@@ -364,7 +361,7 @@ footer .rule{width:min(70%,380px)}
   <footer>
     <p id="sample-credit" hidden>Sample data, not verified archive findings.</p>
     <p>These counts describe posts, not unique people. One person may write several posts.
-      Reasons are found using keywords, so some matches may be wrong.</p>
+      Reasons are keyword matches and may be wrong; age percentages may not total 100% because of rounding.</p>
     <p><a href="https://srdkn.com/">srdkn.com</a></p>
   </footer>
 </div>
@@ -381,13 +378,23 @@ const BUCKETS = ['18-24','25-34','35-44','45-54','55+'];
 const MLABEL = {dead_bedroom:'Lack of sex', thrill_variety:'Excitement & variety', emotional_gap:'Lack of closeness',
                 loneliness:'Feeling lonely', desired:'Wanting to feel desired', escape:'Escape from daily life'};
 let DATA = null, WORLD = null;
-lucide.createIcons();
-$('.scroll-cue').addEventListener('click', () => {
-  const nextTopic = document.querySelector('.men .chart-section');
-  nextTopic.setAttribute('tabindex', '-1');
-  nextTopic.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches ? 'instant' : 'smooth', block:'start'});
-  nextTopic.focus({preventScroll:true});
-});
+if (window.lucide && typeof window.lucide.createIcons === 'function') {
+  window.lucide.createIcons();
+} else {
+  const cueFallback = document.querySelector('.scroll-cue');
+  if (cueFallback) cueFallback.textContent = '↓';
+}
+const scrollCue = $('.scroll-cue');
+if (scrollCue) {
+  scrollCue.addEventListener('click', () => {
+    const nextTopic = document.querySelector('.men .chart-section');
+    if (!nextTopic) return;
+    nextTopic.setAttribute('tabindex', '-1');
+    nextTopic.addEventListener('blur', () => nextTopic.removeAttribute('tabindex'), {once:true});
+    nextTopic.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block:'start'});
+    nextTopic.focus({preventScroll:true});
+  });
+}
 
 const storyPhoto = $('.story-photo');
 const storyStage = $('.stage');
@@ -486,7 +493,8 @@ function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.s
 function bars(sel, rows, color){
   const host = $(sel); host.innerHTML = '';
   const W = host.clientWidth, rowH = matchMedia('(min-width:1024px)').matches ? 60 : 52, pad = 4, plotW = W;
-  const svg = svgEl(W, rows.length * rowH + pad * 2), rc = rough.svg(svg);
+  const svg = svgEl(W, rows.length * rowH + pad * 2);
+  const rc = window.rough && typeof window.rough.svg === 'function' ? window.rough.svg(svg) : null;
   svg.setAttribute('role', 'group');
   svg.setAttribute('aria-label', `${sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : 'reason'} percentages, scale zero to one hundred.`);
   const detail = document.createElement('p'); detail.className = 'chart-detail';
@@ -510,8 +518,17 @@ function bars(sel, rows, color){
       baseline.setAttribute('width', plotW); baseline.setAttribute('height', 10);
       baseline.setAttribute('fill', INK); baseline.setAttribute('opacity', '.05');
       g.appendChild(baseline);
-      if (pct > 0) g.appendChild(rc.rectangle(0, barY, plotW * pct / 100, 10,
-        {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .15, bowing: 0, seed: index + 1}));
+      if (pct > 0){
+        if (rc) {
+          g.appendChild(rc.rectangle(0, barY, plotW * pct / 100, 10,
+            {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .15, bowing: 0, seed: index + 1}));
+        } else {
+          const rect = document.createElementNS(NS, 'rect');
+          rect.setAttribute('x', '0'); rect.setAttribute('y', String(barY));
+          rect.setAttribute('width', String(plotW * pct / 100)); rect.setAttribute('height', '10');
+          rect.setAttribute('fill', color); g.appendChild(rect);
+        }
+      }
       g.appendChild(txt(W, y + 16, pct + '%', 'bv', 'end'));
     }
     const showDetail = () => { detail.textContent = description; };
@@ -536,6 +553,47 @@ function motifRows(g){
 function drawMap(){
   const host = $('#map'); host.innerHTML = '';
   const list = $('#city-list'); list.innerHTML = '';
+  const cityLimit = 15;
+  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n).slice(0, cityLimit);
+  const cityColumnsValue = Number(getComputedStyle(list).getPropertyValue('--city-columns'));
+  const cityColumns = Number.isFinite(cityColumnsValue) && cityColumnsValue > 0 ? cityColumnsValue : 1;
+  list.style.setProperty('--city-rows', Math.max(1, Math.ceil(cities.length / cityColumns)));
+  $('#city-note').textContent = `The ${cities.length} most-mentioned cities. Counts are mentions, not residents or unique people.`;
+
+  const createCityItem = (city, index) => {
+    const item = document.createElement('li'); item.setAttribute('tabindex', '0'); item.setAttribute('role', 'button');
+    const rank = document.createElement('span'); rank.className = 'city-rank'; rank.textContent = index + 1;
+    const name = document.createElement('span'); name.className = 'city-name'; name.textContent = city.city;
+    const count = document.createElement('span'); count.className = 'city-value'; count.textContent = city.n.toLocaleString();
+    item.append(rank, name, count);
+    item.setAttribute('aria-label', `${city.city}: ${city.n.toLocaleString()} mentions`);
+    return item;
+  };
+
+  $('#map-detail').textContent = '';
+  if (!cities.length) {
+    $('#map-note').textContent = 'No city mentions were detected in this dataset.';
+    return;
+  }
+
+  const hasMapLibs = typeof window.d3 !== 'undefined' && typeof window.topojson !== 'undefined';
+  if (!hasMapLibs) {
+    $('#map-note').textContent = 'The map could not load. City counts are listed above.';
+    cities.forEach((city, index) => {
+      const item = createCityItem(city, index);
+      const show = () => { $('#map-detail').textContent = `${city.city}: ${city.n.toLocaleString()} mentions.`; };
+      item.addEventListener('pointerenter', show);
+      item.addEventListener('focus', show);
+      item.addEventListener('pointerleave', () => { $('#map-detail').textContent = ''; });
+      item.addEventListener('blur', () => { $('#map-detail').textContent = ''; });
+      item.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); show();}
+      });
+      list.appendChild(item);
+    });
+    return;
+  }
+
   const W = host.clientWidth;
   const latTop = 76, latBot = -58;
   const H = Math.round(W * (latTop - latBot) / 360);
@@ -559,14 +617,15 @@ function drawMap(){
     svg.appendChild(land);
   }
 
-  const cityLimit = 15;
-  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n).slice(0, cityLimit);
-  const cityColumns = Number(getComputedStyle(list).getPropertyValue('--city-columns'));
-  list.style.setProperty('--city-rows', Math.max(1, Math.ceil(cities.length / cityColumns)));
-  $('#city-note').textContent = `The ${cities.length} most-mentioned cities. Counts are mentions, not residents or unique people.`;
   if (!cities.length) { host.appendChild(svg); return; }
   const labels = [];
   const positions = cities.map(city => ({x:X(city.lon), y:Y(city.lat)}));
+
+  const clearHighlight = () => {
+    [...list.children, ...svg.querySelectorAll('.hot')].forEach(element => element.classList.remove('is-active'));
+    $('#map-detail').textContent = '';
+  };
+
   cities.forEach((c, i) => {
     const cx = X(c.lon), cy = Y(c.lat);
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'hot');
@@ -603,30 +662,27 @@ function drawMap(){
       }
     }
     svg.appendChild(g);
-    const item = document.createElement('li'); item.setAttribute('tabindex', '0');
-    const rank = document.createElement('span'); rank.className = 'city-rank'; rank.textContent = i + 1;
-    const name = document.createElement('span'); name.className = 'city-name'; name.textContent = c.city;
-    const count = document.createElement('span'); count.className = 'city-value'; count.textContent = c.n.toLocaleString();
-    item.append(rank, name, count);
-    item.setAttribute('aria-label', `${c.city}: ${c.n.toLocaleString()} mentions`);
-    const highlight = active => {
-      if (!active) return;
-      [...list.children, ...svg.querySelectorAll('.hot')].forEach(element => element.classList.remove('is-active'));
+    const item = createCityItem(c, i);
+    const highlight = () => {
+      clearHighlight();
       item.classList.add('is-active'); g.classList.add('is-active');
       $('#map-detail').textContent = `${c.city}: ${c.n.toLocaleString()} mentions.`;
     };
-    item.addEventListener('pointerenter', () => highlight(true));
-    item.addEventListener('pointerleave', () => highlight(false));
-    item.addEventListener('focus', () => highlight(true)); item.addEventListener('blur', () => highlight(false));
-    item.addEventListener('click', () => { item.focus(); highlight(true); });
+    item.addEventListener('pointerenter', highlight);
+    item.addEventListener('pointerleave', clearHighlight);
+    item.addEventListener('focus', highlight);
+    item.addEventListener('blur', clearHighlight);
+    item.addEventListener('click', () => { item.focus(); highlight(); });
     item.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight(true);}
+      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight();}
     });
-    g.addEventListener('pointerenter', () => highlight(true)); g.addEventListener('pointerleave', () => highlight(false));
-    g.addEventListener('focus', () => highlight(true));
-    g.addEventListener('click', () => highlight(true));
+    g.addEventListener('pointerenter', highlight);
+    g.addEventListener('pointerleave', clearHighlight);
+    g.addEventListener('focus', highlight);
+    g.addEventListener('blur', clearHighlight);
+    g.addEventListener('click', highlight);
     g.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight(true);}
+      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight();}
     });
     list.appendChild(item);
   });
@@ -692,10 +748,13 @@ function render(){
 }
 
 Promise.all([
-  fetch('data/data.json', {cache:'no-cache'}).then(r => { if (!r.ok) throw 0; return r.json(); }),
+  fetch('data/data.json', {cache:'no-store'}).then(r => { if (!r.ok) throw new Error('data.json request failed'); return r.json(); }),
   fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r => r.json()).catch(() => null),
 ]).then(([d, w]) => { DATA = d; WORLD = w; render(); })
-  .catch(() => { $('#notice').style.display = 'block'; });
+  .catch(error => {
+    console.error('Unable to render data view:', error);
+    $('#notice').style.display = 'block';
+  });
 
 let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => DATA && render(), 250); });
 </script>

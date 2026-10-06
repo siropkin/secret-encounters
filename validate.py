@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Audit scrape.py's classification against raw checkpoints.
 Usage: python3 validate.py [sample-size]"""
-import json, random, re, sys, glob
+import random, re, sys
 from collections import Counter
 import scrape
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 400
 random.seed(7)
 
-posts = [p for f in glob.glob(str(scrape.RAW / '*.json')) for p in json.load(open(f))]
+files = scrape.checkpoint_files()
+if not files:
+    sys.exit(f"no checkpoints found in {scrape.RAW} or {scrape.LEGACY_RAW}")
+posts = [p for f in files for p in scrape.load_json_posts(f)]
 print(f"total checkpointed posts: {len(posts):,}\n")
 
 parsed = [(p, scrape.parse_post(p)) for p in posts]
