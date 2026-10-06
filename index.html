@@ -452,7 +452,7 @@ function updateStoryEffects(){
     ? (titleEntry === 1 && titleExit > 0 ? 1 : 0) : titleEntry * titleExit;
   genderTitles.style.opacity = desktopStory.matches ? 1 : 0;
   genderTitles.inert = titleOpacity === 0;
-  const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight) / (innerHeight * .35)));
+  const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight * .5) / (innerHeight * .35)));
   const introExit = !desktopStory.matches ? 1 : reducedMotion.matches
     ? (release > 0 ? 1 : 0) : release * release * (3 - 2 * release);
   storyIntro.querySelector('h1').style.opacity = 1;
