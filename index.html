@@ -17,7 +17,7 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%; background:var(--paper)}
 body{
-  margin:0; color:var(--ink);
+  margin:0; color:var(--ink); background:var(--paper);
   font-family:'Karla', sans-serif;
   line-height:1.5;
 }
@@ -53,6 +53,9 @@ body{
 }
 .kicker{font-size:.85rem; color:var(--faded); margin:0 auto 18px; max-width:34rem}
 .kicker b{color:var(--red)}
+.kicker a{color:inherit; text-decoration:underline; text-underline-offset:3px}
+.kicker a:hover{color:var(--ink)}
+.kicker a:focus-visible{outline:2px solid var(--red); outline-offset:3px}
 .sample-label{font-weight:500}
 .sample-label[hidden]{display:none}
 h1{
@@ -70,6 +73,7 @@ h1{
 .ledger,.ledger-note{background:transparent; text-shadow:0 1px 2px var(--paper)}
 
 /* ---------- the spread (panels floating on the photograph) ---------- */
+.stage{--gap-tight:4px; --gap-note:8px; --gap-group:16px}
 .spread{display:grid; gap:48px; margin:40px auto 0; max-width:880px}
 .panel{
   padding:0; position:relative; min-width:0;
@@ -81,13 +85,20 @@ h1{
 .panel.men h2{color:var(--blue)}
 .panel.women h2{color:var(--red)}
 .topic-identity{display:none}
+.posts-chapter{display:none}
+.story-photo,.scroll-cue{display:none}
+.summary-story{margin-top:auto; width:100%}
+.topic-summary{display:none}
+.gender-titles{display:none}
 .count{font-weight:600; font-size:1rem; font-variant-numeric:tabular-nums}
 .panel small{font-size:.95rem; color:var(--faded)}
-.panel h3{font-size:1.1rem; margin:24px 0 8px}
-.topic-note{font-size:.9rem; color:var(--faded); margin:0 0 12px; min-height:44px}
+.panel h3{font-size:1.1rem; margin:24px 0 var(--gap-tight)}
+.topic-note{font-size:.9rem; color:var(--faded); margin:0 0 var(--gap-group)}
 .reason-note{max-width:880px; margin:24px auto 0; font-size:.9rem; color:var(--faded)}
-.seek small{display:block; margin-top:8px; font-size:.9rem; color:var(--faded)}
-.seek{font-size:1rem; margin:0; min-height:48px}
+.seek small{display:block; margin-top:0; font-size:.9rem; color:var(--faded)}
+.seek{display:flex; flex-direction:column; gap:var(--gap-tight); font-size:1rem; margin:0; min-height:48px}
+.stat-statement{display:block; font-size:1rem; line-height:1.5; color:var(--faded)}
+.seek .stat-note{margin-top:calc(var(--gap-note) - var(--gap-tight))}
 .seek b{font-weight:700}
 .chart{width:100%; position:relative}
 .chart-detail{font-size:.9rem; color:var(--faded); min-height:44px; margin:4px 0 0}
@@ -125,6 +136,9 @@ h1{
 .hot.is-active .map-dot{fill:var(--ink); stroke:var(--paper); stroke-width:2px}
 
 footer{max-width:880px; margin:32px auto 0; font-size:.9rem; color:var(--faded)}
+footer a{color:var(--ink); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px}
+footer a:hover{color:var(--red)}
+footer a:focus-visible{outline:2px solid var(--red); outline-offset:4px}
 footer .rule{width:min(70%,380px)}
 .notice{display:none; margin:1.5rem auto; max-width:32rem; border:2px dashed var(--red); padding:1rem; text-align:center; color:var(--red); background:rgba(232,222,196,.85)}
 
@@ -133,6 +147,9 @@ footer .rule{width:min(70%,380px)}
   .wrap{padding:0 48px 56px}
   .masthead{padding-top:48px; padding-bottom:0; min-height:0; display:block}
   .masthead::before{display:none}
+  .topic-summary{display:block; width:var(--photo-width); margin:0 auto;
+    font-size:1rem; line-height:1.5; pointer-events:none}
+  .topic-summary[hidden]{display:none}
   .wrap::before{
     content:""; position:absolute; top:140px; left:50%; transform:translateX(-50%);
     width:600px; height:1074px; z-index:-1; pointer-events:none;
@@ -152,32 +169,88 @@ footer .rule{width:min(70%,380px)}
   .city-list{--city-columns:3; gap:14px 32px}
 }
 @media (min-width:1024px){
-  .wrap{--photo-width:min(34vw,calc((100svh - 140px)*.55859375));
+  .wrap{--photo-width:min(40vw,calc((100svh - 140px)*.55859375));
     --center-width:calc(var(--photo-width) + 64px); max-width:none; padding:0 32px 56px}
   .wrap::before{display:none}
   .stage{display:grid; position:relative;
     grid-template-columns:minmax(0,1fr) var(--center-width) minmax(0,1fr)}
+  .gender-titles{display:grid; grid-column:1/-1; grid-row:1; position:sticky; top:0;
+    align-self:start; height:100svh; padding-top:70px; align-content:start; z-index:2;
+    grid-template-columns:minmax(0,1fr) var(--center-width) minmax(0,1fr); pointer-events:none; opacity:0}
+  .gender-title h2{font-family:"DM Serif Display",serif; font-weight:400; font-size:72px;
+    line-height:1.05; margin:0 0 calc(var(--gap-tight) - 1.05em * (1 - var(--title-scale,1)));
+    transform:scale(var(--title-scale,1)); transform-origin:left top}
+  .gender-title{position:relative; padding-bottom:24px; isolation:isolate}
+  .gender-title::before{content:""; position:absolute; inset:-70px -32px -48px; z-index:-1;
+    background:linear-gradient(to bottom,var(--paper) calc(100% - 48px),transparent);
+    opacity:var(--backing-opacity,0)}
+  .gender-title.men h2{color:var(--blue)}
+  .gender-title.women h2{color:var(--red)}
+  .gender-title .count{display:block; font-size:1rem; font-weight:400; color:var(--faded)}
+  .story-photo{display:block; grid-column:2; grid-row:1; position:sticky; top:0;
+    align-self:start; height:100svh; pointer-events:none; isolation:isolate}
   .masthead{grid-column:2; grid-row:1; position:sticky; top:0; align-self:start;
-    height:100svh; min-height:100svh; padding:32px 0 24px; display:flex; flex-direction:column; min-width:0}
-  .masthead::before{display:block; width:var(--photo-width); top:auto; bottom:0;
+    height:100svh; min-height:100svh; padding:32px 0 0; display:block; min-width:0}
+  .story-intro{position:sticky; top:32px; z-index:1; display:grid}
+  .story-intro .kicker{grid-area:1/1}
+  .story-intro h1{grid-area:2/1; transform:scale(var(--title-scale,1)); transform-origin:center top}
+  .masthead .deck{grid-area:3/1; width:var(--photo-width); max-width:none}
+  .story-intro .topic-summary{grid-area:3/1}
+  .summary-story{position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:var(--photo-width); height:100svh; margin-top:0;
+    display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:64px}
+  .masthead::before{display:none}
+  .story-photo::before{content:""; position:absolute; left:50%;
+    transform:translateX(-50%);
+    z-index:-1; display:block; width:var(--photo-width); bottom:0;
     height:auto; aspect-ratio:572/1024; background:url("assets/hero.jpg") center bottom/100% auto no-repeat;
     background-color:var(--paper); background-blend-mode:multiply;
-    mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.12) 18%,#000 35%,#000 80%,
-      rgba(0,0,0,.9) 86%,rgba(0,0,0,.3) 95%,transparent)}
+    mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.12) 18%,#000 35%,#000 90%,
+      rgba(0,0,0,.92) 95%,rgba(0,0,0,.55) 98%,transparent)}
+  .story-photo::after{content:""; position:absolute; inset:0; background:var(--paper);
+    opacity:var(--photo-wash,0); pointer-events:none}
   h1{font-size:72px}
-  .masthead .ledger{margin-top:auto}
-  .spread{grid-column:1/-1; grid-row:1; width:100%; max-width:none; margin-top:0;
+  .masthead .ledger{margin-top:0}
+  .masthead .ledger,.masthead .ledger-note{display:none}
+  .spread{grid-column:1/-1; grid-row:1; width:100%; max-width:none; margin-top:0; padding-top:100svh;
     grid-template-columns:minmax(0,1fr) var(--center-width) minmax(0,1fr); gap:0}
   .panel-heading{display:none}
-  .topic-identity{display:block; margin-bottom:20px}
+  .topic-identity{display:none}
+  .topic-identity .count{display:block; font-size:.95rem; font-weight:400; color:var(--faded)}
   .chart-section{min-height:100svh; display:flex; flex-direction:column;
     justify-content:center; padding:112px 0 72px}
-  .chart-section h3{margin-top:0; font-size:1.25rem}
+  .chart-section h3{margin-top:0; font-size:1.4rem}
+  .chart-section.posts-chapter{display:flex}
+  .chart-section .seek{min-height:0}
+  .chart-section .seek b{display:block; font-size:4rem; line-height:1.05;
+    margin-bottom:0; font-variant-numeric:tabular-nums}
+  .chart-section .seek small{margin-top:0; font-size:1rem; line-height:1.5}
+  .chart-section .seek .stat-note{margin-top:calc(var(--gap-note) - var(--gap-tight))}
+  .topic-note,.chart-detail,.reason-note,.gender-title .count{font-size:1rem; line-height:1.5}
+  .reason-note{margin-top:16px}
+  .plate{margin-top:24px; padding-top:24px}
   .men{grid-column:1}
   .women{grid-column:3}
   .panel h2,.panel h3,.count,.panel small,.seek,.topic-note{text-shadow:none}
-  .bl,.bv{stroke:none}
+  .bl,.bv{stroke:none; font-size:17px}
   .notice{grid-column:1/-1}
+  .scroll-cue{display:grid; place-items:center; position:absolute; bottom:10px; left:50%;
+    margin-left:-20px; width:40px; height:40px; padding:0; border:0; background:transparent; color:var(--ink); cursor:pointer}
+  .scroll-cue svg{width:22px; height:22px; animation:cue-drift 2.4s ease-in-out infinite}
+  .scroll-cue:hover{color:var(--red)}
+  .scroll-cue:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+}
+@keyframes cue-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@media (min-width:1280px){
+  .chart-section .seek b{font-size:6rem}
+}
+@media (max-width:759px){
+  .panel h2{margin-bottom:var(--gap-tight)}
+  .panel h3{font-size:1.25rem}
+  .topic-note,.chart-detail,.seek small{font-size:1rem; line-height:1.5}
+  .seek b{font-size:3rem; line-height:1.05; font-variant-numeric:tabular-nums}
+  .chart-section:not(.posts-chapter) + .chart-section{margin-top:calc(var(--gap-group) * 2)}
+  .chart-section:not(.posts-chapter) + .chart-section h3{margin-top:0}
 }
 @media (min-width:480px) and (max-width:759px){
   .city-list{--city-columns:2}
@@ -197,24 +270,33 @@ footer .rule{width:min(70%,380px)}
 @media (prefers-reduced-motion:reduce){
   .bar,.hot{transition:none}
   .bar:hover,.hot:hover{transform:none}
+  .scroll-cue svg{animation:none}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="stage">
+  <div class="story-photo" aria-hidden="true"></div>
 
   <header class="masthead">
-    <p class="kicker"><b>Reddit · r/Affairs</b><span class="sample-label" id="sample-label" hidden> · Sample data</span></p>
+    <div class="story-intro">
+    <p class="kicker"><b>Reddit · <a href="https://www.reddit.com/r/Affairs/">r/Affairs</a></b><span class="sample-label" id="sample-label" hidden> · Sample data</span></p>
     <h1>Secret<br>Encounters</h1>
     <p class="deck">Who is looking, and why? A look at <span id="nposts">several thousand</span> public
       posts from <span id="period">the past year</span>. Ages, reasons, and cities people mention.</p>
+    </div>
+    <div class="summary-story">
     <div class="ledger">
       <div><span class="n" id="total-posts">—</span><br><span class="l">posts</span></div>
       <div><span class="n" id="pc-m">—</span><br><span class="l">by men</span></div>
       <div><span class="n" id="pc-f">—</span><br><span class="l">by women</span></div>
     </div>
     <p class="ledger-note">Percentages use posts that state a gender.</p>
+    <button class="scroll-cue" type="button" aria-label="Continue to the next topic" title="Continue to the next topic">
+      <i data-lucide="arrow-down" aria-hidden="true"></i>
+    </button>
+    </div>
   </header>
 
   <div class="notice" id="notice">
@@ -227,18 +309,20 @@ footer .rule{width:min(70%,380px)}
       <h2>Men</h2>
       <span class="count" id="men-count">—</span> <small>posts</small>
       </div>
+      <section class="chart-section posts-chapter" aria-label="Men: share of posts">
+      <p class="seek"><b id="men-share">—</b><small>of posts with a stated gender are by men</small></p>
+      </section>
       <section class="chart-section" aria-label="Men: age">
       <h3>Age</h3>
       <p class="topic-note" id="men-age-note">Of posts that state an age.</p>
       <div class="chart" id="men-ages"></div>
       </section>
       <section class="chart-section" aria-label="Men: looking for">
-      <h3>Looking for</h3>
       <p class="seek" id="seek-m">—</p>
       </section>
       <section class="chart-section" aria-label="Men: reasons mentioned">
       <h3>Reasons mentioned</h3>
-      <p class="topic-note">Of posts by men. A post can mention several reasons.</p>
+      <p class="topic-note">of posts by men; one post may mention several reasons</p>
       <div class="chart" id="men-motives"></div>
       </section>
     </section>
@@ -247,18 +331,20 @@ footer .rule{width:min(70%,380px)}
       <h2>Women</h2>
       <span class="count" id="women-count">—</span> <small>posts</small>
       </div>
+      <section class="chart-section posts-chapter" aria-label="Women: share of posts">
+      <p class="seek"><b id="women-share">—</b><small>of posts with a stated gender are by women</small></p>
+      </section>
       <section class="chart-section" aria-label="Women: age">
       <h3>Age</h3>
       <p class="topic-note" id="women-age-note">Of posts that state an age.</p>
       <div class="chart" id="women-ages"></div>
       </section>
       <section class="chart-section" aria-label="Women: looking for">
-      <h3>Looking for</h3>
       <p class="seek" id="seek-f">—</p>
       </section>
       <section class="chart-section" aria-label="Women: reasons mentioned">
       <h3>Reasons mentioned</h3>
-      <p class="topic-note">Of posts by women. A post can mention several reasons.</p>
+      <p class="topic-note">of posts by women; one post may mention several reasons</p>
       <div class="chart" id="women-motives"></div>
       </section>
     </section>
@@ -268,7 +354,7 @@ footer .rule{width:min(70%,380px)}
 
   <section class="plate" aria-label="Map of hotspot cities">
     <h2>Cities mentioned</h2>
-    <p class="sub" id="city-note">The 12 most-mentioned cities. A mention does not mean someone lives there.</p>
+    <p class="sub" id="city-note">The 15 most-mentioned cities. A mention does not mean someone lives there.</p>
     <ol class="city-list" id="city-list" aria-label="City mentions ranked"></ol>
     <div id="map"></div>
     <p class="map-note" id="map-note">Dots show locations, not the number of mentions.</p>
@@ -276,15 +362,17 @@ footer .rule{width:min(70%,380px)}
   </section>
 
   <footer>
-    <p><span id="source-label">Source: public r/Affairs posts from the Arctic Shift archive.</span> <span id="fperiod">The past year</span>.</p>
+    <p id="sample-credit" hidden>Sample data, not verified archive findings.</p>
     <p>These counts describe posts, not unique people. One person may write several posts.
       Reasons are found using keywords, so some matches may be wrong.</p>
+    <p><a href="https://srdkn.com/">srdkn.com</a></p>
   </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.js"></script>
 <script>
 const NS = 'http://www.w3.org/2000/svg';
 const $ = s => document.querySelector(s);
@@ -293,13 +381,111 @@ const BUCKETS = ['18-24','25-34','35-44','45-54','55+'];
 const MLABEL = {dead_bedroom:'Lack of sex', thrill_variety:'Excitement & variety', emotional_gap:'Lack of closeness',
                 loneliness:'Feeling lonely', desired:'Wanting to feel desired', escape:'Escape from daily life'};
 let DATA = null, WORLD = null;
+lucide.createIcons();
+$('.scroll-cue').addEventListener('click', () => {
+  const nextTopic = document.querySelector('.men .chart-section');
+  nextTopic.setAttribute('tabindex', '-1');
+  nextTopic.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches ? 'instant' : 'smooth', block:'start'});
+  nextTopic.focus({preventScroll:true});
+});
+
+const storyPhoto = $('.story-photo');
+const storyStage = $('.stage');
+const storySummary = $('.summary-story');
+const storyIntro = $('.story-intro');
+const topicSummary = document.createElement('p');
+topicSummary.className = 'topic-summary';
+topicSummary.hidden = true;
+storyIntro.append(topicSummary);
+const topicDescriptions = [
+  "Compare the share of posts by men and women. Percentages use posts identified as men or women and count posts, not unique people.",
+  "Compare age ranges among posts by men and women. Each bar shows the share of that group's posts that state an age. Missing ages are excluded.",
+  "Compare who men and women say they are looking for. Each percentage uses only that group's posts tagged as seeking men or women.",
+  "Compare the reasons mentioned in posts by men and women. Each bar shows the share of that group's posts matching a reason's keywords. A post can match several reasons."
+];
+const storyPanels = [...document.querySelectorAll('.spread > .panel')];
+const genderTitles = document.createElement('div');
+genderTitles.className = 'gender-titles';
+const genderHeadings = storyPanels.map(panel => {
+  const heading = panel.querySelector('.panel-heading').cloneNode(true);
+  heading.className = `gender-title ${panel.classList.contains('men') ? 'men' : 'women'}`;
+  heading.querySelector('.count').removeAttribute('id');
+  heading.querySelector('small').remove();
+  genderTitles.append(heading);
+  return heading;
+});
+storyStage.append(genderTitles);
+const desktopStory = matchMedia('(min-width:1024px)');
+const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
+let storyFrame = 0;
+function updateStoryEffects(){
+  storyFrame = 0;
+  const distance = Math.max(0, -storyStage.getBoundingClientRect().top);
+  const progress = desktopStory.matches
+    ? Math.min(1, distance / Math.max(1, storyStage.offsetHeight - innerHeight)) : 0;
+  const fade = Math.min(1, Math.max(0, (distance / innerHeight - .12) / .53));
+  const opacity = !desktopStory.matches ? 1 : reducedMotion.matches
+    ? (fade < 1 ? 1 : 0) : 1 - fade * fade * (3 - 2 * fade);
+  storyPhoto.style.setProperty('--photo-wash', progress);
+  storyStage.style.setProperty('--title-scale', desktopStory.matches && !reducedMotion.matches
+    ? 1 - .22 * Math.min(1, distance / (innerHeight * .8)) : 1);
+  storySummary.style.opacity = opacity;
+  storySummary.style.pointerEvents = opacity === 0 ? 'none' : '';
+  storySummary.inert = opacity === 0;
+  for (const element of [storyIntro.querySelector('.kicker'), storyIntro.querySelector('.deck')]){
+    element.style.opacity = opacity;
+    element.style.pointerEvents = opacity === 0 ? 'none' : '';
+    element.inert = opacity === 0;
+  }
+  const chapterPosition = distance / innerHeight;
+  const topicIndex = Math.max(0, Math.min(topicDescriptions.length - 1, Math.floor(chapterPosition + .5) - 1));
+  const titleEntry = Math.min(1, Math.max(0, (chapterPosition - .3) / .5));
+  const titleExit = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - 100) / innerHeight));
+  const titleOpacity = !desktopStory.matches ? 0 : reducedMotion.matches
+    ? (titleEntry === 1 && titleExit > 0 ? 1 : 0) : titleEntry * titleExit;
+  genderTitles.style.opacity = desktopStory.matches ? 1 : 0;
+  genderTitles.inert = titleOpacity === 0;
+  const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight) / (innerHeight * .35)));
+  const introExit = !desktopStory.matches ? 1 : reducedMotion.matches
+    ? (release > 0 ? 1 : 0) : release * release * (3 - 2 * release);
+  storyIntro.querySelector('h1').style.opacity = 1;
+  genderHeadings.forEach((heading, index) => {
+    heading.querySelector('h2').style.opacity = titleOpacity;
+    heading.querySelector('.count').style.opacity = titleOpacity;
+    heading.style.setProperty('--backing-opacity', titleEntry > 0 && titleExit > 0 ? 1 : 0);
+    const identity = storyPanels[index].querySelectorAll('.topic-identity')[topicIndex];
+    const subtitle = identity?.querySelector('.count').textContent || '';
+    if (heading.querySelector('.count').textContent !== subtitle) heading.querySelector('.count').textContent = subtitle;
+  });
+  const description = topicDescriptions[topicIndex];
+  const topicBlend = chapterPosition > 1 && chapterPosition < topicDescriptions.length
+    ? Math.min(1, Math.abs(chapterPosition % 1 - .5) / .12) : 1;
+  const contextOpacity = !desktopStory.matches || !description ? 0 : reducedMotion.matches
+    ? (chapterPosition >= .65 ? introExit : 0)
+    : Math.min(1, Math.max(0, (chapterPosition - .65) / .2)) * topicBlend * introExit;
+  topicSummary.hidden = contextOpacity === 0;
+  topicSummary.style.opacity = contextOpacity;
+  if (description && topicSummary.textContent !== description) topicSummary.textContent = description;
+  const compactIntro = desktopStory.matches && topicIndex === topicDescriptions.length - 1 && introExit === 0;
+  const mainTitle = storyIntro.querySelector('h1');
+  storyIntro.style.height = compactIntro
+    ? `${Math.ceil(mainTitle.getBoundingClientRect().bottom - storyIntro.getBoundingClientRect().top)}px` : '';
+}
+function scheduleStoryEffects(){
+  if (!storyFrame) storyFrame = requestAnimationFrame(updateStoryEffects);
+}
+addEventListener('scroll', scheduleStoryEffects, {passive:true});
+addEventListener('resize', scheduleStoryEffects);
+desktopStory.addEventListener('change', scheduleStoryEffects);
+reducedMotion.addEventListener('change', scheduleStoryEffects);
+scheduleStoryEffects();
 
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';s.style.height=h+'px';return s}
 function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);if(anchor)t.setAttribute('text-anchor',anchor);t.setAttribute('class',cls);t.textContent=str;return t}
 
 function bars(sel, rows, color){
   const host = $(sel); host.innerHTML = '';
-  const W = host.clientWidth, rowH = 52, pad = 4, plotW = W;
+  const W = host.clientWidth, rowH = matchMedia('(min-width:1024px)').matches ? 60 : 52, pad = 4, plotW = W;
   const svg = svgEl(W, rows.length * rowH + pad * 2), rc = rough.svg(svg);
   svg.setAttribute('role', 'group');
   svg.setAttribute('aria-label', `${sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : 'reason'} percentages, scale zero to one hundred.`);
@@ -373,7 +559,8 @@ function drawMap(){
     svg.appendChild(land);
   }
 
-  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n).slice(0, 12);
+  const cityLimit = 15;
+  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n).slice(0, cityLimit);
   const cityColumns = Number(getComputedStyle(list).getPropertyValue('--city-columns'));
   list.style.setProperty('--city-rows', Math.max(1, Math.ceil(cities.length / cityColumns)));
   $('#city-note').textContent = `The ${cities.length} most-mentioned cities. Counts are mentions, not residents or unique people.`;
@@ -450,54 +637,62 @@ function render(){
   const M = DATA.gender.M || 0, F = DATA.gender.F || 0, T = (M + F) || 1;
   const sample = DATA.generated === 'MOCK';
   $('#sample-label').hidden = !sample;
-  $('#source-label').textContent = sample
-    ? 'Sample data for this design. These are not verified archive findings.'
-    : 'Source: public r/Affairs posts from the Arctic Shift archive.';
+  $('#sample-credit').hidden = !sample;
   $('#nposts').textContent = DATA.posts.toLocaleString();
   if (DATA.period){
     const p = `${DATA.period.from} – ${DATA.period.to}`;
-    $('#period').textContent = p; $('#fperiod').textContent = p;
+    $('#period').textContent = p;
   }
   $('#pc-m').textContent = Math.round(100 * M / T) + '%';
   $('#pc-f').textContent = Math.round(100 * F / T) + '%';
+  $('#men-share').textContent = (100 * M / T).toFixed(1) + '%';
+  $('#women-share').textContent = (100 * F / T).toFixed(1) + '%';
   $('#total-posts').textContent = DATA.posts.toLocaleString();
   $('#men-count').textContent = M.toLocaleString();
   $('#women-count').textContent = F.toLocaleString();
   document.querySelectorAll('.panel').forEach(panel => {
     const heading = panel.querySelector('.panel-heading');
-    panel.querySelectorAll('.chart-section').forEach(section => {
+    const gender = panel.classList.contains('men') ? 'M' : 'F';
+    const commonAge = ageRows(gender).reduce((highest, row) => row[2] > highest[2] ? row : highest);
+    const commonReason = motifRows(gender).reduce((highest, row) => row[2] > highest[2] ? row : highest);
+    const seeking = DATA.seeking || {};
+    const preferences = gender === 'M' ? (seeking.M4F || 0) + (seeking.M4M || 0) : (seeking.F4M || 0) + (seeking.F4F || 0);
+    const subtitles = [`${(DATA.gender[gender] || 0).toLocaleString()} posts`, `Most-mentioned age range: ${commonAge[0]}`, `${preferences.toLocaleString()} posts state who they seek`, `Most-mentioned: ${commonReason[0]}`];
+    panel.querySelectorAll('.chart-section').forEach((section, index) => {
       let identity = section.querySelector('.topic-identity');
       if (!identity){
         identity = heading.cloneNode(true);
         identity.className = 'topic-identity';
         identity.querySelector('.count').removeAttribute('id');
+        identity.querySelector('small').remove();
         section.prepend(identity);
       }
-      identity.querySelector('.count').textContent = heading.querySelector('.count').textContent;
+      identity.querySelector('.count').textContent = subtitles[index];
     });
   });
 
   const menAges = ageRows('M'), womenAges = ageRows('F');
   const menKnown = menAges.reduce((total, row) => total + row[2], 0);
   const womenKnown = womenAges.reduce((total, row) => total + row[2], 0);
-  $('#men-age-note').textContent = `Based on ${menKnown.toLocaleString()} posts that state an age.`;
-  $('#women-age-note').textContent = `Based on ${womenKnown.toLocaleString()} posts that state an age.`;
+  $('#men-age-note').textContent = `based on ${menKnown.toLocaleString()} posts that state an age`;
+  $('#women-age-note').textContent = `based on ${womenKnown.toLocaleString()} posts that state an age`;
   bars('#men-ages', menAges, BLUE); bars('#women-ages', womenAges, RED);
   bars('#men-motives', motifRows('M'), BLUE); bars('#women-motives', motifRows('F'), RED);
 
   const sk = DATA.seeking || {};
   const mTot = (sk.M4F || 0) + (sk.M4M || 0), fTot = (sk.F4M || 0) + (sk.F4F || 0);
   $('#seek-m').innerHTML = DATA.seeking_tagged > 25 && mTot
-    ? `<b>${Math.round(100 * (sk.M4F || 0) / mTot)}%</b> seek women.<small>Based on ${mTot.toLocaleString()} posts that state who they are looking for.</small>`
+    ? `<b>${(100 * (sk.M4F || 0) / mTot).toFixed(1)}%</b><span class="stat-statement">looking for women</span><small class="stat-note">based on ${mTot.toLocaleString()} posts that state who they are looking for</small>`
     : 'Not enough posts state who they are looking for.';
   $('#seek-f').innerHTML = DATA.seeking_tagged > 25 && fTot
-    ? `<b>${Math.round(100 * (sk.F4M || 0) / fTot)}%</b> seek men.<small>Based on ${fTot.toLocaleString()} posts that state who they are looking for.</small>`
+    ? `<b>${(100 * (sk.F4M || 0) / fTot).toFixed(1)}%</b><span class="stat-statement">looking for men</span><small class="stat-note">based on ${fTot.toLocaleString()} posts that state who they are looking for</small>`
     : 'Not enough posts state who they are looking for.';
+  scheduleStoryEffects();
   drawMap();
 }
 
 Promise.all([
-  fetch('data/data.json').then(r => { if (!r.ok) throw 0; return r.json(); }),
+  fetch('data/data.json', {cache:'no-cache'}).then(r => { if (!r.ok) throw 0; return r.json(); }),
   fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r => r.json()).catch(() => null),
 ]).then(([d, w]) => { DATA = d; WORLD = w; render(); })
   .catch(() => { $('#notice').style.display = 'block'; });
