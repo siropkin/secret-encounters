@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Secret Encounters — A Statistical Exposé</title>
-<meta name="description" content="Who looks for whom, and why. A vintage tabloid infographic compiled from anonymous confessions.">
+<title>Secret Encounters | r/Affairs in numbers</title>
+<meta name="description" content="Who is looking, and why? Ages, reasons, and cities in public posts from Reddit's r/Affairs community.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:ital,wght@0,400;0,600;1,400&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#e8dec4; --paper2:#ebdcb9;
@@ -15,106 +15,116 @@
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:var(--paper)}
+html{-webkit-text-size-adjust:100%; background:#d8dbd8}
 body{
   margin:0; color:var(--ink);
   font-family:'Karla', sans-serif;
-  line-height:1.45; overflow-x:hidden;
+  line-height:1.5;
 }
-/* the photograph IS the page: full-bleed, inked into the paper */
-body::before{
-  content:""; position:fixed; inset:0; z-index:-1;
-  background:
-    linear-gradient(rgba(232,222,196,.56), rgba(232,222,196,.34) 45%, rgba(232,222,196,.60)),
-    url("assets/hero.jpg") center 30%/cover no-repeat,
-    var(--paper);
-  background-blend-mode:normal, multiply, normal;
+.wrap{
+  max-width:1060px; margin:0 auto; padding:0 24px 48px;
+  position:relative; isolation:isolate; background:var(--paper);
 }
-/* fixed grain + vignette over everything (non-interactive) */
-body::after{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:60;
-  background-image:
-    var(--noise),
-    radial-gradient(ellipse at center, transparent 58%, rgba(58,38,14,.14) 100%);
-  mix-blend-mode:multiply; opacity:.55;
+.wrap::before{
+  content:""; position:absolute; top:140px; left:50%; transform:translateX(-50%);
+  width:min(100%,572px); aspect-ratio:572/1024; z-index:-1; pointer-events:none;
+  background:linear-gradient(to right, var(--paper), transparent 16%, transparent 84%, var(--paper)),
+    linear-gradient(to bottom, var(--paper), rgba(232,222,196,.8) 12%,
+    rgba(232,222,196,.18) 27%, rgba(232,222,196,.8) 43%, rgba(232,222,196,.92) 60%, var(--paper) 95%),
+    url("assets/hero.jpg") center top/100% auto no-repeat;
+  background-blend-mode:normal,normal,multiply;
 }
-.wrap{max-width:1200px; margin:0 auto; padding:0 16px 4rem}
+.wrap::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:-1;
+  background-image:var(--noise); mix-blend-mode:multiply; opacity:.055;
+}
 
 /* ---------- masthead ---------- */
-.masthead{text-align:center; padding:2.2rem 0 .5rem; position:relative; text-shadow:0 0 14px rgba(232,222,196,.95), 0 0 5px rgba(232,222,196,.9)}
-.kicker{font-size:.72rem; letter-spacing:.28em; text-transform:uppercase; color:var(--faded)}
+.masthead{text-align:center; padding:32px 0 0; position:relative}
+@media (max-width:759px){
+  .masthead{min-height:calc(100svh - 40px); padding-bottom:24px}
+}
+.kicker{font-size:.75rem; color:var(--faded); margin:0 auto 18px; max-width:34rem}
 .kicker b{color:var(--red)}
 h1{
-  font-family:'DM Serif Display', serif; font-style:italic; font-weight:900;
-  font-size:clamp(3.1rem, 15vw, 7.5rem); line-height:.88; margin:.35rem 0 .6rem;
-  transform:rotate(-1.6deg);
-  text-shadow:1px 1px 0 rgba(255,252,240,.5), 2px 2px 0 rgba(43,33,24,.18);
+  font-family:'DM Serif Display', serif; font-weight:400;
+  font-size:58px; line-height:.98; margin:0 0 20px;
 }
-.deck{max-width:34rem; margin:.4rem auto 0; font-size:.95rem; color:var(--faded)}
-.deck::first-letter{
-  font-family:'DM Serif Display', serif; font-weight:900; font-style:italic;
-  float:left; font-size:3.1em; line-height:.8; padding:.06em .12em 0 0; color:var(--ink);
-}
-.rule{height:0; border-top:3px double var(--ink); margin:1.1rem auto .2rem; width:min(92%,560px); position:relative}
-.rule::after{content:"❦"; position:absolute; left:50%; top:50%; transform:translate(-50%,-52%); background:var(--paper); padding:0 .7em; color:var(--red); font-size:1.1rem}
-.ledger{display:flex; justify-content:center; gap:1.6rem; flex-wrap:wrap; margin:1rem 0 0}
+.deck{max-width:31rem; margin:0 auto; font-size:1rem; color:var(--ink)}
+.rule{display:none}
+.ledger{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; max-width:420px; margin:180px auto 0; padding:16px 12px 8px; background:rgba(232,222,196,.94)}
 .ledger div{text-align:center}
-.ledger .n{font-family:'Caveat', cursive; font-weight:700; font-size:2rem; display:inline-block; transform:rotate(-2deg)}
-.ledger .l{font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--faded)}
+.ledger .n{font-weight:600; font-size:2rem; font-variant-numeric:tabular-nums}
+.ledger .l{font-size:.85rem; color:var(--ink)}
+.ledger-note{font-size:.8rem; margin:0 auto; padding:8px 12px 16px; max-width:420px; color:var(--ink); background:rgba(232,222,196,.94)}
 
 /* ---------- the spread (panels floating on the photograph) ---------- */
-.spread{display:grid; gap:1.4rem; margin:1.6rem auto 0; max-width:980px; grid-template-areas:"men" "women"}
+.spread{display:grid; gap:48px; margin:40px auto 0; max-width:880px; grid-template-areas:"men" "women"}
 .panel{
-  border:2px solid var(--ink); box-shadow:3px 3px 0 rgba(43,33,24,.22);
-  background:rgba(232,222,196,.82); padding:1.1rem 1.1rem 1.3rem; position:relative;
+  padding:0; position:relative; min-width:0;
 }
 .panel.men{grid-area:men}
 .panel.women{grid-area:women}
 .panel h2{
-  font-family:'DM Serif Display', serif; font-weight:900; font-style:italic;
-  font-size:clamp(1.9rem,7vw,2.6rem); margin:.1rem 0 .1rem; letter-spacing:.01em;
+  font-family:'DM Serif Display', serif; font-weight:400;
+  font-size:36px; line-height:1.15; margin:0 0 6px;
 }
-.panel h2::after{content:""; display:block; height:0; border-top:3px double var(--ink); margin-top:.35rem}
-.panel.men h2::after{border-color:var(--blue)}
-.panel.women h2::after{border-color:var(--red)}
-.tagline{font-family:'Caveat', cursive; font-size:1.15rem; color:var(--faded); transform:rotate(-1.2deg); display:inline-block}
-.count{font-family:'Caveat', cursive; font-weight:700; font-size:1.9rem; transform:rotate(-2deg); display:inline-block}
-.count small{font-family:'Karla', sans-serif; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--faded)}
+.panel.men h2{color:var(--blue)}
+.panel.women h2{color:var(--red)}
+.count{font-weight:600; font-size:1rem; font-variant-numeric:tabular-nums}
+.panel small{font-size:.85rem; color:var(--faded)}
 .panel h3{
-  font-size:.78rem; letter-spacing:.24em; text-transform:uppercase; color:var(--ink);
-  margin:1.2rem 0 .4rem; display:flex; align-items:center; gap:.6rem;
+  font-size:.9rem; font-weight:700; color:var(--ink); margin:28px 0 12px;
 }
-.panel h3::before,.panel h3::after{content:""; flex:1; border-top:1px solid rgba(43,33,24,.45)}
-.seek{font-size:.85rem}
-.seek b{font-family:'Caveat', cursive; font-size:1.35rem; color:var(--red)}
-.chart{width:100%}
+.seek{font-size:1rem; margin:0; min-height:48px}
+.seek b{font-weight:700}
+.chart{width:100%; position:relative}
+.chart-detail{font-size:.75rem; color:var(--faded); min-height:18px; margin:2px 0 0}
 
 /* svg chart text */
-.bl{font-family:'Karla', sans-serif; font-size:11.5px; fill:var(--ink)}
-.bv{font-family:'Caveat', cursive; font-weight:700; font-size:20px; fill:var(--ink)}
+.bl{font-family:'Karla', sans-serif; font-size:14px; fill:var(--ink)}
+.bv{font-family:'Karla', sans-serif; font-weight:700; font-size:14px; fill:var(--ink); font-variant-numeric:tabular-nums}
 .bar{transition:filter .15s ease, transform .15s ease; transform-box:fill-box; transform-origin:center}
-.bar:hover{filter:brightness(.68) sepia(.3) contrast(1.15); transform:rotate(-.6deg) scale(1.015); cursor:pointer}
+.bar:hover,.bar:focus{filter:brightness(.8); cursor:pointer}
+.bar:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
 .hot{transition:filter .15s ease, transform .15s ease; transform-box:fill-box; transform-origin:center}
 .hot:hover{filter:brightness(.75) contrast(1.3); transform:scale(1.08); cursor:pointer}
 
 /* ---------- map plate ---------- */
-.plate{margin-top:2.6rem; border:3px double var(--ink); padding:.9rem .9rem .4rem; background:rgba(232,222,196,.82)}
+.plate{max-width:880px; margin:56px auto 0; padding:28px 0 0; border-top:1px solid rgba(43,33,24,.2)}
 .plate h2{
-  font-family:'DM Serif Display', serif; font-weight:900; font-style:italic; text-align:center;
-  font-size:clamp(1.6rem,6vw,2.4rem); margin:.2rem 0 .1rem;
+  font-family:'DM Serif Display', serif; font-weight:400;
+  font-size:36px; line-height:1.15; margin:0 0 8px;
 }
-.plate .sub{text-align:center; font-size:.72rem; letter-spacing:.26em; text-transform:uppercase; color:var(--faded); margin-bottom:.6rem}
+.plate .sub{font-size:.9rem; color:var(--faded); margin:0 0 20px}
 #map{width:100%}
-.ml{font-family:'Caveat', cursive; font-weight:700; font-size:16px; fill:var(--ink); paint-order:stroke; stroke:var(--paper); stroke-width:3.5px}
+.ml{font-family:'Karla', sans-serif; font-weight:700; font-size:12px; fill:var(--red); paint-order:stroke; stroke:var(--paper); stroke-width:3px}
+.city-list{list-style:none; padding:0; margin:20px 0 0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 20px}
+.city-list li{display:flex; align-items:baseline; gap:8px; font-size:.85rem; min-width:0}
+.city-rank{color:var(--red); font-size:.75rem; min-width:16px}
+.city-name{flex:1}
+.city-value{font-weight:700; font-variant-numeric:tabular-nums}
+.city-list li:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+.city-list li.is-active{color:var(--red)}
+.hot.is-active{filter:brightness(.7)}
 
-footer{margin-top:2.4rem; text-align:center; font-size:.72rem; color:var(--faded); letter-spacing:.06em; text-shadow:0 0 12px rgba(232,222,196,.95), 0 0 4px rgba(232,222,196,.9)}
+footer{max-width:880px; margin:48px auto 0; font-size:.8rem; color:var(--faded)}
 footer .rule{width:min(70%,380px)}
 .notice{display:none; margin:1.5rem auto; max-width:32rem; border:2px dashed var(--red); padding:1rem; text-align:center; color:var(--red); background:rgba(232,222,196,.85)}
 
 /* ---------- desktop: two columns floating over the photograph ---------- */
-@media (min-width:940px){
-  .spread{grid-template-columns:1fr 1fr; grid-template-areas:"men women"; align-items:start; gap:2.6rem}
-  .panel.women{margin-top:4.5rem}
+@media (min-width:760px){
+  .wrap{padding:0 48px 56px}
+  .masthead{padding-top:48px}
+  h1{font-size:96px}
+  .spread{grid-template-columns:1fr 1fr; grid-template-areas:"men women"; align-items:start; gap:64px}
+  .city-list{grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 32px}
+}
+@media (max-width:359px){
+  .wrap{padding-right:20px; padding-left:20px}
+  h1{font-size:48px}
+  .ledger .n{font-size:1.75rem}
+  .city-list{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
   .bar,.hot{transition:none}
@@ -126,62 +136,58 @@ footer .rule{width:min(70%,380px)}
 <div class="wrap">
 
   <header class="masthead">
-    <p class="kicker">An interactive infographic of <b>Reddit · r/Affairs</b> — <span id="kperiod">the past year</span></p>
+    <p class="kicker"><b>Reddit · r/Affairs</b></p>
     <h1>Secret<br>Encounters</h1>
-    <p class="deck">Who looks for whom — and why. We examined <span id="nposts">several thousand</span> anonymous
-      posts from Reddit's r/Affairs community, collected for <span id="period">the past year</span>,
-      and distilled the demographics, the motives, and the geography of wandering hearts. All names withheld.</p>
-    <div class="rule"></div>
+    <p class="deck">Who is looking, and why? A look at <span id="nposts">several thousand</span> public
+      posts from <span id="period">the past year</span>. Ages, reasons, and cities people mention.</p>
     <div class="ledger">
-      <div><span class="n" id="pc-m">—</span><br><span class="l">are men</span></div>
-      <div><span class="n" id="pc-f">—</span><br><span class="l">are women</span></div>
-      <div><span class="n" id="pc-city">—</span><br><span class="l">name a city</span></div>
+      <div><span class="n" id="pc-m">—</span><br><span class="l">men</span></div>
+      <div><span class="n" id="pc-f">—</span><br><span class="l">women</span></div>
+      <div><span class="n" id="total-posts">—</span><br><span class="l">posts reviewed</span></div>
     </div>
+    <p class="ledger-note">Gender shares exclude posts with no gender tag.</p>
   </header>
 
   <div class="notice" id="notice">
-    The figures haven't arrived: <b>data/data.json</b> is missing or unreachable.<br>
-    Run <b>python3 scrape.py</b> to compile them, and serve the folder over HTTP
-    (<b>python3 -m http.server 8000</b> → localhost:8000).
+    The data could not load. Please try again later.
   </div>
 
   <section class="spread">
     <aside class="panel men" aria-label="Statistics about men">
-      <h2>The Men</h2>
-      <span class="tagline">mostly wed, mostly restless</span><br>
-      <span class="count" id="men-count">—</span> <small>confessions examined</small>
-      <h3>Ages</h3>
+      <h2>Men</h2>
+      <span class="count" id="men-count">—</span> <small>posts</small>
+      <h3>Age</h3>
       <div class="chart" id="men-ages"></div>
-      <h3>Seeking</h3>
+      <h3>Looking for</h3>
       <p class="seek" id="seek-m">—</p>
-      <h3>What he seeks</h3>
+      <h3>Reasons mentioned</h3>
       <div class="chart" id="men-motives"></div>
     </aside>
 
     <aside class="panel women" aria-label="Statistics about women">
-      <h2>The Women</h2>
-      <span class="tagline">starved of more than affection</span><br>
-      <span class="count" id="women-count">—</span> <small>confessions examined</small>
-      <h3>Ages</h3>
+      <h2>Women</h2>
+      <span class="count" id="women-count">—</span> <small>posts</small>
+      <h3>Age</h3>
       <div class="chart" id="women-ages"></div>
-      <h3>Seeking</h3>
+      <h3>Looking for</h3>
       <p class="seek" id="seek-f">—</p>
-      <h3>What she seeks</h3>
+      <h3>Reasons mentioned</h3>
       <div class="chart" id="women-motives"></div>
     </aside>
   </section>
 
   <section class="plate" aria-label="Map of hotspot cities">
-    <h2>The Hot Spots</h2>
-    <p class="sub">Fig. 4 — Where the restless reside · circled in red ink by our cartographer</p>
+    <h2>Cities mentioned</h2>
+    <p class="sub">The 12 most-mentioned cities. A mention does not mean someone lives there.</p>
     <div id="map"></div>
+    <ol class="city-list" id="city-list" aria-label="City mentions ranked"></ol>
   </section>
 
   <footer>
-    <div class="rule"></div>
-    <p>Source: public posts from <b>reddit.com/r/Affairs</b> via the Arctic Shift archive, <span id="fperiod">the past year</span>.
-      Percentages are of posts where the detail could be discerned.
-      Set in DM Serif Display, Karla &amp; Caveat.</p>
+    <p>Source: public r/Affairs posts from the Arctic Shift archive. <span id="fperiod">The past year</span>.</p>
+    <p>One person may write several posts. Age shares use posts with a known age.
+      Reason shares use posts with a known gender. A post may mention more than one reason.
+      Reasons are found using keywords, so some matches may be wrong.</p>
   </footer>
 </div>
 
@@ -192,8 +198,8 @@ const NS = 'http://www.w3.org/2000/svg';
 const $ = s => document.querySelector(s);
 const BLUE = '#3e5b7d', RED = '#9c2f24', INK = '#2b2118';
 const BUCKETS = ['18-24','25-34','35-44','45-54','55+'];
-const MLABEL = {dead_bedroom:'Dead Bedroom', thrill_variety:'Variety & Thrill', emotional_gap:'Emotional Gap',
-                loneliness:'Loneliness', desired:'To Feel Wanted', escape:'An Escape'};
+const MLABEL = {dead_bedroom:'Lack of sex', thrill_variety:'Excitement & variety', emotional_gap:'Lack of closeness',
+                loneliness:'Feeling lonely', desired:'Feeling wanted', escape:'Escape from daily life'};
 let DATA = null, WORLD = null;
 
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';s.style.height=h+'px';return s}
@@ -201,20 +207,34 @@ function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.s
 
 function bars(sel, rows, color){
   const host = $(sel); host.innerHTML = '';
-  const W = Math.max(host.clientWidth, 280), labW = Math.min(148, W * .4), rowH = 36, pad = 6;
+  const W = host.clientWidth, rowH = 48, pad = 4;
   const svg = svgEl(W, rows.length * rowH + pad * 2), rc = rough.svg(svg);
-  const max = Math.max(...rows.map(r => r[1]), 1);
+  svg.setAttribute('role', 'group');
+  svg.setAttribute('aria-label', `${sel.includes('ages') ? 'Age' : 'Reason'} percentages, scale zero to one hundred`);
+  const detail = document.createElement('p'); detail.className = 'chart-detail';
+  detail.setAttribute('aria-live', 'polite');
   rows.forEach(([label, pct, raw], i) => {
-    const y = pad + i * rowH, bw = Math.max((W - labW - 52) * pct / max, 1);
+    const y = pad + i * rowH, bw = W * pct / 100;
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'bar');
+    g.setAttribute('tabindex', '0'); g.setAttribute('role', 'img');
+    g.setAttribute('aria-label', `${label}: ${pct}%, ${raw.toLocaleString()} posts`);
+    const hit = document.createElementNS(NS, 'rect');
+    hit.setAttribute('x', '0'); hit.setAttribute('y', y);
+    hit.setAttribute('width', W); hit.setAttribute('height', rowH);
+    hit.setAttribute('fill', 'transparent'); g.appendChild(hit);
     const ti = document.createElementNS(NS, 'title'); ti.textContent = `${label}: ${raw.toLocaleString()} posts`; g.appendChild(ti);
-    g.appendChild(rc.rectangle(labW, y + 5, bw, rowH - 13,
-      {fill: color, fillStyle: 'hachure', fillWeight: 1, hachureGap: 3.5, stroke: INK, strokeWidth: 1.1, roughness: 2, bowing: 2.5}));
-    g.appendChild(txt(labW - 8, y + rowH / 2 + 5, label, 'bl', 'end'));
-    g.appendChild(txt(labW + bw + 9, y + rowH / 2 + 7, pct + '%', 'bv', 'start'));
+    g.appendChild(rc.rectangle(1, y + 24, Math.max(bw - 2, 0), 9,
+      {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .35, bowing: .2, seed: i + 1}));
+    g.appendChild(txt(0, y + 14, label, 'bl', 'start'));
+    g.appendChild(txt(W, y + 14, pct + '%', 'bv', 'end'));
+    const showDetail = () => { detail.textContent = `${label}: ${raw.toLocaleString()} posts`; };
+    g.addEventListener('pointerenter', showDetail); g.addEventListener('focus', showDetail);
+    g.addEventListener('click', showDetail);
+    g.addEventListener('pointerleave', () => { detail.textContent = ''; });
+    g.addEventListener('blur', () => { detail.textContent = ''; });
     svg.appendChild(g);
   });
-  host.appendChild(svg);
+  host.append(svg, detail);
 }
 
 function ageRows(g){
@@ -228,10 +248,12 @@ function motifRows(g){
 
 function drawMap(){
   const host = $('#map'); host.innerHTML = '';
-  const W = Math.max(host.clientWidth, 320), H = Math.round(W * .55);
+  const list = $('#city-list'); list.innerHTML = '';
+  const W = host.clientWidth, H = Math.round(W * .55);
   const latTop = 76, latBot = -58;
   const X = lon => (lon + 180) / 360 * W, Y = lat => (latTop - lat) / (latTop - latBot) * H;
   const svg = svgEl(W, H), rc = rough.svg(svg);
+  svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'World map of the cities listed below');
 
   const defs = document.createElementNS(NS, 'defs');
   defs.innerHTML = `<pattern id="stipple" width="7" height="7" patternUnits="userSpaceOnUse">
@@ -239,11 +261,6 @@ function drawMap(){
     <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="7" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/></filter>`;
   svg.appendChild(defs);
-
-  for (let lon = -180; lon < 180; lon += 60)
-    svg.appendChild(rc.line(X(lon), 0, X(lon), H, {stroke: INK, strokeWidth: .4, roughness: 1, strokeLineDash: [4, 7]}));
-  for (const lat of [-30, 0, 30, 60])
-    svg.appendChild(rc.line(0, Y(lat), W, Y(lat), {stroke: INK, strokeWidth: .4, roughness: 1, strokeLineDash: [4, 7]}));
 
   if (WORLD){
     let d = '';
@@ -262,37 +279,48 @@ function drawMap(){
     }
     const land = document.createElementNS(NS, 'path');
     land.setAttribute('d', d); land.setAttribute('fill', 'url(#stipple)');
-    land.setAttribute('stroke', INK); land.setAttribute('stroke-width', '.7');
-    land.setAttribute('opacity', '.8'); land.setAttribute('filter', 'url(#wobble)');
+    land.setAttribute('stroke', INK); land.setAttribute('stroke-width', '.4');
+    land.setAttribute('opacity', '.45');
     svg.appendChild(land);
   }
 
-  const cities = DATA.cities || []; if (!cities.length) { host.appendChild(svg); return; }
+  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n);
+  if (!cities.length) { host.appendChild(svg); return; }
   const max = Math.max(...cities.map(c => c.n));
-  const R = c => 5 + 18 * Math.sqrt(c.n / max);
-  const routes = [...cities.slice(0, 4)].sort((a, b) => a.lon - b.lon);
-  if (routes.length > 1){
-    const pts = routes.map(c => [X(c.lon), Y(c.lat) - R(c) - 4]);
-    const route = rc.curve(pts, {stroke: RED, strokeWidth: 1, roughness: 2.5});
-    route.setAttribute('stroke-dasharray', '6 7'); route.setAttribute('opacity', '.55');
-    svg.appendChild(route);
-  }
+  const R = c => 3 + 7 * Math.sqrt(c.n / max);
   // label nudges so neighbours don't collide — [dx, dy] in multiples of (r + 4px)
   const OFF = {'New York': [1.2, 1], 'Boston': [1.2, -1], 'Toronto': [-1.2, -1], 'Chicago': [-2.4, .3],
     'London': [-1.2, -1], 'Paris': [1.2, 1], 'Amsterdam': [1.2, -1.1], 'Berlin': [1.2, -.9],
-    'Manchester': [-1.1, -1.1], 'Dublin': [-1.2, 0], 'Los Angeles': [-1.2, 1], 'San Francisco': [-1.2, -1],
-    'Seattle': [-1.2, .8], 'Vancouver': [-1.1, -1.2], 'Sydney': [0, 1.4], 'Melbourne': [0, -1.4],
+    'Manchester': [-1.1, -1.1], 'Dublin': [-1.2, 0], 'Los Angeles': [1.4, 1.4], 'San Francisco': [-1.1, 1.4],
+    'Seattle': [1.4, .7], 'Vancouver': [-1.1, -1.2], 'Sydney': [0, 1.4], 'Melbourne': [0, -1.4],
     'Houston': [1.1, 1], 'Dallas': [-1.1, -1], 'Miami': [1.2, .8], 'Montreal': [1.2, -1.2]};
   cities.forEach((c, i) => {
     const r = R(c), cx = X(c.lon), cy = Y(c.lat);
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'hot');
     const ti = document.createElementNS(NS, 'title'); ti.textContent = `${c.city}: ${c.n.toLocaleString()} mentions`; g.appendChild(ti);
-    g.appendChild(rc.circle(cx, cy, r * 2, {stroke: RED, strokeWidth: 1.6, roughness: 2.2, fill: 'rgba(156,47,36,.16)', fillStyle: 'solid'}));
+    g.appendChild(rc.circle(cx, cy, r * 2, {stroke: RED, strokeWidth: 1, roughness: .6, seed: i + 1, fill: 'rgba(156,47,36,.12)', fillStyle: 'solid'}));
     const [dx, dy] = OFF[c.city] || [0, -1.25];
-    const anchor = dx > 0 ? 'start' : dx < 0 ? 'end' : 'middle';
-    const gap = r * .55 + 7;
-    g.appendChild(txt(cx + dx * gap, cy + dy * gap + 5, `${c.city} · ${c.n.toLocaleString()}`, 'ml', anchor));
+    const direction = Math.hypot(dx, dy) || 1;
+    const labelX = cx + dx / direction * (r + 7);
+    const labelY = cy + dy / direction * (r + 7);
+    g.appendChild(rc.line(cx + dx / direction * r, cy + dy / direction * r,
+      labelX, labelY, {stroke: RED, strokeWidth: .6, roughness: 0}));
+    g.appendChild(txt(labelX, labelY + 4, String(i + 1), 'ml', 'middle'));
     svg.appendChild(g);
+    const item = document.createElement('li'); item.setAttribute('tabindex', '0');
+    const rank = document.createElement('span'); rank.className = 'city-rank'; rank.textContent = i + 1;
+    const name = document.createElement('span'); name.className = 'city-name'; name.textContent = c.city;
+    const count = document.createElement('span'); count.className = 'city-value'; count.textContent = c.n.toLocaleString();
+    item.append(rank, name, count);
+    item.setAttribute('aria-label', `${c.city}: ${c.n.toLocaleString()} mentions`);
+    const highlight = active => { item.classList.toggle('is-active', active); g.classList.toggle('is-active', active); };
+    item.addEventListener('pointerenter', () => highlight(true));
+    item.addEventListener('pointerleave', () => highlight(false));
+    item.addEventListener('focus', () => highlight(true)); item.addEventListener('blur', () => highlight(false));
+    item.addEventListener('click', () => item.focus());
+    g.addEventListener('pointerenter', () => highlight(true)); g.addEventListener('pointerleave', () => highlight(false));
+    g.addEventListener('click', () => item.focus());
+    list.appendChild(item);
   });
   host.appendChild(svg);
 }
@@ -302,12 +330,11 @@ function render(){
   $('#nposts').textContent = DATA.posts.toLocaleString();
   if (DATA.period){
     const p = `${DATA.period.from} – ${DATA.period.to}`;
-    $('#period').textContent = p; $('#kperiod').textContent = p; $('#fperiod').textContent = p;
+    $('#period').textContent = p; $('#fperiod').textContent = p;
   }
   $('#pc-m').textContent = Math.round(100 * M / T) + '%';
   $('#pc-f').textContent = Math.round(100 * F / T) + '%';
-  const cTot = DATA.cities.reduce((s, c) => s + c.n, 0);
-  $('#pc-city').textContent = cTot ? Math.round(100 * cTot / DATA.posts) + '%' : '—';
+  $('#total-posts').textContent = DATA.posts.toLocaleString();
   $('#men-count').textContent = M.toLocaleString();
   $('#women-count').textContent = F.toLocaleString();
 
@@ -317,11 +344,11 @@ function render(){
   const sk = DATA.seeking || {};
   const mTot = (sk.M4F || 0) + (sk.M4M || 0), fTot = (sk.F4M || 0) + (sk.F4F || 0);
   $('#seek-m').innerHTML = DATA.seeking_tagged > 25 && mTot
-    ? `of the <b>${(sk.M4F || 0) + (sk.M4M || 0)}</b> men who advertised, <b>${Math.round(100 * (sk.M4F || 0) / mTot)}%</b> seek a woman`
-    : 'few advertise openly — they confess instead';
+    ? `<b>${Math.round(100 * (sk.M4F || 0) / mTot)}%</b> look for women.<br>Based on ${mTot.toLocaleString()} posts with a partner tag.`
+    : 'Not enough posts with a partner tag.';
   $('#seek-f').innerHTML = DATA.seeking_tagged > 25 && fTot
-    ? `of the <b>${(sk.F4M || 0) + (sk.F4F || 0)}</b> women who advertised, <b>${Math.round(100 * (sk.F4M || 0) / fTot)}%</b> seek a man`
-    : 'few advertise openly — they confess instead';
+    ? `<b>${Math.round(100 * (sk.F4M || 0) / fTot)}%</b> look for men.<br>Based on ${fTot.toLocaleString()} posts with a partner tag.`
+    : 'Not enough posts with a partner tag.';
   drawMap();
 }
 

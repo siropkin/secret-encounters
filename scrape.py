@@ -14,6 +14,7 @@ from pathlib import Path
 
 API = "https://arctic-shift.photon-reddit.com/api/posts/search"
 OUT = Path(__file__).resolve().parent / "data" / "data.json"
+RAW = Path(__file__).resolve().parent / "data" / "raw"  # page checkpoints (gitignored)
 UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
 TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\s*\]", re.I)   # [M4F] [F4M] [M4A]
@@ -131,10 +132,18 @@ def fetch(after):
 def main(days):
     posts = []
     now = int(time.time())
-    cursor = now - days * 86400
-    for i in range(1500):  # safety cap
+    RAW.mkdir(parents=True, exist_ok=True)
+    saved = sorted(RAW.glob("*.json"), key=lambda p: int(p.stem))
+    if saved:  # resume from checkpoints
+        for p in saved: posts.extend(json.loads(p.read_text()))
+        cursor = posts[-1]["created_utc"]
+        print(f"resuming: {len(posts)} posts from {len(saved)} saved pages", flush=True)
+    else:
+        cursor = now - days * 86400
+    for i in range(len(saved), 1500):  # safety cap
         batch = fetch(cursor)
         posts.extend(batch)
+        (RAW / f"{i + 1}.json").write_text(json.dumps(batch))
         cursor = batch[-1].get("created_utc", now)
         print(f"page {i + 1}: {len(posts)} posts (up to {time.strftime('%Y-%m-%d', time.gmtime(cursor))})", flush=True)
         if cursor >= now - 1800 or len(batch) < 50: break  # caught up to ~now
