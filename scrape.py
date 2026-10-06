@@ -17,7 +17,7 @@ OUT = Path(__file__).resolve().parent / "data" / "data.json"
 RAW = Path(__file__).resolve().parent / "data" / "raw"  # page checkpoints (gitignored)
 UA = {"User-Agent": "secret-encounters/1.0 (vintage data-viz research)"}
 
-TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\s*\]", re.I)   # [M4F] [F4M] [M4A]
+TAG = re.compile(r"\[\s*([mfta])\s*4\s*([mfta])\w*\s*\]", re.I)  # [M4F] [F4M] [M4A] [M4MF]
 TAG_BARE = re.compile(r"\b([mfta])\s*4\s*([mfta])\b", re.I)    # 37 m4f #Missouri (title only)
 PAIR = re.compile(r"\b(\d{2})\s*[-/–—]?\s*([MF])\b|\b([MF])\s*[-/–—]?\s*(\d{2})\b")
 
@@ -25,7 +25,7 @@ MOTIFS = {
     "dead_bedroom":   ["dead bedroom", "dead-bedroom", "sexless", "no sex", "no intimacy",
                        "lack of intimacy", "touch starved", "touch-starved"],
     "thrill_variety": ["thrill", "excitement", "exciting", "variety", "spark", "adrenaline",
-                       "bored", "boredom", "adventure", "naughty", "forbidden", "rush"],
+                       "bored", "boredom", "adventure", "naughty", "forbidden"],
     "emotional_gap":  ["emotional connection", "emotionally", "unappreciated", "neglected",
                        "ignored", "taken for granted", "understood", "validation"],
     "loneliness":     ["lonely", "loneliness", "alone", "isolated", "no one to talk"],
