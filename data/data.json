@@ -1,7 +1,136 @@
-{"generated":"MOCK","posts":2473,"gendered":1912,"seeking_tagged":388,"period":{"from":"Oct 2025","to":"Oct 2026"},"gender":{"M":1184,"F":728},
-"seeking":{"M4F":251,"F4M":108,"F4F":17,"M4M":12},
-"ages":{"M":{"18-24":102,"25-34":341,"35-44":402,"45-54":212,"55+":61},"F":{"18-24":118,"25-34":298,"35-44":196,"45-54":84,"55+":19}},
-"motives":{"M":{"dead_bedroom":512,"thrill_variety":431,"emotional_gap":287,"desired":203,"loneliness":171,"escape":148},
-"F":{"emotional_gap":402,"desired":371,"dead_bedroom":289,"loneliness":231,"thrill_variety":187,"escape":139},
-"all":{"dead_bedroom":801,"thrill_variety":618,"emotional_gap":689,"desired":574,"loneliness":402,"escape":287}},
-"cities":[{"city":"New York","lat":40.71,"lon":-74.0,"n":87},{"city":"London","lat":51.51,"lon":-0.13,"n":64},{"city":"Toronto","lat":43.65,"lon":-79.38,"n":58},{"city":"Chicago","lat":41.88,"lon":-87.63,"n":52},{"city":"Los Angeles","lat":34.05,"lon":-118.24,"n":44},{"city":"Seattle","lat":47.61,"lon":-122.33,"n":31},{"city":"Boston","lat":42.36,"lon":-71.06,"n":28},{"city":"Sydney","lat":-33.87,"lon":151.21,"n":24},{"city":"Vancouver","lat":49.28,"lon":-123.12,"n":22},{"city":"San Francisco","lat":37.77,"lon":-122.42,"n":21},{"city":"Amsterdam","lat":52.37,"lon":4.9,"n":17},{"city":"Paris","lat":48.86,"lon":2.35,"n":14}]}
+{
+ "generated": "2026-10-06",
+ "period": {
+  "from": "Oct 2025",
+  "to": "Jan 2026"
+ },
+ "posts": 31585,
+ "gendered": 22036,
+ "seeking_tagged": 20965,
+ "gender": {
+  "M": 20676,
+  "F": 1360
+ },
+ "seeking": {
+  "M4F": 19724,
+  "F4M": 1151,
+  "M4M": 52,
+  "F4F": 38
+ },
+ "ages": {
+  "M": {
+   "45-54": 4777,
+   "25-34": 4940,
+   "35-44": 9578,
+   "55+": 911,
+   "18-24": 327
+  },
+  "F": {
+   "25-34": 627,
+   "35-44": 443,
+   "18-24": 138,
+   "45-54": 122,
+   "55+": 14
+  }
+ },
+ "motives": {
+  "M": {
+   "thrill_variety": 7466,
+   "desired": 4404,
+   "dead_bedroom": 2009,
+   "emotional_gap": 2377,
+   "escape": 2385,
+   "loneliness": 1168
+  },
+  "F": {
+   "dead_bedroom": 82,
+   "thrill_variety": 369,
+   "desired": 248,
+   "escape": 77,
+   "emotional_gap": 154,
+   "loneliness": 90
+  },
+  "all": {
+   "thrill_variety": 9899,
+   "desired": 5789,
+   "dead_bedroom": 2592,
+   "emotional_gap": 3192,
+   "escape": 3264,
+   "loneliness": 1611
+  }
+ },
+ "cities": [
+  {
+   "city": "New York",
+   "lat": 40.71,
+   "lon": -74.0,
+   "n": 1449
+  },
+  {
+   "city": "Chicago",
+   "lat": 41.88,
+   "lon": -87.63,
+   "n": 851
+  },
+  {
+   "city": "Seattle",
+   "lat": 47.61,
+   "lon": -122.33,
+   "n": 668
+  },
+  {
+   "city": "Boston",
+   "lat": 42.36,
+   "lon": -71.06,
+   "n": 665
+  },
+  {
+   "city": "Washington",
+   "lat": 38.91,
+   "lon": -77.04,
+   "n": 604
+  },
+  {
+   "city": "Toronto",
+   "lat": 43.65,
+   "lon": -79.38,
+   "n": 583
+  },
+  {
+   "city": "London",
+   "lat": 51.51,
+   "lon": -0.13,
+   "n": 559
+  },
+  {
+   "city": "Los Angeles",
+   "lat": 34.05,
+   "lon": -118.24,
+   "n": 511
+  },
+  {
+   "city": "Philadelphia",
+   "lat": 39.95,
+   "lon": -75.17,
+   "n": 474
+  },
+  {
+   "city": "Denver",
+   "lat": 39.74,
+   "lon": -104.99,
+   "n": 387
+  },
+  {
+   "city": "Houston",
+   "lat": 29.76,
+   "lon": -95.37,
+   "n": 330
+  },
+  {
+   "city": "San Francisco",
+   "lat": 37.77,
+   "lon": -122.42,
+   "n": 290
+  }
+ ]
+}

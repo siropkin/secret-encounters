@@ -15,7 +15,7 @@
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:#d8dbd8}
+html{-webkit-text-size-adjust:100%; background:var(--paper)}
 body{
   margin:0; color:var(--ink);
   font-family:'Karla', sans-serif;
@@ -25,106 +25,174 @@ body{
   max-width:1060px; margin:0 auto; padding:0 24px 48px;
   position:relative; isolation:isolate; background:var(--paper);
 }
-.wrap::before{
-  content:""; position:absolute; top:140px; left:50%; transform:translateX(-50%);
-  width:min(100%,572px); aspect-ratio:572/1024; z-index:-1; pointer-events:none;
-  background:linear-gradient(to right, var(--paper), transparent 16%, transparent 84%, var(--paper)),
-    linear-gradient(to bottom, var(--paper), rgba(232,222,196,.8) 12%,
-    rgba(232,222,196,.18) 27%, rgba(232,222,196,.8) 43%, rgba(232,222,196,.92) 60%, var(--paper) 95%),
-    url("assets/hero.jpg") center top/100% auto no-repeat;
-  background-blend-mode:normal,normal,multiply;
-}
 .wrap::after{
   content:""; position:absolute; inset:0; pointer-events:none; z-index:-1;
   background-image:var(--noise); mix-blend-mode:multiply; opacity:.055;
 }
 
 /* ---------- masthead ---------- */
-.masthead{text-align:center; padding:32px 0 0; position:relative}
-@media (max-width:759px){
-  .masthead{min-height:calc(100svh - 40px); padding-bottom:24px}
+.masthead{text-align:center; padding:32px 0 24px; position:relative; isolation:isolate;
+  min-height:100svh; display:flex; flex-direction:column}
+.masthead::before{
+  content:""; position:absolute; top:140px; bottom:110px; left:50%; transform:translateX(-50%);
+  width:min(100vw,660px); z-index:-1; pointer-events:none;
+  background:linear-gradient(to bottom,var(--paper),rgba(232,222,196,.88) 18%,
+    rgba(232,222,196,.08) 38%,rgba(232,222,196,0) 80%,var(--paper)),
+    url("assets/hero.jpg") center bottom/cover no-repeat;
+  background-color:var(--paper); background-blend-mode:normal,multiply;
 }
-.kicker{font-size:.75rem; color:var(--faded); margin:0 auto 18px; max-width:34rem}
+@media (max-width:759px){
+  .masthead::before{bottom:0;
+    background-image:linear-gradient(to bottom,var(--paper),rgba(232,222,196,.88) 18%,
+      rgba(232,222,196,.08) 38%,rgba(232,222,196,.02) 58%,
+      rgba(232,222,196,.12) 68%,rgba(232,222,196,.35) 77%,
+      rgba(232,222,196,.65) 86%,rgba(232,222,196,.9) 94%,var(--paper)),
+      url("assets/hero.jpg")}
+  .masthead .deck{margin-bottom:160px}
+  .masthead .ledger{margin-top:auto; width:100%}
+}
+.kicker{font-size:.85rem; color:var(--faded); margin:0 auto 18px; max-width:34rem}
 .kicker b{color:var(--red)}
+.sample-label{font-weight:500}
+.sample-label[hidden]{display:none}
 h1{
   font-family:'DM Serif Display', serif; font-weight:400;
   font-size:58px; line-height:.98; margin:0 0 20px;
 }
 .deck{max-width:31rem; margin:0 auto; font-size:1rem; color:var(--ink)}
 .rule{display:none}
-.ledger{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; max-width:420px; margin:180px auto 0; padding:16px 12px 8px; background:rgba(232,222,196,.94)}
-.ledger div{text-align:center}
-.ledger .n{font-weight:600; font-size:2rem; font-variant-numeric:tabular-nums}
-.ledger .l{font-size:.85rem; color:var(--ink)}
-.ledger-note{font-size:.8rem; margin:0 auto; padding:8px 12px 16px; max-width:420px; color:var(--ink); background:rgba(232,222,196,.94)}
+.ledger{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; max-width:460px; margin:auto auto 0; width:100%}
+.ledger div{text-align:center; display:grid; align-content:start; gap:3px}
+.ledger br{display:none}
+.ledger .n{font-weight:600; font-size:2rem; line-height:1.1; font-variant-numeric:tabular-nums}
+.ledger .l{font-size:.95rem; line-height:1.25; color:var(--ink)}
+.ledger-note{font-size:.9rem; line-height:1.5; margin:10px auto 0; max-width:460px; color:var(--ink)}
+.ledger,.ledger-note{background:transparent; text-shadow:0 1px 2px var(--paper)}
 
 /* ---------- the spread (panels floating on the photograph) ---------- */
-.spread{display:grid; gap:48px; margin:40px auto 0; max-width:880px; grid-template-areas:"men" "women"}
+.spread{display:grid; gap:48px; margin:40px auto 0; max-width:880px}
 .panel{
   padding:0; position:relative; min-width:0;
 }
-.panel.men{grid-area:men}
-.panel.women{grid-area:women}
 .panel h2{
   font-family:'DM Serif Display', serif; font-weight:400;
   font-size:36px; line-height:1.15; margin:0 0 6px;
 }
 .panel.men h2{color:var(--blue)}
 .panel.women h2{color:var(--red)}
+.topic-identity{display:none}
 .count{font-weight:600; font-size:1rem; font-variant-numeric:tabular-nums}
-.panel small{font-size:.85rem; color:var(--faded)}
-.panel h3{
-  font-size:.9rem; font-weight:700; color:var(--ink); margin:28px 0 12px;
-}
+.panel small{font-size:.95rem; color:var(--faded)}
+.panel h3{font-size:1.1rem; margin:24px 0 8px}
+.topic-note{font-size:.9rem; color:var(--faded); margin:0 0 12px; min-height:44px}
+.reason-note{max-width:880px; margin:24px auto 0; font-size:.9rem; color:var(--faded)}
+.seek small{display:block; margin-top:8px; font-size:.9rem; color:var(--faded)}
 .seek{font-size:1rem; margin:0; min-height:48px}
 .seek b{font-weight:700}
 .chart{width:100%; position:relative}
-.chart-detail{font-size:.75rem; color:var(--faded); min-height:18px; margin:2px 0 0}
+.chart-detail{font-size:.9rem; color:var(--faded); min-height:44px; margin:4px 0 0}
 
 /* svg chart text */
-.bl{font-family:'Karla', sans-serif; font-size:14px; fill:var(--ink)}
-.bv{font-family:'Karla', sans-serif; font-weight:700; font-size:14px; fill:var(--ink); font-variant-numeric:tabular-nums}
+.bl{font-family:'Karla', sans-serif; font-size:16px; fill:var(--ink)}
+.bv{font-family:'Karla', sans-serif; font-weight:700; font-size:16px; fill:var(--ink); font-variant-numeric:tabular-nums}
 .bar{transition:filter .15s ease, transform .15s ease; transform-box:fill-box; transform-origin:center}
 .bar:hover,.bar:focus{filter:brightness(.8); cursor:pointer}
 .bar:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
 .hot{transition:filter .15s ease, transform .15s ease; transform-box:fill-box; transform-origin:center}
-.hot:hover{filter:brightness(.75) contrast(1.3); transform:scale(1.08); cursor:pointer}
+.hot:hover,.hot:focus-visible{filter:brightness(.75); cursor:pointer}
+.hot:focus-visible{outline:2px solid var(--red); outline-offset:3px}
 
 /* ---------- map plate ---------- */
-.plate{max-width:880px; margin:56px auto 0; padding:28px 0 0; border-top:1px solid rgba(43,33,24,.2)}
+.plate{max-width:880px; margin:40px auto 0; padding:28px 0 0; border-top:1px solid rgba(43,33,24,.2)}
 .plate h2{
   font-family:'DM Serif Display', serif; font-weight:400;
   font-size:36px; line-height:1.15; margin:0 0 8px;
 }
 .plate .sub{font-size:.9rem; color:var(--faded); margin:0 0 20px}
-#map{width:100%}
-.ml{font-family:'Karla', sans-serif; font-weight:700; font-size:12px; fill:var(--red); paint-order:stroke; stroke:var(--paper); stroke-width:3px}
-.city-list{list-style:none; padding:0; margin:20px 0 0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 20px}
-.city-list li{display:flex; align-items:baseline; gap:8px; font-size:.85rem; min-width:0}
-.city-rank{color:var(--red); font-size:.75rem; min-width:16px}
+#map{width:100%; margin-top:24px}
+.map-note,.map-detail{font-size:.9rem; color:var(--faded); margin:8px 0 0}
+.map-detail{min-height:44px; color:var(--ink)}
+.ml{font-family:'Karla', sans-serif; font-weight:700; font-size:14px; fill:var(--red); paint-order:stroke; stroke:var(--paper); stroke-width:3px}
+.city-list{--city-columns:1; list-style:none; padding:0; margin:20px 0 0; display:grid;
+  grid-auto-flow:column; grid-template-columns:repeat(var(--city-columns),minmax(0,1fr));
+  grid-template-rows:repeat(var(--city-rows,1),auto); gap:8px 24px}
+.city-list li{display:flex; align-items:baseline; gap:10px; font-size:1rem; min-width:0; padding:4px 0; border-bottom:1px solid rgba(43,33,24,.12); cursor:pointer}
+.city-rank{color:var(--red); font-size:.9rem; min-width:24px}
 .city-name{flex:1}
 .city-value{font-weight:700; font-variant-numeric:tabular-nums}
 .city-list li:focus-visible{outline:2px solid var(--red); outline-offset:3px}
 .city-list li.is-active{color:var(--red)}
-.hot.is-active{filter:brightness(.7)}
+.hot.is-active .map-dot{fill:var(--ink); stroke:var(--paper); stroke-width:2px}
 
-footer{max-width:880px; margin:48px auto 0; font-size:.8rem; color:var(--faded)}
+footer{max-width:880px; margin:32px auto 0; font-size:.9rem; color:var(--faded)}
 footer .rule{width:min(70%,380px)}
 .notice{display:none; margin:1.5rem auto; max-width:32rem; border:2px dashed var(--red); padding:1rem; text-align:center; color:var(--red); background:rgba(232,222,196,.85)}
 
 /* ---------- desktop: two columns floating over the photograph ---------- */
 @media (min-width:760px){
   .wrap{padding:0 48px 56px}
-  .masthead{padding-top:48px}
+  .masthead{padding-top:48px; padding-bottom:0; min-height:0; display:block}
+  .masthead::before{display:none}
+  .wrap::before{
+    content:""; position:absolute; top:140px; left:50%; transform:translateX(-50%);
+    width:600px; height:1074px; z-index:-1; pointer-events:none;
+    background:linear-gradient(to bottom,var(--paper),rgba(232,222,196,.82) 15%,
+      rgba(232,222,196,.28) 32%,rgba(232,222,196,.18) 48%,
+      rgba(232,222,196,.32) 66%,rgba(232,222,196,.65) 82%,
+      rgba(232,222,196,.9) 94%,var(--paper)),
+      url("assets/hero.jpg") center top/100% auto no-repeat;
+    background-color:var(--paper); background-blend-mode:normal,multiply;
+  }
+  .masthead .ledger{margin-top:180px}
   h1{font-size:96px}
-  .spread{grid-template-columns:1fr 1fr; grid-template-areas:"men women"; align-items:start; gap:64px}
-  .city-list{grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 32px}
+  .spread{grid-template-columns:repeat(2,minmax(0,1fr)); gap:120px; align-items:start}
+  .seek{min-height:100px}
+  .panel h2,.panel h3,.count,.panel small,.seek,.topic-note{text-shadow:0 1px 2px var(--paper),0 0 4px var(--paper)}
+  .bl,.bv{paint-order:stroke; stroke:var(--paper); stroke-width:2px; stroke-linejoin:round}
+  .city-list{--city-columns:3; gap:14px 32px}
+}
+@media (min-width:1024px){
+  .wrap{--photo-width:min(34vw,calc((100svh - 140px)*.55859375));
+    --center-width:calc(var(--photo-width) + 64px); max-width:none; padding:0 32px 56px}
+  .wrap::before{display:none}
+  .stage{display:grid; position:relative;
+    grid-template-columns:minmax(0,1fr) var(--center-width) minmax(0,1fr)}
+  .masthead{grid-column:2; grid-row:1; position:sticky; top:0; align-self:start;
+    height:100svh; min-height:100svh; padding:32px 0 24px; display:flex; flex-direction:column; min-width:0}
+  .masthead::before{display:block; width:var(--photo-width); top:auto; bottom:0;
+    height:auto; aspect-ratio:572/1024; background:url("assets/hero.jpg") center bottom/100% auto no-repeat;
+    background-color:var(--paper); background-blend-mode:multiply;
+    mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.12) 18%,#000 35%,#000 80%,
+      rgba(0,0,0,.9) 86%,rgba(0,0,0,.3) 95%,transparent)}
+  h1{font-size:72px}
+  .masthead .ledger{margin-top:auto}
+  .spread{grid-column:1/-1; grid-row:1; width:100%; max-width:none; margin-top:0;
+    grid-template-columns:minmax(0,1fr) var(--center-width) minmax(0,1fr); gap:0}
+  .panel-heading{display:none}
+  .topic-identity{display:block; margin-bottom:20px}
+  .chart-section{min-height:100svh; display:flex; flex-direction:column;
+    justify-content:center; padding:112px 0 72px}
+  .chart-section h3{margin-top:0; font-size:1.25rem}
+  .men{grid-column:1}
+  .women{grid-column:3}
+  .panel h2,.panel h3,.count,.panel small,.seek,.topic-note{text-shadow:none}
+  .bl,.bv{stroke:none}
+  .notice{grid-column:1/-1}
+}
+@media (min-width:480px) and (max-width:759px){
+  .city-list{--city-columns:2}
 }
 @media (max-width:359px){
   .wrap{padding-right:20px; padding-left:20px}
   h1{font-size:48px}
   .ledger .n{font-size:1.75rem}
-  .city-list{grid-template-columns:1fr}
+}
+@media (max-width:759px) and (max-height:650px){
+  .masthead{padding-top:20px; padding-bottom:16px}
+  .masthead .deck{margin-bottom:80px}
+  .masthead::before{top:110px}
+  .kicker{margin-bottom:12px}
+  h1{margin-bottom:14px}
 }
 @media (prefers-reduced-motion:reduce){
   .bar,.hot{transition:none}
@@ -134,18 +202,19 @@ footer .rule{width:min(70%,380px)}
 </head>
 <body>
 <div class="wrap">
+<div class="stage">
 
   <header class="masthead">
-    <p class="kicker"><b>Reddit · r/Affairs</b></p>
+    <p class="kicker"><b>Reddit · r/Affairs</b><span class="sample-label" id="sample-label" hidden> · Sample data</span></p>
     <h1>Secret<br>Encounters</h1>
     <p class="deck">Who is looking, and why? A look at <span id="nposts">several thousand</span> public
       posts from <span id="period">the past year</span>. Ages, reasons, and cities people mention.</p>
     <div class="ledger">
-      <div><span class="n" id="pc-m">—</span><br><span class="l">men</span></div>
-      <div><span class="n" id="pc-f">—</span><br><span class="l">women</span></div>
-      <div><span class="n" id="total-posts">—</span><br><span class="l">posts reviewed</span></div>
+      <div><span class="n" id="total-posts">—</span><br><span class="l">posts</span></div>
+      <div><span class="n" id="pc-m">—</span><br><span class="l">by men</span></div>
+      <div><span class="n" id="pc-f">—</span><br><span class="l">by women</span></div>
     </div>
-    <p class="ledger-note">Gender shares exclude posts with no gender tag.</p>
+    <p class="ledger-note">Percentages use posts that state a gender.</p>
   </header>
 
   <div class="notice" id="notice">
@@ -153,53 +222,76 @@ footer .rule{width:min(70%,380px)}
   </div>
 
   <section class="spread">
-    <aside class="panel men" aria-label="Statistics about men">
+    <section class="panel men" aria-label="Statistics about men">
+      <div class="panel-heading">
       <h2>Men</h2>
       <span class="count" id="men-count">—</span> <small>posts</small>
+      </div>
+      <section class="chart-section" aria-label="Men: age">
       <h3>Age</h3>
+      <p class="topic-note" id="men-age-note">Of posts that state an age.</p>
       <div class="chart" id="men-ages"></div>
+      </section>
+      <section class="chart-section" aria-label="Men: looking for">
       <h3>Looking for</h3>
       <p class="seek" id="seek-m">—</p>
+      </section>
+      <section class="chart-section" aria-label="Men: reasons mentioned">
       <h3>Reasons mentioned</h3>
+      <p class="topic-note">Of posts by men. A post can mention several reasons.</p>
       <div class="chart" id="men-motives"></div>
-    </aside>
-
-    <aside class="panel women" aria-label="Statistics about women">
+      </section>
+    </section>
+    <section class="panel women" aria-label="Statistics about women">
+      <div class="panel-heading">
       <h2>Women</h2>
       <span class="count" id="women-count">—</span> <small>posts</small>
+      </div>
+      <section class="chart-section" aria-label="Women: age">
       <h3>Age</h3>
+      <p class="topic-note" id="women-age-note">Of posts that state an age.</p>
       <div class="chart" id="women-ages"></div>
+      </section>
+      <section class="chart-section" aria-label="Women: looking for">
       <h3>Looking for</h3>
       <p class="seek" id="seek-f">—</p>
+      </section>
+      <section class="chart-section" aria-label="Women: reasons mentioned">
       <h3>Reasons mentioned</h3>
+      <p class="topic-note">Of posts by women. A post can mention several reasons.</p>
       <div class="chart" id="women-motives"></div>
-    </aside>
+      </section>
+    </section>
   </section>
+  </div>
+  <p class="reason-note">Reasons are keyword matches, not confirmed motives. Age percentages may not total 100% because of rounding.</p>
 
   <section class="plate" aria-label="Map of hotspot cities">
     <h2>Cities mentioned</h2>
-    <p class="sub">The 12 most-mentioned cities. A mention does not mean someone lives there.</p>
-    <div id="map"></div>
+    <p class="sub" id="city-note">The 12 most-mentioned cities. A mention does not mean someone lives there.</p>
     <ol class="city-list" id="city-list" aria-label="City mentions ranked"></ol>
+    <div id="map"></div>
+    <p class="map-note" id="map-note">Dots show locations, not the number of mentions.</p>
+    <p class="map-detail" id="map-detail" aria-live="polite"></p>
   </section>
 
   <footer>
-    <p>Source: public r/Affairs posts from the Arctic Shift archive. <span id="fperiod">The past year</span>.</p>
-    <p>One person may write several posts. Age shares use posts with a known age.
-      Reason shares use posts with a known gender. A post may mention more than one reason.
+    <p><span id="source-label">Source: public r/Affairs posts from the Arctic Shift archive.</span> <span id="fperiod">The past year</span>.</p>
+    <p>These counts describe posts, not unique people. One person may write several posts.
       Reasons are found using keywords, so some matches may be wrong.</p>
   </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script>
 const NS = 'http://www.w3.org/2000/svg';
 const $ = s => document.querySelector(s);
 const BLUE = '#3e5b7d', RED = '#9c2f24', INK = '#2b2118';
 const BUCKETS = ['18-24','25-34','35-44','45-54','55+'];
 const MLABEL = {dead_bedroom:'Lack of sex', thrill_variety:'Excitement & variety', emotional_gap:'Lack of closeness',
-                loneliness:'Feeling lonely', desired:'Feeling wanted', escape:'Escape from daily life'};
+                loneliness:'Feeling lonely', desired:'Wanting to feel desired', escape:'Escape from daily life'};
 let DATA = null, WORLD = null;
 
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';s.style.height=h+'px';return s}
@@ -207,27 +299,36 @@ function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.s
 
 function bars(sel, rows, color){
   const host = $(sel); host.innerHTML = '';
-  const W = host.clientWidth, rowH = 48, pad = 4;
+  const W = host.clientWidth, rowH = 52, pad = 4, plotW = W;
   const svg = svgEl(W, rows.length * rowH + pad * 2), rc = rough.svg(svg);
   svg.setAttribute('role', 'group');
-  svg.setAttribute('aria-label', `${sel.includes('ages') ? 'Age' : 'Reason'} percentages, scale zero to one hundred`);
+  svg.setAttribute('aria-label', `${sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : 'reason'} percentages, scale zero to one hundred.`);
   const detail = document.createElement('p'); detail.className = 'chart-detail';
   detail.setAttribute('aria-live', 'polite');
-  rows.forEach(([label, pct, raw], i) => {
-    const y = pad + i * rowH, bw = W * pct / 100;
+  rows.forEach(([label, pct, raw], index) => {
+    const y = pad + index * rowH;
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'bar');
     g.setAttribute('tabindex', '0'); g.setAttribute('role', 'img');
-    g.setAttribute('aria-label', `${label}: ${pct}%, ${raw.toLocaleString()} posts`);
+    const description = `${label}: ${pct}%, ${raw.toLocaleString()} posts`;
+    g.setAttribute('aria-label', description);
     const hit = document.createElementNS(NS, 'rect');
     hit.setAttribute('x', '0'); hit.setAttribute('y', y);
     hit.setAttribute('width', W); hit.setAttribute('height', rowH);
     hit.setAttribute('fill', 'transparent'); g.appendChild(hit);
-    const ti = document.createElementNS(NS, 'title'); ti.textContent = `${label}: ${raw.toLocaleString()} posts`; g.appendChild(ti);
-    g.appendChild(rc.rectangle(1, y + 24, Math.max(bw - 2, 0), 9,
-      {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .35, bowing: .2, seed: i + 1}));
-    g.appendChild(txt(0, y + 14, label, 'bl', 'start'));
-    g.appendChild(txt(W, y + 14, pct + '%', 'bv', 'end'));
-    const showDetail = () => { detail.textContent = `${label}: ${raw.toLocaleString()} posts`; };
+    const ti = document.createElementNS(NS, 'title'); ti.textContent = description; g.appendChild(ti);
+    g.appendChild(txt(0, y + 16, label, 'bl', 'start'));
+    {
+      const barY = y + 28;
+      const baseline = document.createElementNS(NS, 'rect');
+      baseline.setAttribute('x', 0); baseline.setAttribute('y', barY);
+      baseline.setAttribute('width', plotW); baseline.setAttribute('height', 10);
+      baseline.setAttribute('fill', INK); baseline.setAttribute('opacity', '.05');
+      g.appendChild(baseline);
+      if (pct > 0) g.appendChild(rc.rectangle(0, barY, plotW * pct / 100, 10,
+        {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .15, bowing: 0, seed: index + 1}));
+      g.appendChild(txt(W, y + 16, pct + '%', 'bv', 'end'));
+    }
+    const showDetail = () => { detail.textContent = description; };
     g.addEventListener('pointerenter', showDetail); g.addEventListener('focus', showDetail);
     g.addEventListener('click', showDetail);
     g.addEventListener('pointerleave', () => { detail.textContent = ''; });
@@ -243,69 +344,77 @@ function ageRows(g){
 }
 function motifRows(g){
   const m = DATA.motives[g] || {}, tot = DATA.gender[g] || 1;
-  return Object.entries(m).sort((x, y) => y[1] - x[1]).map(([k, v]) => [MLABEL[k] || k, Math.round(100 * v / tot), v]);
+  return Object.keys(MLABEL).map(key => [MLABEL[key], Math.round(100 * (m[key] || 0) / tot), m[key] || 0]);
 }
 
 function drawMap(){
   const host = $('#map'); host.innerHTML = '';
   const list = $('#city-list'); list.innerHTML = '';
-  const W = host.clientWidth, H = Math.round(W * .55);
+  const W = host.clientWidth;
   const latTop = 76, latBot = -58;
-  const X = lon => (lon + 180) / 360 * W, Y = lat => (latTop - lat) / (latTop - latBot) * H;
-  const svg = svgEl(W, H), rc = rough.svg(svg);
-  svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'World map of the cities listed below');
-
-  const defs = document.createElementNS(NS, 'defs');
-  defs.innerHTML = `<pattern id="stipple" width="7" height="7" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="1" fill="${INK}" opacity=".45"/></pattern>
-    <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="7" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/></filter>`;
-  svg.appendChild(defs);
+  const H = Math.round(W * (latTop - latBot) / 360);
+  const projection = d3.geoEquirectangular().scale(W / (2 * Math.PI))
+    .translate([W / 2, latTop * W / 360]).clipExtent([[0, 0], [W, H]]);
+  const X = lon => projection([lon, 0])[0], Y = lat => projection([0, lat])[1];
+  const svg = svgEl(W, H);
+  svg.setAttribute('role', 'group'); svg.setAttribute('aria-label', 'City locations. Counts are in the ranked list above.');
+  $('#map-detail').textContent = '';
+  $('#map-note').textContent = WORLD
+    ? 'Dots show locations, not the number of mentions.'
+    : 'The map background could not load. City counts are listed above.';
 
   if (WORLD){
-    let d = '';
-    for (const f of topojson.feature(WORLD, WORLD.objects.countries).features){
-      if (f.properties && f.properties.name === 'Antarctica') continue;
-      const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates;
-      for (const poly of polys) for (const ring of poly){
-        let prev = null;
-        for (const [lo, la0] of ring){
-          const la = Math.max(latBot, Math.min(latTop, la0));
-          d += (!prev || Math.abs(lo - prev) > 180 ? 'M' : 'L') + X(lo).toFixed(1) + ',' + Y(la).toFixed(1);
-          prev = lo;
-        }
-        d += 'Z';
-      }
-    }
+    const countries = topojson.feature(WORLD, WORLD.objects.countries);
+    countries.features = countries.features.filter(country => country.properties.name !== 'Antarctica');
     const land = document.createElementNS(NS, 'path');
-    land.setAttribute('d', d); land.setAttribute('fill', 'url(#stipple)');
-    land.setAttribute('stroke', INK); land.setAttribute('stroke-width', '.4');
-    land.setAttribute('opacity', '.45');
+    land.setAttribute('d', d3.geoPath(projection)(countries)); land.setAttribute('fill', INK);
+    land.setAttribute('stroke', INK); land.setAttribute('stroke-width', '.5');
+    land.setAttribute('opacity', '.13');
     svg.appendChild(land);
   }
 
-  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n);
+  const cities = [...(DATA.cities || [])].sort((first, second) => second.n - first.n).slice(0, 12);
+  const cityColumns = Number(getComputedStyle(list).getPropertyValue('--city-columns'));
+  list.style.setProperty('--city-rows', Math.max(1, Math.ceil(cities.length / cityColumns)));
+  $('#city-note').textContent = `The ${cities.length} most-mentioned cities. Counts are mentions, not residents or unique people.`;
   if (!cities.length) { host.appendChild(svg); return; }
-  const max = Math.max(...cities.map(c => c.n));
-  const R = c => 3 + 7 * Math.sqrt(c.n / max);
-  // label nudges so neighbours don't collide — [dx, dy] in multiples of (r + 4px)
-  const OFF = {'New York': [1.2, 1], 'Boston': [1.2, -1], 'Toronto': [-1.2, -1], 'Chicago': [-2.4, .3],
-    'London': [-1.2, -1], 'Paris': [1.2, 1], 'Amsterdam': [1.2, -1.1], 'Berlin': [1.2, -.9],
-    'Manchester': [-1.1, -1.1], 'Dublin': [-1.2, 0], 'Los Angeles': [1.4, 1.4], 'San Francisco': [-1.1, 1.4],
-    'Seattle': [1.4, .7], 'Vancouver': [-1.1, -1.2], 'Sydney': [0, 1.4], 'Melbourne': [0, -1.4],
-    'Houston': [1.1, 1], 'Dallas': [-1.1, -1], 'Miami': [1.2, .8], 'Montreal': [1.2, -1.2]};
+  const labels = [];
+  const positions = cities.map(city => ({x:X(city.lon), y:Y(city.lat)}));
   cities.forEach((c, i) => {
-    const r = R(c), cx = X(c.lon), cy = Y(c.lat);
+    const cx = X(c.lon), cy = Y(c.lat);
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'hot');
+    g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', `${c.city}: ${c.n.toLocaleString()} mentions`);
     const ti = document.createElementNS(NS, 'title'); ti.textContent = `${c.city}: ${c.n.toLocaleString()} mentions`; g.appendChild(ti);
-    g.appendChild(rc.circle(cx, cy, r * 2, {stroke: RED, strokeWidth: 1, roughness: .6, seed: i + 1, fill: 'rgba(156,47,36,.12)', fillStyle: 'solid'}));
-    const [dx, dy] = OFF[c.city] || [0, -1.25];
-    const direction = Math.hypot(dx, dy) || 1;
-    const labelX = cx + dx / direction * (r + 7);
-    const labelY = cy + dy / direction * (r + 7);
-    g.appendChild(rc.line(cx + dx / direction * r, cy + dy / direction * r,
-      labelX, labelY, {stroke: RED, strokeWidth: .6, roughness: 0}));
-    g.appendChild(txt(labelX, labelY + 4, String(i + 1), 'ml', 'middle'));
+    const hit = document.createElementNS(NS, 'circle');
+    hit.setAttribute('cx', cx); hit.setAttribute('cy', cy); hit.setAttribute('r', 10);
+    hit.setAttribute('fill', 'transparent'); hit.setAttribute('class', 'map-hit'); g.appendChild(hit);
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('r', 4);
+    dot.setAttribute('class', 'map-dot'); dot.setAttribute('fill', RED);
+    dot.setAttribute('stroke', 'var(--paper)'); dot.setAttribute('stroke-width', 1); g.appendChild(dot);
+    if (W >= 600){
+      const labelWidth = String(i + 1).length * 9 + 6;
+      let placement = null;
+      for (const distance of [18, 30, 44]){
+        for (const angle of [-Math.PI / 2, 0, Math.PI / 2, Math.PI, -Math.PI / 4, Math.PI / 4, 3 * Math.PI / 4, -3 * Math.PI / 4]){
+          const x = cx + Math.cos(angle) * distance, y = cy + Math.sin(angle) * distance;
+          const box = {left:x-labelWidth/2, right:x+labelWidth/2, top:y-10, bottom:y+10};
+          const collision = labels.some(other => box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top)
+            || positions.some(point => point.x > box.left-5 && point.x < box.right+5 && point.y > box.top-5 && point.y < box.bottom+5);
+          if (!collision && box.left >= 0 && box.right <= W && box.top >= 0 && box.bottom <= H){placement = {x, y, box}; break;}
+        }
+        if (placement) break;
+      }
+      if (placement){
+        labels.push(placement.box);
+        const leader = document.createElementNS(NS, 'line');
+        leader.setAttribute('x1', cx); leader.setAttribute('y1', cy);
+        leader.setAttribute('x2', placement.x); leader.setAttribute('y2', placement.y);
+        leader.setAttribute('stroke', RED); leader.setAttribute('stroke-width', '.6'); g.insertBefore(leader, hit);
+        g.appendChild(txt(placement.x, placement.y + 5, String(i + 1), 'ml', 'middle'));
+      }
+    }
     svg.appendChild(g);
     const item = document.createElement('li'); item.setAttribute('tabindex', '0');
     const rank = document.createElement('span'); rank.className = 'city-rank'; rank.textContent = i + 1;
@@ -313,13 +422,25 @@ function drawMap(){
     const count = document.createElement('span'); count.className = 'city-value'; count.textContent = c.n.toLocaleString();
     item.append(rank, name, count);
     item.setAttribute('aria-label', `${c.city}: ${c.n.toLocaleString()} mentions`);
-    const highlight = active => { item.classList.toggle('is-active', active); g.classList.toggle('is-active', active); };
+    const highlight = active => {
+      if (!active) return;
+      [...list.children, ...svg.querySelectorAll('.hot')].forEach(element => element.classList.remove('is-active'));
+      item.classList.add('is-active'); g.classList.add('is-active');
+      $('#map-detail').textContent = `${c.city}: ${c.n.toLocaleString()} mentions.`;
+    };
     item.addEventListener('pointerenter', () => highlight(true));
     item.addEventListener('pointerleave', () => highlight(false));
     item.addEventListener('focus', () => highlight(true)); item.addEventListener('blur', () => highlight(false));
-    item.addEventListener('click', () => item.focus());
+    item.addEventListener('click', () => { item.focus(); highlight(true); });
+    item.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight(true);}
+    });
     g.addEventListener('pointerenter', () => highlight(true)); g.addEventListener('pointerleave', () => highlight(false));
-    g.addEventListener('click', () => item.focus());
+    g.addEventListener('focus', () => highlight(true));
+    g.addEventListener('click', () => highlight(true));
+    g.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' '){event.preventDefault(); highlight(true);}
+    });
     list.appendChild(item);
   });
   host.appendChild(svg);
@@ -327,6 +448,11 @@ function drawMap(){
 
 function render(){
   const M = DATA.gender.M || 0, F = DATA.gender.F || 0, T = (M + F) || 1;
+  const sample = DATA.generated === 'MOCK';
+  $('#sample-label').hidden = !sample;
+  $('#source-label').textContent = sample
+    ? 'Sample data for this design. These are not verified archive findings.'
+    : 'Source: public r/Affairs posts from the Arctic Shift archive.';
   $('#nposts').textContent = DATA.posts.toLocaleString();
   if (DATA.period){
     const p = `${DATA.period.from} – ${DATA.period.to}`;
@@ -337,18 +463,36 @@ function render(){
   $('#total-posts').textContent = DATA.posts.toLocaleString();
   $('#men-count').textContent = M.toLocaleString();
   $('#women-count').textContent = F.toLocaleString();
+  document.querySelectorAll('.panel').forEach(panel => {
+    const heading = panel.querySelector('.panel-heading');
+    panel.querySelectorAll('.chart-section').forEach(section => {
+      let identity = section.querySelector('.topic-identity');
+      if (!identity){
+        identity = heading.cloneNode(true);
+        identity.className = 'topic-identity';
+        identity.querySelector('.count').removeAttribute('id');
+        section.prepend(identity);
+      }
+      identity.querySelector('.count').textContent = heading.querySelector('.count').textContent;
+    });
+  });
 
-  bars('#men-ages', ageRows('M'), BLUE);   bars('#women-ages', ageRows('F'), RED);
+  const menAges = ageRows('M'), womenAges = ageRows('F');
+  const menKnown = menAges.reduce((total, row) => total + row[2], 0);
+  const womenKnown = womenAges.reduce((total, row) => total + row[2], 0);
+  $('#men-age-note').textContent = `Based on ${menKnown.toLocaleString()} posts that state an age.`;
+  $('#women-age-note').textContent = `Based on ${womenKnown.toLocaleString()} posts that state an age.`;
+  bars('#men-ages', menAges, BLUE); bars('#women-ages', womenAges, RED);
   bars('#men-motives', motifRows('M'), BLUE); bars('#women-motives', motifRows('F'), RED);
 
   const sk = DATA.seeking || {};
   const mTot = (sk.M4F || 0) + (sk.M4M || 0), fTot = (sk.F4M || 0) + (sk.F4F || 0);
   $('#seek-m').innerHTML = DATA.seeking_tagged > 25 && mTot
-    ? `<b>${Math.round(100 * (sk.M4F || 0) / mTot)}%</b> look for women.<br>Based on ${mTot.toLocaleString()} posts with a partner tag.`
-    : 'Not enough posts with a partner tag.';
+    ? `<b>${Math.round(100 * (sk.M4F || 0) / mTot)}%</b> seek women.<small>Based on ${mTot.toLocaleString()} posts that state who they are looking for.</small>`
+    : 'Not enough posts state who they are looking for.';
   $('#seek-f').innerHTML = DATA.seeking_tagged > 25 && fTot
-    ? `<b>${Math.round(100 * (sk.F4M || 0) / fTot)}%</b> look for men.<br>Based on ${fTot.toLocaleString()} posts with a partner tag.`
-    : 'Not enough posts with a partner tag.';
+    ? `<b>${Math.round(100 * (sk.F4M || 0) / fTot)}%</b> seek men.<small>Based on ${fTot.toLocaleString()} posts that state who they are looking for.</small>`
+    : 'Not enough posts state who they are looking for.';
   drawMap();
 }
 

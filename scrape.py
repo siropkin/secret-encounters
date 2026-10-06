@@ -94,7 +94,7 @@ def parse_post(p):
     tgender = tag.group(2).upper() if tag else None
     if gender not in ("M", "F"):  gender = None
     if tgender not in ("M", "F"): tgender = None
-    pairs = [(int(m.group(1) or m.group(3)), (m.group(2) or m.group(4)).upper())
+    pairs = [(int(m.group(1) or m.group(4)), (m.group(2) or m.group(3)).upper())
              for m in PAIR.finditer(text)]
     pairs = [(a, g) for a, g in pairs if 18 <= a <= 75]
     age = next((a for a, g in pairs if gender and g == gender), None)
@@ -158,6 +158,12 @@ def main(days):
         time.sleep(1.2)  # polite cadence
     if not posts:
         sys.exit("no posts collected")
+    data = aggregate(posts)
+    OUT.parent.mkdir(exist_ok=True)
+    OUT.write_text(json.dumps(data, indent=1))
+    print(f"wrote {OUT} — {len(posts)} posts, {data['gendered']} gendered, {data['seeking_tagged']} seeking-tags")
+
+def aggregate(posts):
 
     gender_c, seeking_c, cities_c = Counter(), Counter(), Counter()
     ages    = {"M": Counter(), "F": Counter()}
@@ -186,9 +192,15 @@ def main(days):
         "cities": [{"city": n, "lat": CITIES[n][0], "lon": CITIES[n][1], "n": c}
                    for n, c in cities_c.most_common(12)],
     }
+    return data
+
+def rebuild():
+    files = sorted(RAW.glob("*.json"), key=lambda p: int(p.stem))
+    posts = [p for f in files for p in json.loads(f.read_text())]
+    if not posts: sys.exit("no checkpoints in data/raw")
     OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(json.dumps(data, indent=1))
-    print(f"wrote {OUT} — {len(posts)} posts, {data['gendered']} gendered, {tagged} seeking-tags")
+    OUT.write_text(json.dumps(aggregate(posts), indent=1))
+    print(f"rebuilt {OUT} from {len(files)} pages ({len(posts)} posts)")
 
 def demo():
     p = parse_post({"title": "34 [M4F] #Chicago - married, dead bedroom, looking for excitement",
@@ -200,10 +212,14 @@ def demo():
     assert p2["gender"] == "F" and p2["age"] == 42 and "desired" in p2["motives"], p2
     p3 = parse_post({"title": "Update: my wife found out", "selftext": "I (38M) messed up"})
     assert p3["gender"] == "M" and p3["age"] == 38, p3
+    p4 = parse_post({"title": "F 45, thinking about taking the leap", "selftext": ""})
+    assert p4["gender"] == "F" and p4["age"] == 45, p4
     print("demo ok")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "demo":
         demo()
+    elif len(sys.argv) > 1 and sys.argv[1] == "rebuild":
+        rebuild()  # aggregate data/raw checkpoints without fetching
     else:
         main(int(sys.argv[1]) if len(sys.argv) > 1 else 365)  # days of history
