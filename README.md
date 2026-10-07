@@ -13,7 +13,6 @@ All screenshots below are included in this repository under the screenshots fold
 ### Opening
 
 ![Opening desktop](screenshots/01-opening-desktop.png)
-![Opening mobile](screenshots/07-opening-mobile.png)
 
 ### Story chapters
 

@@ -102,6 +102,12 @@ h1{
 .seek b{font-weight:700}
 .chart{width:100%; position:relative}
 .chart-detail{font-size:.9rem; color:var(--faded); min-height:44px; margin:4px 0 0}
+.mobile-comparison{display:none}
+.comparison-legend{display:flex; gap:24px; margin:0 0 24px; padding:12px 0;
+  font-weight:600; position:sticky; top:0; z-index:1; background:var(--paper)}
+.comparison-legend span{display:flex; align-items:center; gap:8px}
+.comparison-legend span::before{content:""; width:18px; height:8px; background:var(--blue)}
+.comparison-legend span:last-child::before{background:var(--red)}
 
 /* svg chart text */
 .bl{font-family:'Karla', sans-serif; font-size:16px; fill:var(--ink)}
@@ -244,6 +250,11 @@ footer .rule{width:min(70%,380px)}
   .chart-section .seek b{font-size:6rem}
 }
 @media (max-width:759px){
+  .spread > .panel{display:none}
+  .mobile-comparison{display:block; min-width:0}
+  .mobile-comparison h2{font-family:'DM Serif Display',serif; font-size:36px; font-weight:400; line-height:1.15; margin:0 0 16px}
+  .mobile-comparison h3{font-size:1.25rem; margin:0 0 var(--gap-tight)}
+  .mobile-comparison .chart-section + .chart-section{margin-top:32px}
   .panel h2{margin-bottom:var(--gap-tight)}
   .panel h3{font-size:1.25rem}
   .topic-note,.chart-detail,.seek small{font-size:1rem; line-height:1.5}
@@ -303,6 +314,25 @@ footer .rule{width:min(70%,380px)}
   </div>
 
   <section class="spread">
+    <section class="mobile-comparison" aria-label="Compare men and women">
+      <h2>Men &amp; women</h2>
+      <div class="comparison-legend"><span>Men</span><span>Women</span></div>
+      <section class="chart-section" aria-label="Age comparison">
+        <h3>Age</h3>
+        <p class="topic-note" id="comparison-age-note">Of posts that state an age.</p>
+        <div class="chart" id="comparison-ages"></div>
+      </section>
+      <section class="chart-section" aria-label="Looking for comparison">
+        <h3>Looking for</h3>
+        <p class="topic-note" id="comparison-seeking-note">Of posts that state who they are looking for.</p>
+        <div class="chart" id="comparison-seeking"></div>
+      </section>
+      <section class="chart-section" aria-label="Reasons comparison">
+        <h3>Reasons mentioned</h3>
+        <p class="topic-note">of each group's posts; one post may mention several reasons</p>
+        <div class="chart" id="comparison-motives"></div>
+      </section>
+    </section>
     <section class="panel men" aria-label="Statistics about men">
       <div class="panel-heading">
       <h2>Men</h2>
@@ -447,12 +477,12 @@ function updateStoryEffects(){
   const chapterPosition = distance / innerHeight;
   const topicIndex = Math.max(0, Math.min(topicDescriptions.length - 1, Math.floor(chapterPosition + .5) - 1));
   const titleEntry = Math.min(1, Math.max(0, (chapterPosition - .3) / .5));
-  const titleExit = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - 100) / innerHeight));
+  const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight * .5) / (innerHeight * .35)));
+  const titleExit = release * release * (3 - 2 * release);
   const titleOpacity = !desktopStory.matches ? 0 : reducedMotion.matches
     ? (titleEntry === 1 && titleExit > 0 ? 1 : 0) : titleEntry * titleExit;
   genderTitles.style.opacity = desktopStory.matches ? 1 : 0;
   genderTitles.inert = titleOpacity === 0;
-  const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight * .5) / (innerHeight * .35)));
   const introExit = !desktopStory.matches ? 1 : reducedMotion.matches
     ? (release > 0 ? 1 : 0) : release * release * (3 - 2 * release);
   storyIntro.querySelector('h1').style.opacity = 1;
@@ -490,20 +520,22 @@ scheduleStoryEffects();
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';s.style.height=h+'px';return s}
 function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);if(anchor)t.setAttribute('text-anchor',anchor);t.setAttribute('class',cls);t.textContent=str;return t}
 
-function bars(sel, rows, color){
+function bars(sel, rows, color, comparisonRows){
   const host = $(sel); host.innerHTML = '';
-  const W = host.clientWidth, rowH = matchMedia('(min-width:1024px)').matches ? 60 : 52, pad = 4, plotW = W;
+  const W = host.clientWidth, rowH = comparisonRows ? 82 : matchMedia('(min-width:1024px)').matches ? 60 : 52, pad = 4, plotW = comparisonRows ? W - 64 : W;
   const svg = svgEl(W, rows.length * rowH + pad * 2);
   const rc = window.rough && typeof window.rough.svg === 'function' ? window.rough.svg(svg) : null;
   svg.setAttribute('role', 'group');
-  svg.setAttribute('aria-label', `${sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : 'reason'} percentages, scale zero to one hundred.`);
+  svg.setAttribute('aria-label', `${comparisonRows ? 'Men and women' : sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : sel.includes('seeking') ? 'looking for' : 'reason'} percentages, scale zero to one hundred.`);
   const detail = document.createElement('p'); detail.className = 'chart-detail';
   detail.setAttribute('aria-live', 'polite');
   rows.forEach(([label, pct, raw], index) => {
     const y = pad + index * rowH;
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'bar');
     g.setAttribute('tabindex', '0'); g.setAttribute('role', 'img');
-    const description = `${label}: ${pct}%, ${raw.toLocaleString()} posts`;
+    const description = comparisonRows
+      ? `${label}: Men ${pct}%, ${raw.toLocaleString()} posts; Women ${comparisonRows[index][1]}%, ${comparisonRows[index][2].toLocaleString()} posts`
+      : `${label}: ${pct}%, ${raw.toLocaleString()} posts`;
     g.setAttribute('aria-label', description);
     const hit = document.createElementNS(NS, 'rect');
     hit.setAttribute('x', '0'); hit.setAttribute('y', y);
@@ -511,26 +543,29 @@ function bars(sel, rows, color){
     hit.setAttribute('fill', 'transparent'); g.appendChild(hit);
     const ti = document.createElementNS(NS, 'title'); ti.textContent = description; g.appendChild(ti);
     g.appendChild(txt(0, y + 16, label, 'bl', 'start'));
-    {
-      const barY = y + 28;
+    const series = comparisonRows ? [[pct, color], [comparisonRows[index][1], RED]] : [[pct, color]];
+    series.forEach(([value, barColor], seriesIndex) => {
+      const barY = y + 28 + seriesIndex * 22;
       const baseline = document.createElementNS(NS, 'rect');
       baseline.setAttribute('x', 0); baseline.setAttribute('y', barY);
       baseline.setAttribute('width', plotW); baseline.setAttribute('height', 10);
       baseline.setAttribute('fill', INK); baseline.setAttribute('opacity', '.05');
       g.appendChild(baseline);
-      if (pct > 0){
+      if (value > 0){
         if (rc) {
-          g.appendChild(rc.rectangle(0, barY, plotW * pct / 100, 10,
-            {fill: color, fillStyle: 'solid', stroke: 'none', roughness: .15, bowing: 0, seed: index + 1}));
+          g.appendChild(rc.rectangle(0, barY, plotW * value / 100, 10,
+            {fill: barColor, fillStyle: 'solid', stroke: 'none', roughness: .15, bowing: 0, seed: index + 1}));
         } else {
           const rect = document.createElementNS(NS, 'rect');
           rect.setAttribute('x', '0'); rect.setAttribute('y', String(barY));
-          rect.setAttribute('width', String(plotW * pct / 100)); rect.setAttribute('height', '10');
-          rect.setAttribute('fill', color); g.appendChild(rect);
+          rect.setAttribute('width', String(plotW * value / 100)); rect.setAttribute('height', '10');
+          rect.setAttribute('fill', barColor); g.appendChild(rect);
         }
       }
-      g.appendChild(txt(W, y + 16, pct + '%', 'bv', 'end'));
-    }
+      const valueText = txt(W, comparisonRows ? barY + 11 : y + 16, value + '%', 'bv', 'end');
+      if (comparisonRows) valueText.style.fill = barColor;
+      g.appendChild(valueText);
+    });
     const showDetail = () => { detail.textContent = description; };
     g.addEventListener('pointerenter', showDetail); g.addEventListener('focus', showDetail);
     g.addEventListener('click', showDetail);
@@ -547,7 +582,8 @@ function ageRows(g){
 }
 function motifRows(g){
   const m = DATA.motives[g] || {}, tot = DATA.gender[g] || 1;
-  return Object.keys(MLABEL).map(key => [MLABEL[key], Math.round(100 * (m[key] || 0) / tot), m[key] || 0]);
+  return Object.keys(MLABEL).map(key => [MLABEL[key], Math.round(100 * (m[key] || 0) / tot), m[key] || 0])
+    .sort((first, second) => first[0].localeCompare(second[0], 'en'));
 }
 
 function drawMap(){
@@ -732,11 +768,31 @@ function render(){
   const womenKnown = womenAges.reduce((total, row) => total + row[2], 0);
   $('#men-age-note').textContent = `based on ${menKnown.toLocaleString()} posts that state an age`;
   $('#women-age-note').textContent = `based on ${womenKnown.toLocaleString()} posts that state an age`;
-  bars('#men-ages', menAges, BLUE); bars('#women-ages', womenAges, RED);
-  bars('#men-motives', motifRows('M'), BLUE); bars('#women-motives', motifRows('F'), RED);
+  const mobileComparison = matchMedia('(max-width:759px)').matches;
+  if (mobileComparison){
+    $('#comparison-age-note').textContent = `based on ${menKnown.toLocaleString()} men's posts and ${womenKnown.toLocaleString()} women's posts that state an age`;
+    bars('#comparison-ages', menAges, BLUE, womenAges);
+    bars('#comparison-motives', motifRows('M'), BLUE, motifRows('F'));
+  } else {
+    bars('#men-ages', menAges, BLUE); bars('#women-ages', womenAges, RED);
+    bars('#men-motives', motifRows('M'), BLUE); bars('#women-motives', motifRows('F'), RED);
+  }
 
   const sk = DATA.seeking || {};
   const mTot = (sk.M4F || 0) + (sk.M4M || 0), fTot = (sk.F4M || 0) + (sk.F4F || 0);
+  if (mobileComparison){
+    $('#comparison-seeking-note').textContent = `based on ${mTot.toLocaleString()} men's posts and ${fTot.toLocaleString()} women's posts that state who they are looking for`;
+    if (DATA.seeking_tagged > 25 && mTot && fTot){
+      const seekingRows = (total, women, men) => [
+        ['Women', Number((100 * women / total).toFixed(1)), women],
+        ['Men', Number((100 * men / total).toFixed(1)), men]
+      ];
+      bars('#comparison-seeking', seekingRows(mTot, sk.M4F || 0, sk.M4M || 0), BLUE,
+        seekingRows(fTot, sk.F4F || 0, sk.F4M || 0));
+    } else {
+      $('#comparison-seeking').textContent = 'Not enough posts state who they are looking for.';
+    }
+  }
   $('#seek-m').innerHTML = DATA.seeking_tagged > 25 && mTot
     ? `<b>${(100 * (sk.M4F || 0) / mTot).toFixed(1)}%</b><span class="stat-statement">looking for women</span><small class="stat-note">based on ${mTot.toLocaleString()} posts that state who they are looking for</small>`
     : 'Not enough posts state who they are looking for.';
