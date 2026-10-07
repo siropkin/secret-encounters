@@ -19,6 +19,10 @@ Optional local audit tools, not required by the website:
 
 These scripts aid manual inspection; they are not labeled accuracy tests. Their output can include raw post excerpts and should remain local.
 
+## Reddit Poster
+
+Public [poster](https://srdkn.com/secret-encounters/poster.html) and [1600 x 2000 PNG](https://srdkn.com/secret-encounters/screenshots/reddit-poster.png). Local preview: http://localhost:8000/poster.html. The [local PNG](screenshots/reddit-poster.png) uses the same photo and palette, with figures derived from the published aggregate data.
+
 ## Screenshots
 
 All 11 article screenshots are 1888 x 1682 pixels and are listed below in story order. Standalone sections are framed for the article without neighboring chapters or footer content.
