@@ -10,6 +10,7 @@ Usage:  python3 scrape.py [days]      # history window, default 365
 Stdlib only. Output is aggregates only — no usernames or post IDs are stored.
 """
 import json, os, re, sys, time, urllib.parse, urllib.request, urllib.error
+import statistics
 from collections import Counter
 from pathlib import Path
 
@@ -221,14 +222,111 @@ def main(days):
     OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")
     print(f"wrote {OUT} — {len(posts)} posts, {data['gendered']} gendered, {data['seeking_tagged']} seeking-tags")
 
+def analyze_posts(records):
+    buckets = ['18-24', '25-34', '35-44', '45-54', '55+']
+    coverage = {gender: Counter() for gender in ('M', 'F')}
+    age_values = {gender: [] for gender in coverage}
+    strata = {gender: {bucket: Counter() for bucket in buckets} for gender in coverage}
+    cities = {city: {'gender': Counter(), 'single': Counter(), 'title': Counter(),
+                     'specific': Counter(), 'ages': {gender: Counter() for gender in coverage}}
+              for city in CITIES}
+    specific_patterns = {city: re.compile(r'\b(?:' + '|'.join(re.escape(alias) for alias in aliases if len(alias) > 3) + r')\b')
+                         for city, (_, _, aliases) in CITIES.items()}
+    months = {}
+    authors_available = 0
+    for post, parsed in records:
+        gender = parsed['gender']
+        if gender not in coverage:
+            continue
+        counts = coverage[gender]
+        counts['posts'] += 1
+        counts['age'] += parsed['age'] is not None
+        counts['city'] += bool(parsed['cities'])
+        counts['seeking'] += parsed['seeking'] is not None
+        counts['reason'] += bool(parsed['motives'])
+        counts['multiple_cities'] += len(parsed['cities']) > 1
+        author = post.get('author')
+        authors_available += isinstance(author, str) and author.lower() not in ('', '[deleted]', '[removed]')
+        bucket = age_bucket(parsed['age']) if parsed['age'] else None
+        if bucket:
+            age_values[gender].append(parsed['age'])
+            strata[gender][bucket]['posts'] += 1
+            strata[gender][bucket]['city'] += bool(parsed['cities'])
+            for motif in parsed['motives']:
+                strata[gender][bucket][motif] += 1
+        timestamp = post.get('created_utc')
+        month = time.strftime('%Y-%m', time.gmtime(timestamp)) if isinstance(timestamp, (int, float)) else None
+        if month:
+            monthly = months.setdefault(month, {'gender': Counter(), 'coverage': {group: Counter() for group in coverage}, 'cities': {}})
+            monthly['gender'][gender] += 1
+            for field in ('age', 'city', 'seeking', 'reason'):
+                monthly['coverage'][gender][field] += {'age': bucket is not None, 'city': bool(parsed['cities']),
+                    'seeking': parsed['seeking'] is not None, 'reason': bool(parsed['motives'])}[field]
+        title = (post.get('title') or '').lower()
+        text = title + '\n' + (post.get('selftext') or '').lower()
+        for city in parsed['cities']:
+            city_counts = cities[city]
+            city_counts['gender'][gender] += 1
+            city_counts['single'][gender] += len(parsed['cities']) == 1
+            city_counts['title'][gender] += next(pattern for name, pattern in CITY_RES if name == city).search(title) is not None
+            city_counts['specific'][gender] += specific_patterns[city].search(text) is not None
+            if bucket:
+                city_counts['ages'][gender][bucket] += 1
+            if month:
+                monthly['cities'].setdefault(city, Counter())[gender] += 1
+    pooled = sum(counts['posts'] for groups in strata.values() for counts in groups.values())
+    weights = {bucket: sum(strata[gender][bucket]['posts'] for gender in coverage) / pooled if pooled else 0 for bucket in buckets}
+    complete_strata = pooled > 0 and all(strata[gender][bucket]['posts'] for gender in coverage for bucket in buckets)
+    def standardized(gender, counts):
+        if not complete_strata:
+            return None
+        return 100 * sum(weights[bucket] * counts[bucket] / strata[gender][bucket]['posts'] for bucket in buckets)
+    for gender, counts in coverage.items():
+        counts['no_reason'] = counts['posts'] - counts['reason']
+        counts['median_age'] = statistics.median(age_values[gender]) if age_values[gender] else None
+        counts['mean_age'] = statistics.mean(age_values[gender]) if age_values[gender] else None
+    sorted_months = sorted(months)
+    full_months = sorted_months[1:-1]
+    city_results = []
+    for city, counts in cities.items():
+        if not sum(counts['gender'].values()):
+            continue
+        rates = {gender: standardized(gender, counts['ages'][gender]) for gender in coverage}
+        eligible = []
+        men_rate = counts['gender']['M'] / coverage['M']['posts'] if coverage['M']['posts'] else 0
+        women_rate = counts['gender']['F'] / coverage['F']['posts'] if coverage['F']['posts'] else 0
+        for month in full_months:
+            monthly = months[month]
+            hits = monthly['cities'].get(city, Counter())
+            if hits['M'] >= 20 and hits['F'] >= 5:
+                relative = (hits['F'] / monthly['gender']['F']) / (hits['M'] / monthly['gender']['M'])
+                eligible.append(relative)
+        city_results.append({'city': city, **{field: dict(counts[field]) for field in ('gender', 'single', 'title', 'specific')},
+            'age_standardized_rate': rates, 'relative_rate': women_rate / men_rate if men_rate else None,
+            'monthly_checks': {'eligible': len(eligible), 'same_direction': sum((relative >= 1) == (women_rate >= men_rate) for relative in eligible),
+                               'relative_rate_min': min(eligible) if eligible else None, 'relative_rate_max': max(eligible) if eligible else None}})
+    return {'coverage': {gender: dict(counts) for gender, counts in coverage.items()},
+        'age_buckets': {gender: {bucket: dict(counts) for bucket, counts in groups.items()} for gender, groups in strata.items()},
+        'age_weights': weights,
+        'age_standardized': {field: {gender: standardized(gender, {bucket: strata[gender][bucket][field] for bucket in buckets}) for gender in coverage}
+                             for field in ['city', *MOTIFS]},
+        'cities': sorted(city_results, key=lambda row: sum(row['gender'].values()), reverse=True),
+        'months': [{'month': month, 'full_month': month in full_months, 'gender': dict(months[month]['gender']),
+                    'coverage': {gender: dict(counts) for gender, counts in months[month]['coverage'].items()}} for month in sorted_months],
+        'author_available_posts': authors_available,
+        'method': {'age_adjustment': 'Pooled stated-age distribution across five age buckets; only available when both groups have every bucket.',
+                   'monthly_checks': 'Boundary months excluded; city direction checked only with at least 20 male and 5 female posts per month.',
+                   'specific_aliases': 'Excludes aliases of three characters or fewer. Longer aliases can still be ambiguous.',
+                   'interpretation': 'Exploratory post-level comparisons, not population estimates or independent-author significance tests.'}}
+
 def aggregate(posts):
 
     gender_c, seeking_c, cities_c = Counter(), Counter(), Counter()
     ages    = {"M": Counter(), "F": Counter()}
     motives = {"M": Counter(), "F": Counter(), "all": Counter()}
     tagged = 0
-    for p in posts:
-        r = parse_post(p)
+    records = [(post, parse_post(post)) for post in posts]
+    for p, r in records:
         g = r["gender"]
         if g:
             gender_c[g] += 1
@@ -254,6 +352,7 @@ def aggregate(posts):
         "motives": {g: dict(c) for g, c in motives.items()},
         "cities": [{"city": n, "lat": CITIES[n][0], "lon": CITIES[n][1], "n": c}
                    for n, c in cities_c.most_common(15)],
+        "analysis": analyze_posts(records),
     }
     return data
 
@@ -286,6 +385,45 @@ def demo():
                   for index, (_, _, aliases) in enumerate(list(CITIES.values())[:16])]
     city_data = aggregate(city_posts)
     assert len(city_data["cities"]) == 15, city_data["cities"]
+    fixtures = []
+    for gender in ('M', 'F'):
+        for age in (21, 29, 39, 49, 59):
+            fixtures.append({'title': f'{age} [{gender}4M] Chicago lonely', 'created_utc': 1700000000})
+    fixture_data = aggregate(fixtures)['analysis']
+    assert fixture_data['coverage']['M']['age'] == 5, fixture_data
+    assert fixture_data['coverage']['F']['no_reason'] == 0, fixture_data
+    assert fixture_data['age_standardized']['city'] == {'M': 100.0, 'F': 100.0}, fixture_data
+    assert fixture_data['cities'][0]['gender'] == {'M': 5, 'F': 5}, fixture_data
+    assert aggregate([])['analysis']['age_standardized']['city'] == {'M': None, 'F': None}
+    unequal_ages = []
+    for gender in ('M', 'F'):
+        for age in (21, 29, 39, 49, 59):
+            total = 10 if (gender == 'M' and age == 21) or (gender == 'F' and age == 59) else 1
+            for index in range(total):
+                unequal_ages.append({'title': f'{age} [{gender}4M] ' + ('Chicago' if age == 59 else 'online')})
+    adjusted_ages = aggregate(unequal_ages)['analysis']
+    assert adjusted_ages['coverage']['M']['city'] != adjusted_ages['coverage']['F']['city'], adjusted_ages
+    assert abs(adjusted_ages['age_standardized']['city']['M'] - adjusted_ages['age_standardized']['city']['F']) < 1e-10, adjusted_ages
+    city_fixtures = aggregate([
+        {'title': '29 [F4M] Chicago New York', 'selftext': '', 'created_utc': 1700000000},
+        {'title': '39 [M4F] #NY', 'selftext': 'Chicago', 'created_utc': 1700000000},
+        {'title': '49 [F4M] online', 'selftext': '', 'created_utc': 1700000000},
+    ])['analysis']
+    assert city_fixtures['coverage']['F']['multiple_cities'] == 1, city_fixtures
+    assert city_fixtures['coverage']['F']['no_reason'] == 2, city_fixtures
+    new_york = next(city for city in city_fixtures['cities'] if city['city'] == 'New York')
+    assert new_york['specific'].get('M', 0) == 0 and new_york['specific']['F'] == 1, new_york
+    assert new_york['title']['M'] == 1 and new_york['single'].get('M', 0) == 0, new_york
+    month_fixtures = []
+    for month in (1, 2, 3):
+        timestamp = int(time.mktime((2026, month, 15, 12, 0, 0, 0, 0, -1)))
+        for gender, total, city_posts in [('M', 40, 20), ('F', 10, 5)]:
+            for index in range(total):
+                month_fixtures.append({'title': f'39 [{gender}4M] ' + ('Chicago' if index < city_posts else 'online'), 'created_utc': timestamp})
+    monthly_analysis = aggregate(month_fixtures)['analysis']
+    assert [month['full_month'] for month in monthly_analysis['months']] == [False, True, False], monthly_analysis
+    assert monthly_analysis['cities'][0]['monthly_checks']['eligible'] == 1, monthly_analysis
+    assert monthly_analysis['cities'][0]['monthly_checks']['same_direction'] == 1, monthly_analysis
     print("demo ok")
 
 if __name__ == "__main__":

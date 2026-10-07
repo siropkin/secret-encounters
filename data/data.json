@@ -19,43 +19,43 @@
  },
  "ages": {
   "M": {
-   "35-44": 50260,
    "45-54": 23662,
    "25-34": 24333,
+   "35-44": 50260,
    "55+": 4907,
    "18-24": 1751
   },
   "F": {
-   "18-24": 874,
-   "35-44": 3142,
    "25-34": 3195,
-   "55+": 114,
-   "45-54": 723
+   "45-54": 723,
+   "35-44": 3142,
+   "18-24": 874,
+   "55+": 114
   }
  },
  "motives": {
   "M": {
    "thrill_variety": 34250,
-   "emotional_gap": 12753,
-   "escape": 13678,
    "desired": 22925,
    "dead_bedroom": 10488,
+   "emotional_gap": 12753,
+   "escape": 13678,
    "loneliness": 6190
   },
   "F": {
    "dead_bedroom": 481,
-   "thrill_variety": 1883,
-   "escape": 568,
-   "loneliness": 511,
    "emotional_gap": 1206,
-   "desired": 1765
+   "thrill_variety": 1883,
+   "desired": 1765,
+   "loneliness": 511,
+   "escape": 568
   },
   "all": {
    "thrill_variety": 37101,
-   "emotional_gap": 14327,
-   "escape": 14549,
    "desired": 25222,
    "dead_bedroom": 11198,
+   "emotional_gap": 14327,
+   "escape": 14549,
    "loneliness": 6915
   }
  },
@@ -150,5 +150,1959 @@
    "lon": -80.0,
    "n": 1037
   }
- ]
+ ],
+ "analysis": {
+  "coverage": {
+   "M": {
+    "posts": 106230,
+    "age": 104913,
+    "city": 52629,
+    "seeking": 103266,
+    "reason": 62717,
+    "multiple_cities": 2295,
+    "no_reason": 43513,
+    "median_age": 40,
+    "mean_age": 39.938539551819126
+   },
+   "F": {
+    "posts": 8212,
+    "age": 8048,
+    "city": 2953,
+    "seeking": 7634,
+    "reason": 3982,
+    "multiple_cities": 100,
+    "no_reason": 4230,
+    "median_age": 34.0,
+    "mean_age": 34.33151093439364
+   }
+  },
+  "age_buckets": {
+   "M": {
+    "18-24": {
+     "posts": 1751,
+     "city": 461,
+     "desired": 230,
+     "thrill_variety": 293,
+     "loneliness": 62,
+     "dead_bedroom": 44,
+     "emotional_gap": 111,
+     "escape": 86
+    },
+    "25-34": {
+     "posts": 24333,
+     "city": 10035,
+     "desired": 4491,
+     "thrill_variety": 8191,
+     "emotional_gap": 2766,
+     "escape": 2711,
+     "dead_bedroom": 2179,
+     "loneliness": 1272
+    },
+    "35-44": {
+     "posts": 50260,
+     "city": 26136,
+     "thrill_variety": 16759,
+     "desired": 11581,
+     "dead_bedroom": 4907,
+     "escape": 6866,
+     "emotional_gap": 5826,
+     "loneliness": 2902
+    },
+    "45-54": {
+     "posts": 23662,
+     "city": 13340,
+     "thrill_variety": 7422,
+     "loneliness": 1616,
+     "emotional_gap": 3218,
+     "desired": 5653,
+     "escape": 3495,
+     "dead_bedroom": 2647
+    },
+    "55+": {
+     "posts": 4907,
+     "city": 2127,
+     "thrill_variety": 1393,
+     "desired": 856,
+     "dead_bedroom": 677,
+     "escape": 458,
+     "emotional_gap": 757,
+     "loneliness": 309
+    }
+   },
+   "F": {
+    "18-24": {
+     "posts": 874,
+     "city": 340,
+     "loneliness": 60,
+     "thrill_variety": 174,
+     "desired": 106,
+     "emotional_gap": 48,
+     "escape": 37,
+     "dead_bedroom": 26
+    },
+    "25-34": {
+     "posts": 3195,
+     "city": 1031,
+     "dead_bedroom": 181,
+     "thrill_variety": 863,
+     "desired": 760,
+     "loneliness": 213,
+     "escape": 253,
+     "emotional_gap": 461
+    },
+    "35-44": {
+     "posts": 3142,
+     "city": 1186,
+     "thrill_variety": 656,
+     "emotional_gap": 507,
+     "escape": 243,
+     "desired": 647,
+     "dead_bedroom": 209,
+     "loneliness": 191
+    },
+    "45-54": {
+     "posts": 723,
+     "city": 319,
+     "emotional_gap": 146,
+     "escape": 24,
+     "desired": 197,
+     "thrill_variety": 156,
+     "dead_bedroom": 47,
+     "loneliness": 35
+    },
+    "55+": {
+     "posts": 114,
+     "city": 35,
+     "thrill_variety": 18,
+     "dead_bedroom": 15,
+     "emotional_gap": 27,
+     "loneliness": 7,
+     "desired": 30,
+     "escape": 5
+    }
+   }
+  },
+  "age_weights": {
+   "18-24": 0.02323810872779101,
+   "25-34": 0.24369472649852603,
+   "35-44": 0.4727472313453316,
+   "45-54": 0.2158709643151176,
+   "55+": 0.04444896911323377
+  },
+  "age_standardized": {
+   "city": {
+    "M": 49.342379302347304,
+    "F": 37.50171301164838
+   },
+   "dead_bedroom": {
+    "M": 9.884332391947801,
+    "F": 6.582476926896294
+   },
+   "thrill_variety": {
+    "M": 32.38868704142624,
+    "F": 22.27490078868843
+   },
+   "emotional_gap": {
+    "M": 12.01894029679534,
+    "F": 16.6841563400714
+   },
+   "loneliness": {
+    "M": 5.840014646929481,
+    "F": 5.9759092453954095
+   },
+   "desired": {
+    "M": 21.62878049659871,
+    "F": 22.86511479186362
+   },
+   "escape": {
+    "M": 12.890774542347902,
+    "F": 6.595831577099369
+   }
+  },
+  "cities": [
+   {
+    "city": "New York",
+    "gender": {
+     "M": 8409,
+     "F": 529
+    },
+    "single": {
+     "M": 7865,
+     "F": 502
+    },
+    "title": {
+     "M": 7864,
+     "F": 508
+    },
+    "specific": {
+     "M": 1359,
+     "F": 63
+    },
+    "age_standardized_rate": {
+     "M": 7.887071247089179,
+     "F": 5.575180752834879
+    },
+    "relative_rate": 0.8137847748194085,
+    "monthly_checks": {
+     "eligible": 11,
+     "same_direction": 9,
+     "relative_rate_min": 0.35468824369347934,
+     "relative_rate_max": 1.3180511377538535
+    }
+   },
+   {
+    "city": "Washington",
+    "gender": {
+     "M": 3988,
+     "F": 237
+    },
+    "single": {
+     "M": 3663,
+     "F": 223
+    },
+    "title": {
+     "M": 3666,
+     "F": 221
+    },
+    "specific": {
+     "M": 1679,
+     "F": 91
+    },
+    "age_standardized_rate": {
+     "M": 3.7372162486947893,
+     "F": 3.521993255105161
+    },
+    "relative_rate": 0.7687611665976986,
+    "monthly_checks": {
+     "eligible": 11,
+     "same_direction": 8,
+     "relative_rate_min": 0.4560198248153691,
+     "relative_rate_max": 1.589771294795606
+    }
+   },
+   {
+    "city": "Chicago",
+    "gender": {
+     "M": 3741,
+     "F": 246
+    },
+    "single": {
+     "M": 3418,
+     "F": 229
+    },
+    "title": {
+     "M": 3503,
+     "F": 233
+    },
+    "specific": {
+     "M": 3741,
+     "F": 246
+    },
+    "age_standardized_rate": {
+     "M": 3.5115267949755893,
+     "F": 3.0015645244515934
+    },
+    "relative_rate": 0.8506396842924724,
+    "monthly_checks": {
+     "eligible": 11,
+     "same_direction": 9,
+     "relative_rate_min": 0.5994947620039297,
+     "relative_rate_max": 1.4645373134328359
+    }
+   },
+   {
+    "city": "Boston",
+    "gender": {
+     "M": 3598,
+     "F": 100
+    },
+    "single": {
+     "M": 3366,
+     "F": 92
+    },
+    "title": {
+     "M": 3398,
+     "F": 95
+    },
+    "specific": {
+     "M": 3598,
+     "F": 100
+    },
+    "age_standardized_rate": {
+     "M": 3.363444664103056,
+     "F": 1.137394772502377
+    },
+    "relative_rate": 0.35953161184150856,
+    "monthly_checks": {
+     "eligible": 8,
+     "same_direction": 8,
+     "relative_rate_min": 0.22064718259026614,
+     "relative_rate_max": 0.6956591510872182
+    }
+   },
+   {
+    "city": "Seattle",
+    "gender": {
+     "M": 2748,
+     "F": 177
+    },
+    "single": {
+     "M": 2641,
+     "F": 156
+    },
+    "title": {
+     "M": 2667,
+     "F": 158
+    },
+    "specific": {
+     "M": 2748,
+     "F": 177
+    },
+    "age_standardized_rate": {
+     "M": 2.5561578036870505,
+     "F": 2.6338232677754623
+    },
+    "relative_rate": 0.8332105854250994,
+    "monthly_checks": {
+     "eligible": 11,
+     "same_direction": 8,
+     "relative_rate_min": 0.599934857772804,
+     "relative_rate_max": 1.2441688394052568
+    }
+   },
+   {
+    "city": "Los Angeles",
+    "gender": {
+     "M": 2631,
+     "F": 200
+    },
+    "single": {
+     "M": 2405,
+     "F": 177
+    },
+    "title": {
+     "M": 2293,
+     "F": 170
+    },
+    "specific": {
+     "M": 1583,
+     "F": 105
+    },
+    "age_standardized_rate": {
+     "M": 2.4893924886870638,
+     "F": 2.461148215363834
+    },
+    "relative_rate": 0.9833483385828564,
+    "monthly_checks": {
+     "eligible": 11,
+     "same_direction": 7,
+     "relative_rate_min": 0.6942232622674136,
+     "relative_rate_max": 1.5614745250431779
+    }
+   },
+   {
+    "city": "San Francisco",
+    "gender": {
+     "M": 2295,
+     "F": 97
+    },
+    "single": {
+     "M": 1767,
+     "F": 70
+    },
+    "title": {
+     "M": 2040,
+     "F": 65
+    },
+    "specific": {
+     "M": 2159,
+     "F": 74
+    },
+    "age_standardized_rate": {
+     "M": 2.1462491157880126,
+     "F": 1.2233801278751475
+    },
+    "relative_rate": 0.5467481033653923,
+    "monthly_checks": {
+     "eligible": 9,
+     "same_direction": 9,
+     "relative_rate_min": 0.3385310290652003,
+     "relative_rate_max": 0.8618045497145779
+    }
+   },
+   {
+    "city": "Philadelphia",
+    "gender": {
+     "M": 2090,
+     "F": 100
+    },
+    "single": {
+     "M": 1984,
+     "F": 86
+    },
+    "title": {
+     "M": 1909,
+     "F": 91
+    },
+    "specific": {
+     "M": 2090,
+     "F": 100
+    },
+    "age_standardized_rate": {
+     "M": 1.9340856907874064,
+     "F": 1.3209746727362381
+    },
+    "relative_rate": 0.6189448513903099,
+    "monthly_checks": {
+     "eligible": 10,
+     "same_direction": 8,
+     "relative_rate_min": 0.3478987323380916,
+     "relative_rate_max": 1.6134950844812006
+    }
+   },
+   {
+    "city": "London",
+    "gender": {
+     "M": 1958,
+     "F": 113
+    },
+    "single": {
+     "M": 1751,
+     "F": 109
+    },
+    "title": {
+     "M": 1761,
+     "F": 110
+    },
+    "specific": {
+     "M": 1958,
+     "F": 113
+    },
+    "age_standardized_rate": {
+     "M": 1.8527696518123262,
+     "F": 1.0628878474974341
+    },
+    "relative_rate": 0.7465587617612334,
+    "monthly_checks": {
+     "eligible": 9,
+     "same_direction": 8,
+     "relative_rate_min": 0.3067138415636366,
+     "relative_rate_max": 2.9653643724696357
+    }
+   },
+   {
+    "city": "Toronto",
+    "gender": {
+     "M": 1982,
+     "F": 75
+    },
+    "single": {
+     "M": 1857,
+     "F": 70
+    },
+    "title": {
+     "M": 1910,
+     "F": 71
+    },
+    "specific": {
+     "M": 1852,
+     "F": 70
+    },
+    "age_standardized_rate": {
+     "M": 1.8498474007398173,
+     "F": 0.8735206315354112
+    },
+    "relative_rate": 0.4895035593109539,
+    "monthly_checks": {
+     "eligible": 6,
+     "same_direction": 6,
+     "relative_rate_min": 0.43767037341525683,
+     "relative_rate_max": 0.8495205311040078
+    }
+   },
+   {
+    "city": "Denver",
+    "gender": {
+     "M": 1428,
+     "F": 60
+    },
+    "single": {
+     "M": 1387,
+     "F": 45
+    },
+    "title": {
+     "M": 1305,
+     "F": 44
+    },
+    "specific": {
+     "M": 1428,
+     "F": 60
+    },
+    "age_standardized_rate": {
+     "M": 1.3422789785259597,
+     "F": 0.7018910849499456
+    },
+    "relative_rate": 0.5435272014309864,
+    "monthly_checks": {
+     "eligible": 7,
+     "same_direction": 7,
+     "relative_rate_min": 0.5077531662860202,
+     "relative_rate_max": 0.8336548037769624
+    }
+   },
+   {
+    "city": "Houston",
+    "gender": {
+     "M": 1341,
+     "F": 73
+    },
+    "single": {
+     "M": 1174,
+     "F": 69
+    },
+    "title": {
+     "M": 1279,
+     "F": 56
+    },
+    "specific": {
+     "M": 1317,
+     "F": 72
+    },
+    "age_standardized_rate": {
+     "M": 1.2554221814190067,
+     "F": 0.7138435874835605
+    },
+    "relative_rate": 0.7041940042999224,
+    "monthly_checks": {
+     "eligible": 7,
+     "same_direction": 5,
+     "relative_rate_min": 0.7101200686106347,
+     "relative_rate_max": 1.4366560232220609
+    }
+   },
+   {
+    "city": "Dallas",
+    "gender": {
+     "M": 1346,
+     "F": 57
+    },
+    "single": {
+     "M": 1199,
+     "F": 52
+    },
+    "title": {
+     "M": 1238,
+     "F": 52
+    },
+    "specific": {
+     "M": 743,
+     "F": 28
+    },
+    "age_standardized_rate": {
+     "M": 1.2475919577174577,
+     "F": 0.5977409103819205
+    },
+    "relative_rate": 0.5478075790945589,
+    "monthly_checks": {
+     "eligible": 5,
+     "same_direction": 3,
+     "relative_rate_min": 0.5302650033217686,
+     "relative_rate_max": 1.2686326735673616
+    }
+   },
+   {
+    "city": "Atlanta",
+    "gender": {
+     "F": 91,
+     "M": 1176
+    },
+    "single": {
+     "F": 90,
+     "M": 1047
+    },
+    "title": {
+     "F": 88,
+     "M": 1057
+    },
+    "specific": {
+     "F": 81,
+     "M": 1070
+    },
+    "age_standardized_rate": {
+     "M": 1.1089269233772738,
+     "F": 1.355889885580439
+    },
+    "relative_rate": 1.0009959293020667,
+    "monthly_checks": {
+     "eligible": 7,
+     "same_direction": 5,
+     "relative_rate_min": 0.5367044554391159,
+     "relative_rate_max": 2.0914053133085124
+    }
+   },
+   {
+    "city": "Pittsburgh",
+    "gender": {
+     "F": 57,
+     "M": 933
+    },
+    "single": {
+     "F": 56,
+     "M": 923
+    },
+    "title": {
+     "F": 52,
+     "M": 916
+    },
+    "specific": {
+     "F": 57,
+     "M": 933
+    },
+    "age_standardized_rate": {
+     "M": 0.8740609267694062,
+     "F": 0.622161125819789
+    },
+    "relative_rate": 0.7902990369359874,
+    "monthly_checks": {
+     "eligible": 5,
+     "same_direction": 2,
+     "relative_rate_min": 0.6103295635155193,
+     "relative_rate_max": 2.50388978930308
+    }
+   },
+   {
+    "city": "Nashville",
+    "gender": {
+     "M": 925,
+     "F": 48
+    },
+    "single": {
+     "M": 864,
+     "F": 40
+    },
+    "title": {
+     "M": 797,
+     "F": 38
+    },
+    "specific": {
+     "M": 925,
+     "F": 48
+    },
+    "age_standardized_rate": {
+     "M": 0.8772382792974506,
+     "F": 0.7561367197523541
+    },
+    "relative_rate": 0.6712707836916312,
+    "monthly_checks": {
+     "eligible": 5,
+     "same_direction": 1,
+     "relative_rate_min": 0.7531687242798355,
+     "relative_rate_max": 1.5291362886488211
+    }
+   },
+   {
+    "city": "St. Louis",
+    "gender": {
+     "M": 950,
+     "F": 16
+    },
+    "single": {
+     "M": 891,
+     "F": 13
+    },
+    "title": {
+     "M": 861,
+     "F": 16
+    },
+    "specific": {
+     "M": 471,
+     "F": 5
+    },
+    "age_standardized_rate": {
+     "M": 0.8864510373463286,
+     "F": 0.30980071562434197
+    },
+    "relative_rate": 0.2178685876893891,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "San Diego",
+    "gender": {
+     "M": 895,
+     "F": 30
+    },
+    "single": {
+     "M": 761,
+     "F": 28
+    },
+    "title": {
+     "M": 818,
+     "F": 29
+    },
+    "specific": {
+     "M": 895,
+     "F": 30
+    },
+    "age_standardized_rate": {
+     "M": 0.8392261889134429,
+     "F": 0.40888832866468755
+    },
+    "relative_rate": 0.4336071752198037,
+    "monthly_checks": {
+     "eligible": 2,
+     "same_direction": 0,
+     "relative_rate_min": 1.1252005194408372,
+     "relative_rate_max": 1.4428519622219067
+    }
+   },
+   {
+    "city": "Sydney",
+    "gender": {
+     "M": 833,
+     "F": 19
+    },
+    "single": {
+     "M": 819,
+     "F": 19
+    },
+    "title": {
+     "M": 813,
+     "F": 16
+    },
+    "specific": {
+     "M": 833,
+     "F": 19
+    },
+    "age_standardized_rate": {
+     "M": 0.7966696641807282,
+     "F": 0.3021405305383069
+    },
+    "relative_rate": 0.29505762363396404,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Raleigh",
+    "gender": {
+     "M": 787,
+     "F": 56
+    },
+    "single": {
+     "M": 778,
+     "F": 56
+    },
+    "title": {
+     "M": 757,
+     "F": 52
+    },
+    "specific": {
+     "M": 759,
+     "F": 52
+    },
+    "age_standardized_rate": {
+     "M": 0.7355661966238985,
+     "F": 0.9064427973467336
+    },
+    "relative_rate": 0.9204740204157797,
+    "monthly_checks": {
+     "eligible": 6,
+     "same_direction": 2,
+     "relative_rate_min": 0.9184984442437018,
+     "relative_rate_max": 1.730465274506725
+    }
+   },
+   {
+    "city": "Phoenix",
+    "gender": {
+     "M": 738,
+     "F": 65
+    },
+    "single": {
+     "M": 728,
+     "F": 50
+    },
+    "title": {
+     "M": 697,
+     "F": 48
+    },
+    "specific": {
+     "M": 685,
+     "F": 44
+    },
+    "age_standardized_rate": {
+     "M": 0.6982692857224808,
+     "F": 0.8264101370309463
+    },
+    "relative_rate": 1.139344960181214,
+    "monthly_checks": {
+     "eligible": 7,
+     "same_direction": 6,
+     "relative_rate_min": 0.9620464441219158,
+     "relative_rate_max": 2.5570556826849735
+    }
+   },
+   {
+    "city": "Portland",
+    "gender": {
+     "M": 671,
+     "F": 68
+    },
+    "single": {
+     "M": 595,
+     "F": 41
+    },
+    "title": {
+     "M": 647,
+     "F": 45
+    },
+    "specific": {
+     "M": 622,
+     "F": 56
+    },
+    "age_standardized_rate": {
+     "M": 0.6190126336263505,
+     "F": 1.0435198041132716
+    },
+    "relative_rate": 1.3109454885184924,
+    "monthly_checks": {
+     "eligible": 6,
+     "same_direction": 5,
+     "relative_rate_min": 0.9612991288289373,
+     "relative_rate_max": 2.676813471502591
+    }
+   },
+   {
+    "city": "Miami",
+    "gender": {
+     "M": 634,
+     "F": 58
+    },
+    "single": {
+     "M": 545,
+     "F": 54
+    },
+    "title": {
+     "M": 500,
+     "F": 47
+    },
+    "specific": {
+     "M": 634,
+     "F": 58
+    },
+    "age_standardized_rate": {
+     "M": 0.5955197737164983,
+     "F": 0.8164607526589697
+    },
+    "relative_rate": 1.183414745828602,
+    "monthly_checks": {
+     "eligible": 7,
+     "same_direction": 6,
+     "relative_rate_min": 0.8056350238404854,
+     "relative_rate_max": 2.423685918234912
+    }
+   },
+   {
+    "city": "Indianapolis",
+    "gender": {
+     "M": 639,
+     "F": 37
+    },
+    "single": {
+     "M": 573,
+     "F": 37
+    },
+    "title": {
+     "M": 577,
+     "F": 27
+    },
+    "specific": {
+     "M": 639,
+     "F": 37
+    },
+    "age_standardized_rate": {
+     "M": 0.6064780048198357,
+     "F": 0.5021777773749092
+    },
+    "relative_rate": 0.7490298178092748,
+    "monthly_checks": {
+     "eligible": 3,
+     "same_direction": 0,
+     "relative_rate_min": 1.3007219684691322,
+     "relative_rate_max": 1.941762883694734
+    }
+   },
+   {
+    "city": "Las Vegas",
+    "gender": {
+     "M": 593,
+     "F": 28
+    },
+    "single": {
+     "M": 498,
+     "F": 11
+    },
+    "title": {
+     "M": 496,
+     "F": 11
+    },
+    "specific": {
+     "M": 593,
+     "F": 28
+    },
+    "age_standardized_rate": {
+     "M": 0.5623006131708402,
+     "F": 0.27977177279262755
+    },
+    "relative_rate": 0.6108035869032199,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Sacramento",
+    "gender": {
+     "F": 43,
+     "M": 545
+    },
+    "single": {
+     "F": 43,
+     "M": 443
+    },
+    "title": {
+     "F": 42,
+     "M": 493
+    },
+    "specific": {
+     "F": 43,
+     "M": 545
+    },
+    "age_standardized_rate": {
+     "M": 0.4987158732493013,
+     "F": 0.866430305429914
+    },
+    "relative_rate": 1.020634381549489,
+    "monthly_checks": {
+     "eligible": 4,
+     "same_direction": 4,
+     "relative_rate_min": 1.307584590763603,
+     "relative_rate_max": 3.193388429752066
+    }
+   },
+   {
+    "city": "Minneapolis",
+    "gender": {
+     "M": 559,
+     "F": 28
+    },
+    "single": {
+     "M": 534,
+     "F": 28
+    },
+    "title": {
+     "M": 508,
+     "F": 18
+    },
+    "specific": {
+     "M": 559,
+     "F": 28
+    },
+    "age_standardized_rate": {
+     "M": 0.521394576569757,
+     "F": 0.5056058182003605
+    },
+    "relative_rate": 0.6479544311871366,
+    "monthly_checks": {
+     "eligible": 1,
+     "same_direction": 0,
+     "relative_rate_min": 1.2545454545454546,
+     "relative_rate_max": 1.2545454545454546
+    }
+   },
+   {
+    "city": "Vancouver",
+    "gender": {
+     "F": 66,
+     "M": 493
+    },
+    "single": {
+     "F": 46,
+     "M": 411
+    },
+    "title": {
+     "F": 47,
+     "M": 454
+    },
+    "specific": {
+     "F": 66,
+     "M": 493
+    },
+    "age_standardized_rate": {
+     "M": 0.4653839414684181,
+     "F": 0.7282204833440348
+    },
+    "relative_rate": 1.7317901176628672,
+    "monthly_checks": {
+     "eligible": 5,
+     "same_direction": 5,
+     "relative_rate_min": 1.426455917196658,
+     "relative_rate_max": 5.3228506047728015
+    }
+   },
+   {
+    "city": "Detroit",
+    "gender": {
+     "M": 531,
+     "F": 17
+    },
+    "single": {
+     "M": 447,
+     "F": 13
+    },
+    "title": {
+     "M": 358,
+     "F": 11
+    },
+    "specific": {
+     "M": 531,
+     "F": 17
+    },
+    "age_standardized_rate": {
+     "M": 0.49490363160760453,
+     "F": 0.17142464444069597
+    },
+    "relative_rate": 0.4141452084726499,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Tampa",
+    "gender": {
+     "M": 484,
+     "F": 59
+    },
+    "single": {
+     "M": 430,
+     "F": 52
+    },
+    "title": {
+     "M": 445,
+     "F": 49
+    },
+    "specific": {
+     "M": 484,
+     "F": 59
+    },
+    "age_standardized_rate": {
+     "M": 0.4493764111318669,
+     "F": 0.7957691953394526
+    },
+    "relative_rate": 1.5769026782012214,
+    "monthly_checks": {
+     "eligible": 3,
+     "same_direction": 3,
+     "relative_rate_min": 1.315057208237986,
+     "relative_rate_max": 3.659473057063418
+    }
+   },
+   {
+    "city": "Austin",
+    "gender": {
+     "M": 482,
+     "F": 31
+    },
+    "single": {
+     "M": 399,
+     "F": 27
+    },
+    "title": {
+     "M": 422,
+     "F": 29
+    },
+    "specific": {
+     "M": 472,
+     "F": 31
+    },
+    "age_standardized_rate": {
+     "M": 0.44891006936436556,
+     "F": 0.37718982479117164
+    },
+    "relative_rate": 0.8319800191198793,
+    "monthly_checks": {
+     "eligible": 4,
+     "same_direction": 0,
+     "relative_rate_min": 1.7771360820010709,
+     "relative_rate_max": 2.3077325247032987
+    }
+   },
+   {
+    "city": "Charlotte",
+    "gender": {
+     "M": 443,
+     "F": 59
+    },
+    "single": {
+     "M": 384,
+     "F": 58
+    },
+    "title": {
+     "M": 361,
+     "F": 52
+    },
+    "specific": {
+     "M": 443,
+     "F": 59
+    },
+    "age_standardized_rate": {
+     "M": 0.4110784090774337,
+     "F": 0.7738158977528963
+    },
+    "relative_rate": 1.7228462669286482,
+    "monthly_checks": {
+     "eligible": 6,
+     "same_direction": 6,
+     "relative_rate_min": 1.5187594164553706,
+     "relative_rate_max": 4.475750132447142
+    }
+   },
+   {
+    "city": "Orlando",
+    "gender": {
+     "M": 461,
+     "F": 32
+    },
+    "single": {
+     "M": 403,
+     "F": 31
+    },
+    "title": {
+     "M": 390,
+     "F": 31
+    },
+    "specific": {
+     "M": 461,
+     "F": 32
+    },
+    "age_standardized_rate": {
+     "M": 0.43662510020673767,
+     "F": 0.2760385976290679
+    },
+    "relative_rate": 0.8979399492621243,
+    "monthly_checks": {
+     "eligible": 2,
+     "same_direction": 0,
+     "relative_rate_min": 2.14977130977131,
+     "relative_rate_max": 2.748704126062617
+    }
+   },
+   {
+    "city": "Kansas City",
+    "gender": {
+     "M": 427,
+     "F": 51
+    },
+    "single": {
+     "M": 387,
+     "F": 51
+    },
+    "title": {
+     "M": 383,
+     "F": 48
+    },
+    "specific": {
+     "M": 427,
+     "F": 51
+    },
+    "age_standardized_rate": {
+     "M": 0.4132383517369103,
+     "F": 0.648415726571759
+    },
+    "relative_rate": 1.545042897182509,
+    "monthly_checks": {
+     "eligible": 4,
+     "same_direction": 4,
+     "relative_rate_min": 1.559638009049774,
+     "relative_rate_max": 3.196319603356217
+    }
+   },
+   {
+    "city": "San Jose",
+    "gender": {
+     "M": 460,
+     "F": 3
+    },
+    "single": {
+     "M": 159,
+     "F": 1
+    },
+    "title": {
+     "M": 335,
+     "F": 3
+    },
+    "specific": {
+     "M": 460,
+     "F": 3
+    },
+    "age_standardized_rate": {
+     "M": 0.42935591192679484,
+     "F": 0.05994979307712704
+    },
+    "relative_rate": 0.08436487430907048,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Baltimore",
+    "gender": {
+     "M": 428,
+     "F": 14
+    },
+    "single": {
+     "M": 256,
+     "F": 8
+    },
+    "title": {
+     "M": 351,
+     "F": 9
+    },
+    "specific": {
+     "M": 428,
+     "F": 14
+    },
+    "age_standardized_rate": {
+     "M": 0.4012421584644355,
+     "F": 0.16858288192271337
+    },
+    "relative_rate": 0.42313846616075856,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Columbus",
+    "gender": {
+     "F": 24,
+     "M": 330
+    },
+    "single": {
+     "F": 24,
+     "M": 282
+    },
+    "title": {
+     "F": 16,
+     "M": 259
+    },
+    "specific": {
+     "F": 24,
+     "M": 330
+    },
+    "age_standardized_rate": {
+     "M": 0.27839629751507783,
+     "F": 0.22260061318161062
+    },
+    "relative_rate": 0.9407961741132709,
+    "monthly_checks": {
+     "eligible": 1,
+     "same_direction": 0,
+     "relative_rate_min": 2.8227272727272728,
+     "relative_rate_max": 2.8227272727272728
+    }
+   },
+   {
+    "city": "Montreal",
+    "gender": {
+     "F": 16,
+     "M": 332
+    },
+    "single": {
+     "F": 13,
+     "M": 315
+    },
+    "title": {
+     "F": 15,
+     "M": 326
+    },
+    "specific": {
+     "F": 16,
+     "M": 310
+    },
+    "age_standardized_rate": {
+     "M": 0.31480250110333974,
+     "F": 0.13932554077936643
+    },
+    "relative_rate": 0.6234191515208423,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Salt Lake City",
+    "gender": {
+     "M": 338,
+     "F": 10
+    },
+    "single": {
+     "M": 326,
+     "F": 10
+    },
+    "title": {
+     "M": 294,
+     "F": 9
+    },
+    "specific": {
+     "M": 132,
+     "F": 3
+    },
+    "age_standardized_rate": {
+     "M": 0.31067280678470166,
+     "F": 0.12817880464724737
+    },
+    "relative_rate": 0.3827203371022922,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Melbourne",
+    "gender": {
+     "M": 299,
+     "F": 20
+    },
+    "single": {
+     "M": 284,
+     "F": 20
+    },
+    "title": {
+     "M": 278,
+     "F": 20
+    },
+    "specific": {
+     "M": 299,
+     "F": 20
+    },
+    "age_standardized_rate": {
+     "M": 0.2811513469998474,
+     "F": 0.2860323406982921
+    },
+    "relative_rate": 0.8652807621443128,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Calgary",
+    "gender": {
+     "M": 298,
+     "F": 9
+    },
+    "single": {
+     "M": 270,
+     "F": 8
+    },
+    "title": {
+     "M": 293,
+     "F": 8
+    },
+    "specific": {
+     "M": 298,
+     "F": 9
+    },
+    "age_standardized_rate": {
+     "M": 0.27952910995343083,
+     "F": 0.08348376753246937
+    },
+    "relative_rate": 0.39068297498831306,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Paris",
+    "gender": {
+     "M": 290,
+     "F": 8
+    },
+    "single": {
+     "M": 198,
+     "F": 8
+    },
+    "title": {
+     "M": 227,
+     "F": 8
+    },
+    "specific": {
+     "M": 290,
+     "F": 8
+    },
+    "age_standardized_rate": {
+     "M": 0.29846845688234386,
+     "F": 0.0832750724022442
+    },
+    "relative_rate": 0.35685372121537867,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Brisbane",
+    "gender": {
+     "M": 249,
+     "F": 9
+    },
+    "single": {
+     "M": 246,
+     "F": 9
+    },
+    "title": {
+     "M": 202,
+     "F": 9
+    },
+    "specific": {
+     "M": 249,
+     "F": 9
+    },
+    "age_standardized_rate": {
+     "M": 0.23781345593997502,
+     "F": 0.10573981608531736
+    },
+    "relative_rate": 0.46756436364063175,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Manchester",
+    "gender": {
+     "M": 186,
+     "F": 7
+    },
+    "single": {
+     "M": 157,
+     "F": 5
+    },
+    "title": {
+     "M": 125,
+     "F": 7
+    },
+    "specific": {
+     "M": 186,
+     "F": 7
+    },
+    "age_standardized_rate": {
+     "M": 0.1780848340703746,
+     "F": 0.09787798785277449
+    },
+    "relative_rate": 0.4868367298838835,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Edmonton",
+    "gender": {
+     "M": 158,
+     "F": 5
+    },
+    "single": {
+     "M": 149,
+     "F": 5
+    },
+    "title": {
+     "M": 151,
+     "F": 5
+    },
+    "specific": {
+     "M": 158,
+     "F": 5
+    },
+    "age_standardized_rate": {
+     "M": 0.15078728145929582,
+     "F": 0.06781162130966994
+    },
+    "relative_rate": 0.40936542386257835,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "New Orleans",
+    "gender": {
+     "F": 17,
+     "M": 139
+    },
+    "single": {
+     "F": 16,
+     "M": 123
+    },
+    "title": {
+     "F": 17,
+     "M": 131
+    },
+    "specific": {
+     "F": 17,
+     "M": 139
+    },
+    "age_standardized_rate": {
+     "M": 0.1298030742377191,
+     "F": 0.35201987023930137
+    },
+    "relative_rate": 1.5820942856041518,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Ottawa",
+    "gender": {
+     "M": 142,
+     "F": 3
+    },
+    "single": {
+     "M": 130,
+     "F": 2
+    },
+    "title": {
+     "M": 141,
+     "F": 2
+    },
+    "specific": {
+     "M": 142,
+     "F": 3
+    },
+    "age_standardized_rate": {
+     "M": 0.13439288570122254,
+     "F": 0.030300816794472905
+    },
+    "relative_rate": 0.2732946632547354,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Dublin",
+    "gender": {
+     "M": 101
+    },
+    "single": {
+     "M": 60
+    },
+    "title": {
+     "M": 64
+    },
+    "specific": {
+     "M": 101
+    },
+    "age_standardized_rate": {
+     "M": 0.09532210490238568,
+     "F": 0.0
+    },
+    "relative_rate": 0.0,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Amsterdam",
+    "gender": {
+     "M": 34
+    },
+    "single": {
+     "M": 21
+    },
+    "title": {
+     "M": 18
+    },
+    "specific": {
+     "M": 34
+    },
+    "age_standardized_rate": {
+     "M": 0.03214034039409311,
+     "F": 0.0
+    },
+    "relative_rate": 0.0,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   },
+   {
+    "city": "Berlin",
+    "gender": {
+     "M": 29
+    },
+    "single": {
+     "M": 21
+    },
+    "title": {
+     "M": 21
+    },
+    "specific": {
+     "M": 29
+    },
+    "age_standardized_rate": {
+     "M": 0.02512698793682116,
+     "F": 0.0
+    },
+    "relative_rate": 0.0,
+    "monthly_checks": {
+     "eligible": 0,
+     "same_direction": 0,
+     "relative_rate_min": null,
+     "relative_rate_max": null
+    }
+   }
+  ],
+  "months": [
+   {
+    "month": "2025-10",
+    "full_month": false,
+    "gender": {
+     "M": 7303,
+     "F": 611
+    },
+    "coverage": {
+     "M": {
+      "age": 7171,
+      "city": 3440,
+      "seeking": 7088,
+      "reason": 4163
+     },
+     "F": {
+      "age": 600,
+      "city": 198,
+      "seeking": 561,
+      "reason": 284
+     }
+    }
+   },
+   {
+    "month": "2025-11",
+    "full_month": true,
+    "gender": {
+     "M": 8670,
+     "F": 726
+    },
+    "coverage": {
+     "M": {
+      "age": 8559,
+      "city": 4016,
+      "seeking": 8378,
+      "reason": 4891
+     },
+     "F": {
+      "age": 709,
+      "city": 225,
+      "seeking": 676,
+      "reason": 339
+     }
+    }
+   },
+   {
+    "month": "2025-12",
+    "full_month": true,
+    "gender": {
+     "M": 9293,
+     "F": 769
+    },
+    "coverage": {
+     "M": {
+      "age": 9161,
+      "city": 4434,
+      "seeking": 8996,
+      "reason": 5411
+     },
+     "F": {
+      "age": 754,
+      "city": 236,
+      "seeking": 717,
+      "reason": 358
+     }
+    }
+   },
+   {
+    "month": "2026-01",
+    "full_month": true,
+    "gender": {
+     "F": 874,
+     "M": 9578
+    },
+    "coverage": {
+     "M": {
+      "age": 9457,
+      "city": 4604,
+      "seeking": 9273,
+      "reason": 5462
+     },
+     "F": {
+      "age": 853,
+      "city": 274,
+      "seeking": 813,
+      "reason": 410
+     }
+    }
+   },
+   {
+    "month": "2026-02",
+    "full_month": true,
+    "gender": {
+     "M": 8292,
+     "F": 581
+    },
+    "coverage": {
+     "M": {
+      "age": 8175,
+      "city": 4074,
+      "seeking": 8047,
+      "reason": 4771
+     },
+     "F": {
+      "age": 564,
+      "city": 211,
+      "seeking": 546,
+      "reason": 278
+     }
+    }
+   },
+   {
+    "month": "2026-03",
+    "full_month": true,
+    "gender": {
+     "M": 9108,
+     "F": 605
+    },
+    "coverage": {
+     "M": {
+      "age": 8986,
+      "city": 4603,
+      "seeking": 8847,
+      "reason": 5172
+     },
+     "F": {
+      "age": 598,
+      "city": 187,
+      "seeking": 547,
+      "reason": 296
+     }
+    }
+   },
+   {
+    "month": "2026-04",
+    "full_month": true,
+    "gender": {
+     "M": 8619,
+     "F": 670
+    },
+    "coverage": {
+     "M": {
+      "age": 8523,
+      "city": 4406,
+      "seeking": 8354,
+      "reason": 5170
+     },
+     "F": {
+      "age": 658,
+      "city": 275,
+      "seeking": 612,
+      "reason": 282
+     }
+    }
+   },
+   {
+    "month": "2026-05",
+    "full_month": true,
+    "gender": {
+     "F": 729,
+     "M": 9151
+    },
+    "coverage": {
+     "M": {
+      "age": 9046,
+      "city": 4709,
+      "seeking": 8931,
+      "reason": 5423
+     },
+     "F": {
+      "age": 716,
+      "city": 275,
+      "seeking": 676,
+      "reason": 373
+     }
+    }
+   },
+   {
+    "month": "2026-06",
+    "full_month": true,
+    "gender": {
+     "M": 8266,
+     "F": 579
+    },
+    "coverage": {
+     "M": {
+      "age": 8191,
+      "city": 4230,
+      "seeking": 8049,
+      "reason": 5071
+     },
+     "F": {
+      "age": 569,
+      "city": 187,
+      "seeking": 542,
+      "reason": 293
+     }
+    }
+   },
+   {
+    "month": "2026-07",
+    "full_month": true,
+    "gender": {
+     "M": 8617,
+     "F": 650
+    },
+    "coverage": {
+     "M": {
+      "age": 8527,
+      "city": 4363,
+      "seeking": 8366,
+      "reason": 5302
+     },
+     "F": {
+      "age": 636,
+      "city": 253,
+      "seeking": 594,
+      "reason": 363
+     }
+    }
+   },
+   {
+    "month": "2026-08",
+    "full_month": true,
+    "gender": {
+     "F": 617,
+     "M": 8828
+    },
+    "coverage": {
+     "M": {
+      "age": 8754,
+      "city": 4472,
+      "seeking": 8618,
+      "reason": 5496
+     },
+     "F": {
+      "age": 604,
+      "city": 262,
+      "seeking": 586,
+      "reason": 331
+     }
+    }
+   },
+   {
+    "month": "2026-09",
+    "full_month": true,
+    "gender": {
+     "M": 8838,
+     "F": 689
+    },
+    "coverage": {
+     "M": {
+      "age": 8714,
+      "city": 4400,
+      "seeking": 8681,
+      "reason": 5351
+     },
+     "F": {
+      "age": 678,
+      "city": 314,
+      "seeking": 656,
+      "reason": 317
+     }
+    }
+   },
+   {
+    "month": "2026-10",
+    "full_month": false,
+    "gender": {
+     "M": 1667,
+     "F": 112
+    },
+    "coverage": {
+     "M": {
+      "age": 1649,
+      "city": 878,
+      "seeking": 1638,
+      "reason": 1034
+     },
+     "F": {
+      "age": 109,
+      "city": 56,
+      "seeking": 108,
+      "reason": 58
+     }
+    }
+   }
+  ],
+  "author_available_posts": 0,
+  "method": {
+   "age_adjustment": "Pooled stated-age distribution across five age buckets; only available when both groups have every bucket.",
+   "monthly_checks": "Boundary months excluded; city direction checked only with at least 20 male and 5 female posts per month.",
+   "specific_aliases": "Excludes aliases of three characters or fewer. Longer aliases can still be ambiguous.",
+   "interpretation": "Exploratory post-level comparisons, not population estimates or independent-author significance tests."
+  }
+ }
 }

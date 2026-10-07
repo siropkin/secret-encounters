@@ -102,6 +102,11 @@ h1{
 .seek b{font-weight:700}
 .chart{width:100%; position:relative}
 .chart-detail{font-size:.9rem; color:var(--faded); min-height:44px; margin:4px 0 0}
+.coverage-chapter[hidden]{display:none}
+.stat-pair{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:20px 0}
+.stat-pair .stat-gender{display:block; font-weight:600; margin-bottom:8px}
+.stat-pair .men .stat-gender,.stat-pair .men b{color:var(--blue)}
+.stat-pair .women .stat-gender,.stat-pair .women b{color:var(--red)}
 .mobile-comparison{display:none}
 .comparison-legend{display:flex; gap:24px; margin:0 0 24px; padding:12px 0;
   font-weight:600; position:sticky; top:0; z-index:1; background:var(--paper)}
@@ -140,8 +145,34 @@ h1{
 .city-list li:focus-visible{outline:2px solid var(--red); outline-offset:3px}
 .city-list li.is-active{color:var(--red)}
 .hot.is-active .map-dot{fill:var(--ink); stroke:var(--paper); stroke-width:2px}
+.analysis-copy{max-width:44rem; margin:12px 0 20px; font-size:1rem}
+.gender-city-lists{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:48px}
+.gender-city-column{min-width:0}
+.gender-city-lists > .gender-city-column{grid-column:auto}
+.gender-city-column h3{font-family:'DM Serif Display',serif; font-size:32px; font-weight:400; margin:0 0 8px}
+.gender-city-column.men h3{color:var(--blue)}
+.gender-city-column.women h3{color:var(--red)}
+.gender-city-list{list-style:none; margin:0; padding:0; font-variant-numeric:tabular-nums}
+.gender-city-list li{display:grid; grid-template-columns:24px minmax(0,1fr) 52px 48px; gap:8px; align-items:baseline; padding:10px 0; border-bottom:1px solid rgba(43,33,24,.15)}
+.gender-city-list .city-value,.gender-city-share{text-align:right}
+.gender-city-share{color:var(--faded); font-size:.9rem}
+@media (max-width:759px){.gender-city-lists{grid-template-columns:1fr; gap:32px}}
+.analysis-table-wrap{max-width:100%; overflow-x:auto}
+.analysis-table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:1rem}
+.analysis-table caption{text-align:left; margin-bottom:12px; color:var(--faded)}
+.analysis-table th,.analysis-table td{text-align:right; padding:12px 8px; border-bottom:1px solid rgba(43,33,24,.18); white-space:nowrap}
+.analysis-table th:first-child,.analysis-table td:first-child{text-align:left; padding-left:0}
+.analysis-table th{font-weight:600}
+.analysis-table th:nth-child(2){color:var(--blue)}
+.analysis-table th:nth-child(3){color:var(--red)}
 
 footer{max-width:880px; margin:32px auto 0; font-size:.9rem; color:var(--faded)}
+footer > p{margin:0}
+footer details{margin-top:12px}
+footer summary{width:fit-content; cursor:pointer; color:var(--ink)}
+footer summary:focus-visible{outline:2px solid var(--red); outline-offset:4px}
+footer details p{margin:12px 0 0}
+footer .footer-credit{margin-top:12px}
 footer a{color:var(--ink); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px}
 footer a:hover{color:var(--red)}
 footer a:focus-visible{outline:2px solid var(--red); outline-offset:4px}
@@ -269,6 +300,7 @@ footer .rule{width:min(70%,380px)}
   .wrap{padding-right:20px; padding-left:20px}
   h1{font-size:48px}
   .ledger .n{font-size:1.75rem}
+  .stat-pair .seek b{font-size:2.5rem}
 }
 @media (max-width:759px) and (max-height:650px){
   .masthead{padding-top:20px; padding-bottom:16px}
@@ -333,6 +365,20 @@ footer .rule{width:min(70%,380px)}
         <p class="topic-note">of each group's posts; one post may mention several reasons</p>
         <div class="chart" id="comparison-motives"></div>
       </section>
+      <section class="chart-section coverage-chapter" aria-label="City name detection comparison" hidden>
+        <div class="stat-pair">
+          <div class="men"><span class="stat-gender">Men</span><p class="seek"><b data-coverage="city" data-gender="M">—</b><span class="stat-statement">mention a city or region</span></p></div>
+          <div class="women"><span class="stat-gender">Women</span><p class="seek"><b data-coverage="city" data-gender="F">—</b><span class="stat-statement">mention a city or region</span></p></div>
+        </div>
+        <p class="topic-note">of each group's posts, using city-name and regional-alias matches. Missing matches do not prove someone hid their location.</p>
+      </section>
+      <section class="chart-section coverage-chapter" aria-label="Reason keyword detection comparison" hidden>
+        <div class="stat-pair">
+          <div class="men"><span class="stat-gender">Men</span><p class="seek"><b data-coverage="reason" data-gender="M">—</b><span class="stat-statement">match a reason keyword</span></p></div>
+          <div class="women"><span class="stat-gender">Women</span><p class="seek"><b data-coverage="reason" data-gender="F">—</b><span class="stat-statement">match a reason keyword</span></p></div>
+        </div>
+        <p class="topic-note">of each group's posts match at least one reason keyword. Matches are language patterns, not verified motivations.</p>
+      </section>
     </section>
     <section class="panel men" aria-label="Statistics about men">
       <div class="panel-heading">
@@ -354,6 +400,12 @@ footer .rule{width:min(70%,380px)}
       <h3>Reasons mentioned</h3>
       <p class="topic-note">of posts by men; one post may mention several reasons</p>
       <div class="chart" id="men-motives"></div>
+      </section>
+      <section class="chart-section coverage-chapter" aria-label="Men: city name detection" hidden>
+      <p class="seek"><b data-coverage="city" data-gender="M">—</b><span class="stat-statement">mention a city or region</span><small class="stat-note">of men's posts, using city-name and regional-alias matches</small></p>
+      </section>
+      <section class="chart-section coverage-chapter" aria-label="Men: reason keyword detection" hidden>
+      <p class="seek"><b data-coverage="reason" data-gender="M">—</b><span class="stat-statement">match a reason keyword</span><small class="stat-note">of men's posts; at least one match, not a verified motivation</small></p>
       </section>
     </section>
     <section class="panel women" aria-label="Statistics about women">
@@ -377,27 +429,69 @@ footer .rule{width:min(70%,380px)}
       <p class="topic-note">of posts by women; one post may mention several reasons</p>
       <div class="chart" id="women-motives"></div>
       </section>
+      <section class="chart-section coverage-chapter" aria-label="Women: city name detection" hidden>
+      <p class="seek"><b data-coverage="city" data-gender="F">—</b><span class="stat-statement">mention a city or region</span><small class="stat-note">of women's posts, using city-name and regional-alias matches</small></p>
+      </section>
+      <section class="chart-section coverage-chapter" aria-label="Women: reason keyword detection" hidden>
+      <p class="seek"><b data-coverage="reason" data-gender="F">—</b><span class="stat-statement">match a reason keyword</span><small class="stat-note">of women's posts; at least one match, not a verified motivation</small></p>
+      </section>
     </section>
   </section>
   </div>
-  <section class="plate" aria-label="Map of hotspot cities">
+  <section class="plate" aria-label="Map of city mention groups">
     <h2>Cities mentioned</h2>
     <p class="sub" id="city-note">The 15 most-mentioned cities. A mention does not mean someone lives there.</p>
     <ol class="city-list" id="city-list" aria-label="City mentions ranked"></ol>
     <div id="map"></div>
-    <p class="map-note" id="map-note">Dots show locations, not the number of mentions.</p>
+    <p class="map-note" id="map-note">Dots mark city-group reference points, not posters' locations. Match groups include regional aliases.</p>
     <p class="map-detail" id="map-detail" aria-live="polite"></p>
+  </section>
+  <section class="plate" id="city-analysis" aria-label="Gender comparison by city" hidden>
+    <h2>Different cities, different mixes</h2>
+    <p class="sub">The 15 most-mentioned city groups in each gender's posts. Counts are matched posts; percentages use all posts in that gender group.</p>
+    <div class="gender-city-lists">
+      <section class="gender-city-column men" aria-label="Top cities in men's posts">
+        <h3>Men</h3><p class="topic-note" id="men-city-total"></p>
+        <ol class="gender-city-list" id="men-city-list"></ol>
+      </section>
+      <section class="gender-city-column women" aria-label="Top cities in women's posts">
+        <h3>Women</h3><p class="topic-note" id="women-city-total"></p>
+        <ol class="gender-city-list" id="women-city-list"></ol>
+      </section>
+    </div>
+    <p class="map-note">Match groups include regional and ambiguous aliases, not verified home locations. A post may mention several groups, so percentages need not total 100%.</p>
+  </section>
+  <section class="plate" id="monthly-analysis" aria-label="Monthly posting activity comparison" hidden>
+    <h2>Posting activity, month by month</h2>
+    <p class="sub">Average posts per calendar day in each month. Partial first and last months are excluded.</p>
+    <div class="chart" id="monthly-chart"></div>
+    <p class="analysis-copy" id="monthly-insight"></p>
+    <p class="map-note">The vertical scales differ and do not start at zero; compare when activity changes, not line heights. Counts describe posts, not unique people. Archive coverage and repeat posting can affect the averages.</p>
+  </section>
+  <section class="plate" id="season-analysis" aria-label="Calendar season posting comparison" hidden>
+    <h2>Posting activity across the year</h2>
+    <p class="sub">Men's and women's daily posting averages, grouped into northern-calendar seasons. Partial first and last months are excluded.</p>
+    <div class="analysis-table-wrap" tabindex="0" role="region" aria-label="Season comparison table">
+      <table class="analysis-table">
+        <caption>Average gender-identified posts per calendar day. Seasons are date groups, not local seasons for every poster.</caption>
+        <thead><tr><th scope="col">Season</th><th scope="col">Men / day</th><th scope="col">Women / day</th></tr></thead>
+        <tbody id="season-rows"></tbody>
+      </table>
+    </div>
+    <p class="analysis-copy" id="season-insight"></p>
+    <p class="map-note">Only one annual cycle is available. These differences cannot establish a recurring seasonal effect or its cause. Archive coverage and repeat posting can affect the averages.</p>
   </section>
 
   <footer>
     <p id="sample-credit" hidden>Sample data, not verified archive findings.</p>
-    <p>These counts describe posts, not unique people. One person may write several posts.</p>
-    <p>Reddit users and people who choose to post here may differ from the wider population.
-      These results are not adjusted for Reddit's age or gender distribution and cannot show
-      how common affairs are among men or women.</p>
-    <p>Age comparisons exclude posts without a stated age.
-      Reasons are keyword matches and may be wrong; age percentages may not total 100% because of rounding.</p>
-    <p><a href="https://srdkn.com/">srdkn.com</a></p>
+    <p>Counts describe posts, not unique people. This self-selected Reddit sample cannot show how common affairs are among men or women.</p>
+    <details>
+      <summary>Data notes</summary>
+      <p>One person may write several posts. Reddit users and people who post here may differ from the wider population. Results are not adjusted for Reddit's age or gender distribution.</p>
+      <p>Age comparisons exclude posts without a stated age. Reasons are keyword matches and may be wrong; age percentages may not total 100% because of rounding.</p>
+      <p id="author-analysis-note" hidden></p>
+    </details>
+    <p class="footer-credit"><a href="https://srdkn.com/">srdkn.com</a></p>
   </footer>
 </div>
 
@@ -443,9 +537,16 @@ const topicDescriptions = [
   "Compare the share of posts by men and women. Percentages use posts identified as men or women and count posts, not unique people.",
   "Compare age ranges among posts by men and women. Each bar shows the share of that group's posts that state an age. Missing ages are excluded.",
   "Compare who men and women say they are looking for. Each percentage uses only that group's posts tagged as seeking men or women.",
-  "Compare the reasons mentioned in posts by men and women. Each bar shows the share of that group's posts matching a reason's keywords. A post can match several reasons."
+  "Compare the share of posts matching at least one reason keyword. A missing match does not mean no reason exists, and a match does not verify someone's motivation.",
+  "Compare the reasons mentioned in posts by men and women. Each bar shows the share of that group's posts matching a reason's keywords. A post can match several reasons.",
+  "City names or regional aliases are detected more often in men's posts. This describes matched wording, not verified home locations. Missing matches do not prove someone chose to hide information."
 ];
 const storyPanels = [...document.querySelectorAll('.spread > .panel')];
+for (const panel of [...storyPanels, $('.mobile-comparison')]){
+  const reasonCoverage = panel.querySelector('[data-coverage="reason"]').closest('.chart-section');
+  const reasons = panel.querySelector('[id$="motives"]').closest('.chart-section');
+  reasons.before(reasonCoverage);
+}
 const genderTitles = document.createElement('div');
 genderTitles.className = 'gender-titles';
 const genderHeadings = storyPanels.map(panel => {
@@ -462,6 +563,8 @@ const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
 let storyFrame = 0;
 function updateStoryEffects(){
   storyFrame = 0;
+  const chapters = [...storyPanels[0].querySelectorAll('.chart-section')].filter(section => !section.hidden);
+  const activeTopics = DATA?.analysis ? topicDescriptions : topicDescriptions.filter((description, index) => index !== 3 && index !== 5);
   const distance = Math.max(0, -storyStage.getBoundingClientRect().top);
   const progress = desktopStory.matches
     ? Math.min(1, distance / Math.max(1, storyStage.offsetHeight - innerHeight)) : 0;
@@ -480,7 +583,12 @@ function updateStoryEffects(){
     element.inert = opacity === 0;
   }
   const chapterPosition = distance / innerHeight;
-  const topicIndex = Math.max(0, Math.min(topicDescriptions.length - 1, Math.floor(chapterPosition + .5) - 1));
+  const chapterCenter = chapter => {
+    const bounds = chapter.getBoundingClientRect();
+    return bounds.top + bounds.height / 2;
+  };
+  const topicIndex = chapters.reduce((selected, chapter, index) =>
+    Math.abs(chapterCenter(chapter) - innerHeight / 2) < Math.abs(chapterCenter(chapters[selected]) - innerHeight / 2) ? index : selected, 0);
   const titleEntry = Math.min(1, Math.max(0, (chapterPosition - .3) / .5));
   const release = Math.min(1, Math.max(0, (storyStage.getBoundingClientRect().bottom - innerHeight * .5) / (innerHeight * .35)));
   const titleExit = release * release * (3 - 2 * release);
@@ -495,20 +603,21 @@ function updateStoryEffects(){
     heading.querySelector('h2').style.opacity = titleOpacity;
     heading.querySelector('.count').style.opacity = titleOpacity;
     heading.style.setProperty('--backing-opacity', titleEntry > 0 && titleExit > 0 ? 1 : 0);
-    const identity = storyPanels[index].querySelectorAll('.topic-identity')[topicIndex];
+    const activeChapter = [...storyPanels[index].querySelectorAll('.chart-section')].filter(section => !section.hidden)[topicIndex];
+    const identity = activeChapter?.querySelector('.topic-identity');
     const subtitle = identity?.querySelector('.count').textContent || '';
     if (heading.querySelector('.count').textContent !== subtitle) heading.querySelector('.count').textContent = subtitle;
   });
-  const description = topicDescriptions[topicIndex];
-  const topicBlend = chapterPosition > 1 && chapterPosition < topicDescriptions.length
-    ? Math.min(1, Math.abs(chapterPosition % 1 - .5) / .12) : 1;
+  const description = activeTopics[topicIndex];
+  const topicBlend = topicIndex === 0 && chapterPosition < 1 ? 1
+    : Math.min(1, Math.max(0, (innerHeight * .5 - Math.abs(chapterCenter(chapters[topicIndex]) - innerHeight / 2)) / (innerHeight * .12)));
   const contextOpacity = !desktopStory.matches || !description ? 0 : reducedMotion.matches
     ? (chapterPosition >= .65 ? introExit : 0)
     : Math.min(1, Math.max(0, (chapterPosition - .65) / .2)) * topicBlend * introExit;
   topicSummary.hidden = contextOpacity === 0;
   topicSummary.style.opacity = contextOpacity;
   if (description && topicSummary.textContent !== description) topicSummary.textContent = description;
-  const compactIntro = desktopStory.matches && topicIndex === topicDescriptions.length - 1 && introExit === 0;
+  const compactIntro = desktopStory.matches && topicIndex === activeTopics.length - 1 && introExit === 0;
   const mainTitle = storyIntro.querySelector('h1');
   storyIntro.style.height = compactIntro
     ? `${Math.ceil(mainTitle.getBoundingClientRect().bottom - storyIntro.getBoundingClientRect().top)}px` : '';
@@ -525,13 +634,13 @@ scheduleStoryEffects();
 function svgEl(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.width='100%';s.style.height=h+'px';return s}
 function txt(x,y,str,cls,anchor){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);if(anchor)t.setAttribute('text-anchor',anchor);t.setAttribute('class',cls);t.textContent=str;return t}
 
-function bars(sel, rows, color, comparisonRows){
+function bars(sel, rows, color, comparisonRows, valueNote = ''){
   const host = $(sel); host.innerHTML = '';
   const W = host.clientWidth, rowH = comparisonRows ? 82 : matchMedia('(min-width:1024px)').matches ? 60 : 52, pad = 4, plotW = comparisonRows ? W - 64 : W;
   const svg = svgEl(W, rows.length * rowH + pad * 2);
   const rc = window.rough && typeof window.rough.svg === 'function' ? window.rough.svg(svg) : null;
   svg.setAttribute('role', 'group');
-  svg.setAttribute('aria-label', `${comparisonRows ? 'Men and women' : sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('ages') ? 'age' : sel.includes('seeking') ? 'looking for' : 'reason'} percentages, scale zero to one hundred.`);
+  svg.setAttribute('aria-label', `${comparisonRows ? 'Men and women' : sel.startsWith('#men') ? 'Men' : 'Women'}: ${sel.includes('coverage') ? 'information detected' : sel.includes('ages') ? 'age' : sel.includes('seeking') ? 'looking for' : 'reason'} percentages, scale zero to one hundred. ${valueNote}`);
   const detail = document.createElement('p'); detail.className = 'chart-detail';
   detail.setAttribute('aria-live', 'polite');
   rows.forEach(([label, pct, raw], index) => {
@@ -539,7 +648,7 @@ function bars(sel, rows, color, comparisonRows){
     const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'bar');
     g.setAttribute('tabindex', '0'); g.setAttribute('role', 'img');
     const description = comparisonRows
-      ? `${label}: Men ${pct}%, ${raw.toLocaleString()} posts; Women ${comparisonRows[index][1]}%, ${comparisonRows[index][2].toLocaleString()} posts`
+      ? `${label}: Men ${pct}%, ${raw.toLocaleString()} posts; Women ${comparisonRows[index][1]}%, ${comparisonRows[index][2].toLocaleString()} posts. ${valueNote}`
       : `${label}: ${pct}%, ${raw.toLocaleString()} posts`;
     g.setAttribute('aria-label', description);
     const hit = document.createElementNS(NS, 'rect');
@@ -645,7 +754,7 @@ function drawMap(){
   svg.setAttribute('role', 'group'); svg.setAttribute('aria-label', 'City locations. Counts are in the ranked list above.');
   $('#map-detail').textContent = '';
   $('#map-note').textContent = WORLD
-    ? 'Dots show locations, not the number of mentions.'
+    ? 'Dots mark city-group reference points, not posters\' locations. Match groups include regional aliases.'
     : 'The map background could not load. City counts are listed above.';
 
   if (WORLD){
@@ -730,6 +839,144 @@ function drawMap(){
   host.appendChild(svg);
 }
 
+function renderCityAnalysis(){
+  const analysis = DATA.analysis;
+  if (!analysis) return;
+  for (const [gender, prefix] of [['M', 'men'], ['F', 'women']]){
+    const total = analysis.coverage[gender].posts;
+    $('#' + prefix + '-city-total').textContent = `${total.toLocaleString()} posts in this group`;
+    const list = $('#' + prefix + '-city-list'); list.replaceChildren();
+    const cities = analysis.cities.filter(city => (city.gender[gender] || 0) > 0)
+      .sort((first, second) => (second.gender[gender] || 0) - (first.gender[gender] || 0) || first.city.localeCompare(second.city, 'en')).slice(0, 15);
+    cities.forEach((city, index) => {
+      const item = document.createElement('li');
+      const count = city.gender[gender] || 0;
+      const fields = [[String(index + 1), 'city-rank'], [city.city, 'city-name'],
+        [count.toLocaleString(), 'city-value'], [(100 * count / (total || 1)).toFixed(1) + '%', 'gender-city-share']];
+      for (const [value, className] of fields){
+        const field = document.createElement('span'); field.className = className; field.textContent = value; item.append(field);
+      }
+      list.append(item);
+    });
+  }
+}
+
+function renderMonthlyAnalysis(){
+  const months = DATA.analysis.months.filter(month => month.full_month && month.gender.M && month.gender.F);
+  const host = $('#monthly-chart');
+  host.replaceChildren();
+  if (!months.length || !window.d3){
+    host.textContent = 'Monthly comparison is unavailable.';
+    return;
+  }
+  const width = host.clientWidth, panelHeight = 220, gap = 32, height = panelHeight * 2 + gap;
+  const left = 48, right = 12, top = 32, bottom = 32;
+  const svg = svgEl(width, height);
+  svg.setAttribute('role', 'group');
+  const x = d3.scalePoint().domain(months.map(month => month.month)).range([left, width - right]);
+  const daily = (month, gender) => {
+    const [year, number] = month.month.split('-').map(Number);
+    return month.gender[gender] / new Date(Date.UTC(year, number, 0)).getUTCDate();
+  };
+  const monthLabel = month => new Date(month + '-01T00:00:00Z').toLocaleDateString('en', {month:'short', year:'2-digit', timeZone:'UTC'});
+  svg.setAttribute('aria-label', "Men's and women's average daily posts by month, in two aligned charts with separate vertical scales.");
+  const detail = document.createElement('p');
+  detail.className = 'chart-detail'; detail.setAttribute('aria-live', 'polite');
+  const labelStep = Math.max(1, Math.ceil((months.length - 1) / (width < 480 ? 2 : 6)));
+  for (const [gender, label, color] of [['M', 'Men', BLUE], ['F', 'Women', RED]]){
+    const offset = gender === 'M' ? 0 : panelHeight + gap;
+    const y = d3.scaleLinear().domain(d3.extent(months, month => daily(month, gender))).nice(3)
+      .range([offset + panelHeight - bottom, offset + top]);
+    const heading = txt(left, offset + 18, label + ' / day', 'bl', 'start'); heading.style.fill = color;
+    svg.append(heading);
+    for (const value of y.ticks(3)){
+      const line = document.createElementNS(NS, 'line');
+      for (const [key, position] of Object.entries({x1:left, x2:width - right, y1:y(value), y2:y(value)})) line.setAttribute(key, position);
+      line.setAttribute('stroke', INK); line.setAttribute('opacity', '.12');
+      svg.append(line, txt(left - 8, y(value) + 5, d3.format('~g')(value), 'bl', 'end'));
+    }
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', d3.line().x(month => x(month.month)).y(month => y(daily(month, gender)))(months));
+    path.setAttribute('fill', 'none'); path.setAttribute('stroke', color); path.setAttribute('stroke-width', '2');
+    svg.append(path);
+    for (const month of months){
+      const dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('cx', x(month.month)); dot.setAttribute('cy', y(daily(month, gender))); dot.setAttribute('r', '5');
+      dot.setAttribute('fill', color); dot.setAttribute('tabindex', '0'); dot.setAttribute('class', 'bar'); dot.setAttribute('role', 'img');
+      const description = `${monthLabel(month.month)}: Men ${daily(month, 'M').toFixed(1)} / day (${month.gender.M.toLocaleString()} posts); women ${daily(month, 'F').toFixed(1)} / day (${month.gender.F.toLocaleString()} posts)`;
+      dot.setAttribute('aria-label', `${label}: ${description}`);
+      const title = document.createElementNS(NS, 'title'); title.textContent = description; dot.append(title);
+      for (const event of ['focus', 'pointerenter', 'click']) dot.addEventListener(event, () => { detail.textContent = description; });
+      for (const event of ['blur', 'pointerleave']) dot.addEventListener(event, () => { detail.textContent = ''; });
+      svg.append(dot);
+    }
+    months.forEach((month, index) => {
+      if (index !== 0 && index !== months.length - 1 &&
+          (index % labelStep || months.length - 1 - index < labelStep)) return;
+      svg.append(txt(x(month.month), offset + panelHeight - 8, monthLabel(month.month), 'bl', index === 0 ? 'start' : index === months.length - 1 ? 'end' : 'middle'));
+    });
+  }
+  host.append(svg, detail);
+  const peak = gender => months.reduce((highest, month) => daily(month, gender) > daily(highest, gender) ? month : highest);
+  const menPeak = peak('M'), womenPeak = peak('F');
+  $('#monthly-insight').textContent = menPeak.month === womenPeak.month
+    ? `Both groups recorded their highest daily posting average in ${new Date(menPeak.month + '-01T00:00:00Z').toLocaleDateString('en', {month:'long', year:'numeric', timeZone:'UTC'})}. One annual cycle cannot establish a recurring pattern or its cause.`
+    : `Men's daily posting average peaked in ${monthLabel(menPeak.month)}; women's peaked in ${monthLabel(womenPeak.month)}. One annual cycle cannot establish a recurring pattern or its cause.`;
+}
+
+function renderSeasonAnalysis(){
+  const months = DATA.analysis.months.filter(month => month.full_month && month.gender.M && month.gender.F);
+  const seasons = [
+    {name:'Winter', months:[12, 1, 2]}, {name:'Spring', months:[3, 4, 5]},
+    {name:'Summer', months:[6, 7, 8]}, {name:'Autumn', months:[9, 10, 11]}
+  ];
+  const body = $('#season-rows'); body.replaceChildren();
+  const incomplete = [];
+  const dailyAverages = {};
+  for (const season of seasons){
+    const selected = months.filter(month => season.months.includes(Number(month.month.slice(5))));
+    if (!selected.length) continue;
+    const days = selected.reduce((total, month) => {
+      const [year, number] = month.month.split('-').map(Number);
+      return total + new Date(Date.UTC(year, number, 0)).getUTCDate();
+    }, 0);
+    const men = selected.reduce((total, month) => total + month.gender.M, 0);
+    const women = selected.reduce((total, month) => total + month.gender.F, 0);
+    dailyAverages[season.name] = {men:men / days, women:women / days};
+    const row = document.createElement('tr');
+    [season.name + (selected.length < 3 ? ' *' : ''), (men / days).toFixed(1), (women / days).toFixed(1)].forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? 'th' : 'td');
+      if (index === 0) cell.scope = 'row';
+      cell.textContent = value; row.append(cell);
+    });
+    body.append(row);
+    if (selected.length < 3) incomplete.push(`${season.name} includes only ${selected.map(month => month.month).join(' and ')}`);
+  }
+  const winter = dailyAverages.Winter, summer = dailyAverages.Summer;
+  const comparison = winter && summer && winter.men > summer.men && winter.women > summer.women
+    ? 'Both groups posted more per day in winter than summer in this dataset. ' : '';
+  $('#season-insight').textContent = comparison + (incomplete.length
+    ? `* ${incomplete.join('; ')}. These months are pooled by calendar group and need not belong to the same year's season. Daily averages account for month length, not missing archive data.`
+    : 'Daily averages account for month length, not missing archive data. These calendar groups do not establish a seasonal pattern.');
+}
+
+function renderAnalysis(){
+  const analysis = DATA.analysis;
+  for (const id of ['city-analysis', 'monthly-analysis', 'season-analysis']) $('#' + id).hidden = !analysis;
+  document.querySelectorAll('.coverage-chapter').forEach(section => { section.hidden = !analysis; });
+  if (!analysis) return;
+  document.querySelectorAll('[data-coverage]').forEach(element => {
+    const counts = analysis.coverage[element.dataset.gender];
+    element.textContent = (100 * (counts[element.dataset.coverage] || 0) / (counts.posts || 1)).toFixed(1) + '%';
+  });
+  const authorNote = $('#author-analysis-note');
+  authorNote.hidden = false;
+  authorNote.textContent = analysis.author_available_posts === 0
+    ? 'Saved checkpoints have no usable author information. Repeat authors cannot be counted or controlled for; post-level comparisons are exploratory, not independent-person significance tests.'
+    : 'Comparisons count posts, not independent authors. Repeat posting is not controlled for.';
+  renderCityAnalysis(); renderMonthlyAnalysis(); renderSeasonAnalysis();
+}
+
 function render(){
   const M = DATA.gender.M || 0, F = DATA.gender.F || 0, T = (M + F) || 1;
   const sample = DATA.generated === 'MOCK';
@@ -754,7 +1001,9 @@ function render(){
     const commonReason = motifRows(gender).reduce((highest, row) => row[2] > highest[2] ? row : highest);
     const seeking = DATA.seeking || {};
     const preferences = gender === 'M' ? (seeking.M4F || 0) + (seeking.M4M || 0) : (seeking.F4M || 0) + (seeking.F4F || 0);
-    const subtitles = [`${(DATA.gender[gender] || 0).toLocaleString()} posts`, `Most-mentioned age range: ${commonAge[0]}`, `${preferences.toLocaleString()} posts state who they seek`, `Most-mentioned: ${commonReason[0]}`];
+    const coverage = DATA.analysis?.coverage[gender];
+    const subtitles = [`${(DATA.gender[gender] || 0).toLocaleString()} posts`, `Most-mentioned age range: ${commonAge[0]}`, `${preferences.toLocaleString()} posts state who they seek`,
+      `${(coverage?.reason || 0).toLocaleString()} posts with a reason match`, `Most-mentioned: ${commonReason[0]}`, `${(coverage?.city || 0).toLocaleString()} posts with a city match`];
     panel.querySelectorAll('.chart-section').forEach((section, index) => {
       let identity = section.querySelector('.topic-identity');
       if (!identity){
@@ -805,6 +1054,7 @@ function render(){
     ? `<b>${(100 * (sk.F4M || 0) / fTot).toFixed(1)}%</b><span class="stat-statement">looking for men</span><small class="stat-note">based on ${fTot.toLocaleString()} posts that state who they are looking for</small>`
     : 'Not enough posts state who they are looking for.';
   scheduleStoryEffects();
+  renderAnalysis();
   drawMap();
 }
 
