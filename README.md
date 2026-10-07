@@ -2,9 +2,13 @@
 
 Secret Encounters is a static scrollytelling infographic based on aggregated public posts from r/Affairs.
 
+[Explore the full story](https://srdkn.com/secret-encounters/) | [View poster](https://srdkn.com/secret-encounters/poster.html) | [Download PNG](https://srdkn.com/secret-encounters/screenshots/reddit-poster.png)
+
+[![Secret Encounters poster: gender shares, stated ages, main reason, and top 15 cities](screenshots/reddit-poster.png)](https://srdkn.com/secret-encounters/poster.html)
+
 ## Local preview
 
-Start a local server from this folder and open http://localhost:8000/.
+Start a local server from this folder and open http://localhost:8000/. The poster is at http://localhost:8000/poster.html; its PNG is 1600 x 2000 pixels.
 
 ## Analysis
 
@@ -19,11 +23,8 @@ Optional local audit tools, not required by the website:
 
 These scripts aid manual inspection; they are not labeled accuracy tests. Their output can include raw post excerpts and should remain local.
 
-## Reddit Poster
-
-Public [poster](https://srdkn.com/secret-encounters/poster.html) and [1600 x 2000 PNG](https://srdkn.com/secret-encounters/screenshots/reddit-poster.png). Local preview: http://localhost:8000/poster.html. The [local PNG](screenshots/reddit-poster.png) uses the same photo and palette, with figures derived from the published aggregate data.
-
-## Screenshots
+<details>
+<summary>Article screenshots</summary>
 
 All 11 article screenshots are 1888 x 1682 pixels and are listed below in story order. Standalone sections are framed for the article without neighboring chapters or footer content.
 
@@ -49,3 +50,5 @@ All 11 article screenshots are 1888 x 1682 pixels and are listed below in story 
 
 ![Aligned monthly daily posting averages](screenshots/10-monthly-activity.png)
 ![Daily posting averages across calendar seasons](screenshots/11-seasonal-activity.png)
+
+</details>
